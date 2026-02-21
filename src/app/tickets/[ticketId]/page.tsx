@@ -1,5 +1,9 @@
+import Placeholder from "@/components/placeholder";
+import { Button } from "@/components/ui/button";
 import { initialData } from "@/data";
-import { ticketPagePath, ticketsPagePath } from "@/path";
+import TicketItem from "@/features/tickets/components/ticket-item";
+import { ticketsPagePath } from "@/path";
+import { LucideMessageSquareWarning } from "lucide-react";
 import Link from "next/link";
 
 type TicketPageProps = {
@@ -12,13 +16,20 @@ const TicketPage = async ({ params }: TicketPageProps) => {
 
   if (!ticket)
     return (
-      <div className="text-red-500 font-bold px-4 py-8">Ticket not found</div>
+      <Placeholder
+        label="Ticket not found"
+        icon={<LucideMessageSquareWarning className="w-16 h-16" />}
+        button={
+          <Button variant="destructive" asChild>
+            <Link href={ticketsPagePath()}>Go Back to Tickets</Link>
+          </Button>
+        }
+      />
     );
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold">{ticket.title}</h1>
-      <Link href={ticketsPagePath()}>Back to Tickets</Link>
+    <div className="flex justify-center animate-fade-from-top">
+      <TicketItem ticket={ticket} isDetail />
     </div>
   );
 };
