@@ -10,7 +10,7 @@ const Heading = ({ title, description }: HeadingProps) => {
     <>
       <div className="px-8">
         <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
-        <p className="text-gray-600">{description}</p>
+        <p className="text-gray-500">{description}</p>
       </div>
 
       <Separator />

@@ -1,6 +1,7 @@
 import Heading from "@/components/heading";
-import TicketItem from "@/features/tickets/components/ticket-item";
-import { initialData } from "../../data";
+import Spinner from "@/components/spinner";
+import TicketList from "@/features/tickets/components/ticket-list";
+import { Suspense } from "react";
 
 const TicketsPage = () => {
   return (
@@ -10,11 +11,9 @@ const TicketsPage = () => {
         description="All your tickets at one place"
       />
 
-      <div className="flex flex-1 flex-col self-center items-center gap-y-4 animate-fade-from-top">
-        {initialData.tickets.map((ticket) => (
-          <TicketItem key={ticket.id} ticket={ticket} />
-        ))}
-      </div>
+      <Suspense fallback={<Spinner />}>
+        <TicketList />
+      </Suspense>
     </div>
   );
 };

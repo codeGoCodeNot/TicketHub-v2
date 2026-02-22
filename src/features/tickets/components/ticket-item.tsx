@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ticketPagePath } from "@/path";
+import clsx from "clsx";
 import { LucideSquareArrowOutUpRight } from "lucide-react";
 import Link from "next/link";
 import { TICKET_ICONS } from "../constants";
 import { Ticket } from "../type";
-import clsx from "clsx";
 
 type TicketItemProps = {
   ticket: Ticket;
@@ -13,6 +13,8 @@ type TicketItemProps = {
 };
 
 const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
+  console.log("Where am I displayed?");
+
   const detailButton = (
     <Button
       asChild
@@ -38,7 +40,7 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
           <CardTitle className="flex gap-x-2 items-center">
             <span>{TICKET_ICONS[ticket.status]}</span>
             <div>
-              <span className="truncate">{ticket.title}</span>
+              <span className="truncate text-lg">{ticket.title}</span>
             </div>
           </CardTitle>
         </CardHeader>
