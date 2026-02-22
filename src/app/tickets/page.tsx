@@ -6,10 +6,7 @@ import { Suspense } from "react";
 const TicketsPage = () => {
   return (
     <div className="flex flex-col gap-y-8 flex-1">
-      <Heading
-        title="Tickets Page"
-        description="All your tickets at one place"
-      />
+      <Heading title="Tickets" description="All your tickets at one place" />
 
       <Suspense fallback={<Spinner />}>
         <TicketList />
