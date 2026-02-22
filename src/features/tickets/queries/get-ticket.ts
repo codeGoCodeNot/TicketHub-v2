@@ -1,17 +1,12 @@
-import { initialData } from "@/data";
-import { Ticket } from "../type";
+import prisma from "@/lib/prisma";
 
-const getTicket = async (ticketId: string): Promise<Ticket | null> => {
-  // Simulate an API call to fetch the ticket by ID
+// Query to fetch a single ticket by its ID
 
-  await new Promise((resolve) => {
-    setTimeout(resolve, 2000); // Simulate network delay
-  });
-
-  return await new Promise((resolve) => {
-    resolve(
-      initialData.tickets.find((ticket) => ticket.id === ticketId) || null,
-    );
+const getTicket = async (id: string) => {
+  return await prisma.ticket.findUnique({
+    where: {
+      id,
+    },
   });
 };
 

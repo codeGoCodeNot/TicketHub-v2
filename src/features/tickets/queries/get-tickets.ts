@@ -1,12 +1,10 @@
-import { initialData } from "@/data";
-import { Ticket } from "../type";
+import prisma from "@/lib/prisma";
 
-// Simulate an API call to fetch tickets with a delay
-const getTickets = async (): Promise<Ticket[]> => {
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+// Query to fetch all tickets
 
-  return new Promise((resolve) => {
-    resolve(initialData.tickets);
+const getTickets = async () => {
+  return await prisma.ticket.findMany({
+    orderBy: { createdAt: "desc" },
   });
 };
 
