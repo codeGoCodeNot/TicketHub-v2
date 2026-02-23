@@ -21,7 +21,7 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
       size="icon"
       className="hover:bg-secondary/80"
     >
-      <Link href={ticketPagePath(ticket.id)}>
+      <Link prefetch href={ticketPagePath(ticket.id)}>
         <LucideSquareArrowOutUpRight />
       </Link>
     </Button>
