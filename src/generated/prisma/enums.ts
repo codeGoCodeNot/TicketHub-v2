@@ -9,10 +9,10 @@
 * 🟢 You can import this file directly.
 */
 
-export const Status = {
+export const TicketStatus = {
   OPEN: 'OPEN',
   IN_PROGRESS: 'IN_PROGRESS',
   DONE: 'DONE'
 } as const
 
-export type Status = (typeof Status)[keyof typeof Status]
+export type TicketStatus = (typeof TicketStatus)[keyof typeof TicketStatus]

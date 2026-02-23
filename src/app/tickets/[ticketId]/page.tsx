@@ -1,10 +1,5 @@
-import Placeholder from "@/components/placeholder";
-import { Button } from "@/components/ui/button";
 import TicketItem from "@/features/tickets/components/ticket-item";
 import getTicket from "@/features/tickets/queries/get-ticket";
-import { ticketsPagePath } from "@/path";
-import { LucideMessageSquareWarning } from "lucide-react";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 type TicketPageProps = {

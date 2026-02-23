@@ -13,10 +13,10 @@ model Ticket {
   updatedAt DateTime @updatedAt
   title String
   content String @db.VarChar(1024)
-  status Status
+  status TicketStatus @default(OPEN)
 }
 
-enum Status {
+enum TicketStatus {
   OPEN
   IN_PROGRESS
   DONE
