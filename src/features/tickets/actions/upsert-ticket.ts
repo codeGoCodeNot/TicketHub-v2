@@ -1,27 +1,50 @@
 "use server";
 
+import fromErrorToActionState, {
+  ActionState,
+} from "@/components/form/utils/to-action-state";
 import prisma from "@/lib/prisma";
-import { ticketsPagePath } from "@/path";
+import { ticketPagePath, ticketsPagePath } from "@/path";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { z } from "zod";
 
-const upsertTicket = async (id: string, formData: FormData) => {
-  const data = {
-    title: formData.get("title") as string,
-    content: formData.get("content") as string,
-  };
+const upsertTicketSchema = z.object({
+  title: z.string().min(1, "Title is required."),
+  content: z.string().min(3, "Content must be at least 3 characters long."),
+});
 
-  await prisma.ticket.upsert({
-    where: {
-      id: id || "",
-    },
-    create: data,
-    update: data,
-  });
+const upsertTicket = async (
+  id: string,
+  _actionState: ActionState,
+  formData: FormData,
+) => {
+  try {
+    const data = upsertTicketSchema.parse({
+      title: formData.get("title"),
+      content: formData.get("content"),
+    });
+
+    await prisma.ticket.upsert({
+      where: {
+        id: id || "",
+      },
+      create: data,
+      update: data,
+    });
+  } catch (error) {
+    // extract validation errors and return them as action state
+    return fromErrorToActionState(error, formData);
+  }
 
   revalidatePath(ticketsPagePath());
 
-  if (id) redirect(ticketsPagePath());
+  if (id) redirect(ticketPagePath(id));
+
+  return {
+    message: "Ticket has been successfully created.",
+    fieldErrors: {},
+  };
 };
 
 export default upsertTicket;
