@@ -14,6 +14,8 @@ import { z } from "zod";
 const upsertTicketSchema = z.object({
   title: z.string().min(1, "Title is required."),
   content: z.string().min(3, "Content must be at least 3 characters long."),
+  bounty: z.coerce.number().positive("Bounty must be a positive number."),
+  deadline: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "is required"),
 });
 
 const upsertTicket = async (
@@ -22,10 +24,9 @@ const upsertTicket = async (
   formData: FormData,
 ) => {
   try {
-    const data = upsertTicketSchema.parse({
-      title: formData.get("title"),
-      content: formData.get("content"),
-    });
+    const data = upsertTicketSchema.parse(
+      Object.fromEntries(formData.entries()),
+    );
 
     await prisma.ticket.upsert({
       where: {

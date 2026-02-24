@@ -12,17 +12,23 @@ const tickets = [
     title: "Issue with login",
     content: "Unable to login with correct credentials.",
     status: "OPEN" as const,
+    bounty: 499,
+    deadline: new Date().toISOString().split("T")[0], // Today's date
   },
   {
     title: "Page not loading",
     content: "The dashboard page is not loading for some users.",
     status: "DONE" as const,
+    bounty: 399,
+    deadline: new Date().toISOString().split("T")[0],
   },
 
   {
     title: "Missing user permissions",
     content: "Some users are unable to access certain features.",
     status: "IN_PROGRESS" as const,
+    bounty: 299,
+    deadline: new Date().toISOString().split("T")[0],
   },
 ];
 
