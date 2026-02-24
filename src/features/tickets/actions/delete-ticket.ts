@@ -7,6 +7,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 const deleteTicket = async (id: string) => {
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+
   await prisma.ticket.delete({
     where: {
       id,

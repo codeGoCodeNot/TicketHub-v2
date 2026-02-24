@@ -1,5 +1,10 @@
 "use client";
 
+import useActionFeedback from "@/components/form/hooks/use-action-feedback";
+import {
+  ActionState,
+  EMPTY_ACTION_STATE,
+} from "@/components/form/utils/to-action-state";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,13 +15,23 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { cloneElement, useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  cloneElement,
+  useActionState,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { toast } from "sonner";
 
 type UseConfirmDialogProps = {
-  action: () => Promise<void>;
+  action: () => Promise<ActionState>;
   trigger: React.ReactElement<{ onClick?: () => void }>;
   title?: string;
   description?: string;
+  pendingMessage?: string;
+  onSuccess?: (actionState: ActionState) => void;
 };
 
 const useConfirmDialog = ({
@@ -24,12 +39,45 @@ const useConfirmDialog = ({
   trigger,
   title,
   description,
+  pendingMessage = "Deleting...",
+  onSuccess,
 }: UseConfirmDialogProps) => {
   const [open, setOpen] = useState(false);
 
   const dialogTrigger = cloneElement(trigger, {
     onClick: () => {
       setOpen((prev) => !prev);
+    },
+  });
+
+  const [actionState, formAction, isPending] = useActionState(
+    action,
+    EMPTY_ACTION_STATE,
+  );
+
+  const toastRef = useRef<string | number | null>(null);
+
+  useEffect(() => {
+    if (isPending) {
+      toastRef.current = toast.loading(pendingMessage);
+    } else if (toastRef.current) {
+      toast.dismiss(toastRef.current);
+    }
+
+    return () => {
+      if (toastRef.current) {
+        toast.dismiss(toastRef.current);
+      }
+    };
+  }, [isPending, pendingMessage]);
+
+  useActionFeedback(actionState, {
+    onSuccess: ({ actionState }) => {
+      if (actionState.message) toast.success(actionState.message);
+      onSuccess?.(actionState);
+    },
+    onError: ({ actionState }) => {
+      if (actionState.message) toast.error(actionState.message);
     },
   });
 
@@ -47,7 +95,11 @@ const useConfirmDialog = ({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={action}>Continue</AlertDialogAction>
+          <AlertDialogAction asChild>
+            <form action={formAction}>
+              <Button type="submit">Confirm</Button>
+            </form>
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
