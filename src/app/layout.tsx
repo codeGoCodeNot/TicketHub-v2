@@ -4,6 +4,7 @@ import { ThemeProvider } from "next-themes";
 import { Roboto } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
+import RedirectToast from "@/components/redirect-toast";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -38,6 +39,7 @@ export default function RootLayout({
           >
             {children}
           </main>
+          <RedirectToast />
           <Toaster expand />
         </ThemeProvider>
       </body>
