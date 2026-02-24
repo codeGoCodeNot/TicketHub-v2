@@ -15,7 +15,7 @@ import { z } from "zod";
 const upsertTicketSchema = z.object({
   title: z.string().min(1, "Title is required."),
   content: z.string().min(3, "Content must be at least 3 characters long."),
-  bounty: z.coerce.number().positive("Bounty must be a positive number."),
+  bounty: z.coerce.number().positive("Bounty is required."),
   deadline: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "is required"),
 });
 

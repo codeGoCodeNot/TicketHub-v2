@@ -4,13 +4,23 @@ import FieldError from "@/components/form/field-error";
 import Form from "@/components/form/form";
 import SubmitButton from "@/components/form/submit-button";
 import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { Ticket } from "@/generated/prisma/client";
-import { useActionState } from "react";
-import upsertTicket from "../actions/upsert-ticket";
 import { fromCent } from "@/utils/currency";
+import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { useActionState, useState } from "react";
+import upsertTicket from "../actions/upsert-ticket";
+import DatePicker from "@/components/date-picker";
 
 type TicketUpsertFormProps = {
   ticket?: Ticket;
@@ -21,6 +31,10 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
     upsertTicket.bind(null, ticket?.id ?? ""),
     EMPTY_ACTION_STATE,
   );
+
+  const [date, setDate] = useState<Date | undefined>(new Date());
+
+  const formattedStringDate = date ? format(date, "yyyy-MM-dd") : "";
 
   return (
     <Form action={action} actionState={actionState}>
@@ -45,13 +59,14 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
       />
       <FieldError actionState={actionState} name="content" />
 
-      <div className="flex gap-x-2">
-        <div className="w-1/2 flex flex-col gap-y-2">
-          <Label htmlFor="deadline">Deadline</Label>
-          <Input
+      <div className="flex gap-x-2 mb-1">
+        <div className="w-1/2">
+          <Label htmlFor="deadline" className="mb-2">
+            Deadline
+          </Label>
+          <DatePicker
             id="deadline"
             name="deadline"
-            type="date"
             defaultValue={
               (actionState.payload?.get("deadline") as string) ??
               ticket?.deadline
@@ -59,8 +74,11 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
           />
           <FieldError actionState={actionState} name="deadline" />
         </div>
-        <div className="w-1/2 flex flex-col gap-y-1">
-          <Label htmlFor="bounty">Bounty</Label>
+
+        <div className="w-1/2">
+          <Label htmlFor="bounty" className="mb-2">
+            Bounty
+          </Label>
           <Input
             id="bounty"
             name="bounty"
