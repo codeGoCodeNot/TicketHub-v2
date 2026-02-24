@@ -5,6 +5,7 @@ import { Roboto } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 import RedirectToast from "@/components/redirect-toast";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -37,7 +38,7 @@ export default function RootLayout({
           min-h-screen
           "
           >
-            {children}
+            <TooltipProvider delayDuration={2000}>{children}</TooltipProvider>
           </main>
           <RedirectToast />
           <Toaster expand />

@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import deleteTicket from "../actions/delete-ticket";
 import updateTicketStatus from "../actions/update-ticket-status";
 import { TICKET_STATUS_LABELS } from "../constants";
+import ToolTip from "@/components/tool-tip";
 
 type TicketMoreMenuProps = {
   ticket: Ticket;
@@ -68,7 +69,9 @@ const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
     <>
       {deleteDialog}
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
+        <ToolTip label="More options">
+          <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
+        </ToolTip>
         <DropdownMenuContent side="right" className="w-50">
           {ticketStatusOptionsItems}
           <DropdownMenuSeparator />

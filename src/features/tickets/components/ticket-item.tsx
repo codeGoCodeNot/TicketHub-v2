@@ -18,6 +18,7 @@ import {
 import Link from "next/link";
 import { TICKET_ICONS } from "../constants";
 import TicketMoreMenu from "./ticket-more-menu";
+import ToolTip from "@/components/tool-tip";
 
 type TicketItemProps = {
   ticket: Ticket;
@@ -26,24 +27,28 @@ type TicketItemProps = {
 
 const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
   const editButton = (
-    <Button variant="outline" size="icon" asChild>
-      <Link prefetch href={ticketEditPagePath(ticket.id)}>
-        <LucideEdit />
-      </Link>
-    </Button>
+    <ToolTip label="Edit ticket">
+      <Button variant="outline" size="icon" asChild>
+        <Link prefetch href={ticketEditPagePath(ticket.id)}>
+          <LucideEdit />
+        </Link>
+      </Button>
+    </ToolTip>
   );
 
   const detailButton = (
-    <Button
-      asChild
-      variant="outline"
-      size="icon"
-      className="hover:bg-secondary/80"
-    >
-      <Link prefetch href={ticketPagePath(ticket.id)}>
-        <LucideSquareArrowOutUpRight />
-      </Link>
-    </Button>
+    <ToolTip label="View details">
+      <Button
+        asChild
+        variant="outline"
+        size="icon"
+        className="hover:bg-secondary/80"
+      >
+        <Link prefetch href={ticketPagePath(ticket.id)}>
+          <LucideSquareArrowOutUpRight />
+        </Link>
+      </Button>
+    </ToolTip>
   );
 
   const moreMenu = (
