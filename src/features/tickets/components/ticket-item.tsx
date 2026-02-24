@@ -1,3 +1,4 @@
+import ConfirmDialog from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -6,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Ticket } from "@/generated/prisma/client";
 import { ticketEditPagePath, ticketPagePath } from "@/path";
 import { toCurrencyFromCents } from "@/utils/currency";
@@ -14,8 +16,10 @@ import {
   LucideEdit,
   LucideMenu,
   LucideSquareArrowOutUpRight,
+  LucideTrash2,
 } from "lucide-react";
 import Link from "next/link";
+import deleteTicket from "../actions/delete-ticket";
 import { TICKET_ICONS } from "../constants";
 import TicketMoreMenu from "./ticket-more-menu";
 

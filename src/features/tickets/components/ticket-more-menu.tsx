@@ -15,6 +15,9 @@ import { LucideTrash2 } from "lucide-react";
 import { TICKET_STATUS_LABELS } from "../constants";
 import updateTicketStatus from "../actions/update-ticket-status";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import ConfirmDialog from "@/components/confirm-dialog";
+import deleteTicket from "../actions/delete-ticket";
 
 type TicketMoreMenuProps = {
   ticket: Ticket;
@@ -22,13 +25,6 @@ type TicketMoreMenuProps = {
 };
 
 const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
-  const deleteButton = (
-    <DropdownMenuItem>
-      <LucideTrash2 className="text-red-800" />
-      Delete
-    </DropdownMenuItem>
-  );
-
   const handleUpdateTicketStatus = async (value: string) => {
     const promiseStatus = updateTicketStatus(ticket.id, value as TicketStatus);
 
@@ -44,6 +40,18 @@ const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
       toast.success(result.message);
     }
   };
+
+  const deleteButton = (
+    <ConfirmDialog
+      action={deleteTicket.bind(null, ticket.id)}
+      trigger={
+        <DropdownMenuItem>
+          <LucideTrash2 className="text-red-800" />
+          Delete
+        </DropdownMenuItem>
+      }
+    />
+  );
 
   const ticketStatusOptionsItems = (
     <DropdownMenuRadioGroup
