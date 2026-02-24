@@ -1,0 +1,73 @@
+"use client";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Ticket, TicketStatus } from "@/generated/prisma/client";
+import { LucideTrash2 } from "lucide-react";
+import { TICKET_STATUS_LABELS } from "../constants";
+import updateTicketStatus from "../actions/update-ticket-status";
+import { toast } from "sonner";
+
+type TicketMoreMenuProps = {
+  ticket: Ticket;
+  trigger: React.ReactNode;
+};
+
+const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
+  const deleteButton = (
+    <DropdownMenuItem>
+      <LucideTrash2 className="text-red-800" />
+      Delete
+    </DropdownMenuItem>
+  );
+
+  const handleUpdateTicketStatus = async (value: string) => {
+    const promiseStatus = updateTicketStatus(ticket.id, value as TicketStatus);
+
+    toast.promise(promiseStatus, {
+      loading: "Updating status...",
+    });
+
+    const result = await promiseStatus;
+
+    if (result.status === "ERROR") {
+      toast.error(result.message);
+    } else if (result.status === "SUCCESS") {
+      toast.success(result.message);
+    }
+  };
+
+  const ticketStatusOptionsItems = (
+    <DropdownMenuRadioGroup
+      value={ticket.status}
+      onValueChange={handleUpdateTicketStatus}
+    >
+      {(Object.keys(TICKET_STATUS_LABELS) as TicketStatus[]).map((key) => (
+        <DropdownMenuRadioItem key={key} value={key}>
+          {TICKET_STATUS_LABELS[key]}
+        </DropdownMenuRadioItem>
+      ))}
+    </DropdownMenuRadioGroup>
+  );
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
+      <DropdownMenuContent side="right" className="w-50">
+        {ticketStatusOptionsItems}
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>{deleteButton}</DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+export default TicketMoreMenu;
