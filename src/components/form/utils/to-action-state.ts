@@ -1,9 +1,17 @@
 import z, { ZodError } from "zod";
 
 export type ActionState = {
+  status?: "SUCCESS" | "ERROR";
   message: string;
   payload?: FormData;
   fieldErrors: Record<string, string[] | undefined>;
+  timestamp: number;
+};
+
+export const EMPTY_ACTION_STATE: ActionState = {
+  message: "",
+  fieldErrors: {},
+  timestamp: Date.now(),
 };
 
 const fromErrorToActionState = (
@@ -13,24 +21,29 @@ const fromErrorToActionState = (
   if (error instanceof ZodError) {
     // zod errors case
     const flattenError = z.flattenError(error).fieldErrors;
-    console.log(flattenError);
     return {
+      timestamp: Date.now(),
+      status: "ERROR",
       message: "",
       fieldErrors: flattenError,
-      //   fieldErros will be used to show validation errors for each field in the form
       payload: formData,
+      // fieldErros will be used to show validation errors for each field in the form
     };
   } else if (error instanceof Error) {
     // db or other errors case
     return {
+      timestamp: Date.now(),
+      status: "ERROR",
       message: error.message,
       fieldErrors: {},
       payload: formData,
     };
   } else {
     return {
-      // generic error message for unexpected error types
+      timestamp: Date.now(),
+      status: "ERROR",
       message: "Something went wrong",
+      // generic error message for unexpected error types
       fieldErrors: {},
       payload: formData,
       // default values for the form will be taken from the payload in case of an error
@@ -38,4 +51,16 @@ const fromErrorToActionState = (
   }
 };
 
+// utility function to create a success action state with a message
+export const toActionState = (
+  status: ActionState["status"],
+  message: string,
+): ActionState => {
+  return {
+    timestamp: Date.now(),
+    status,
+    message,
+    fieldErrors: {},
+  };
+};
 export default fromErrorToActionState;
