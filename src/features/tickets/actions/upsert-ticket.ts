@@ -7,6 +7,7 @@ import fromErrorToActionState, {
 } from "@/components/form/utils/to-action-state";
 import prisma from "@/lib/prisma";
 import { ticketPagePath, ticketsPagePath } from "@/path";
+import { toCent } from "@/utils/currency";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -28,12 +29,14 @@ const upsertTicket = async (
       Object.fromEntries(formData.entries()),
     );
 
+    const dbData = { ...data, bounty: toCent(data.bounty) };
+
     await prisma.ticket.upsert({
       where: {
         id: id || "",
       },
-      create: data,
-      update: data,
+      create: dbData,
+      update: dbData,
     });
   } catch (error) {
     // extract validation errors and return them as action state

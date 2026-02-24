@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Ticket } from "@/generated/prisma/client";
 import { useActionState } from "react";
 import upsertTicket from "../actions/upsert-ticket";
+import { fromCent } from "@/utils/currency";
 
 type TicketUpsertFormProps = {
   ticket?: Ticket;
@@ -45,7 +46,7 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
       <FieldError actionState={actionState} name="content" />
 
       <div className="flex gap-x-2">
-        <div className="w-1/2 flex flex-col gap-y-1">
+        <div className="w-1/2 flex flex-col gap-y-2">
           <Label htmlFor="deadline">Deadline</Label>
           <Input
             id="deadline"
@@ -65,7 +66,8 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
             name="bounty"
             type="number"
             defaultValue={
-              (actionState.payload?.get("bounty") as string) ?? ticket?.bounty
+              (actionState.payload?.get("bounty") as string) ??
+              (ticket?.bounty ? fromCent(ticket.bounty) : "")
             }
           />
           <FieldError actionState={actionState} name="bounty" />
