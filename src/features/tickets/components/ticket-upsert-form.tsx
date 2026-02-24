@@ -1,26 +1,18 @@
 "use client";
 
+import DatePicker from "@/components/date-picker";
 import FieldError from "@/components/form/field-error";
 import Form from "@/components/form/form";
 import SubmitButton from "@/components/form/submit-button";
 import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { Ticket } from "@/generated/prisma/client";
 import { fromCent } from "@/utils/currency";
-import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { useActionState, useState } from "react";
+import { useActionState, useRef } from "react";
 import upsertTicket from "../actions/upsert-ticket";
-import DatePicker from "@/components/date-picker";
+import { da } from "date-fns/locale";
 
 type TicketUpsertFormProps = {
   ticket?: Ticket;
@@ -32,12 +24,14 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
     EMPTY_ACTION_STATE,
   );
 
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const dateImperativeHandleRef = useRef<{ reset: () => void }>(null);
 
-  const formattedStringDate = date ? format(date, "yyyy-MM-dd") : "";
+  const handleSuccess = () => {
+    dateImperativeHandleRef.current?.reset();
+  };
 
   return (
-    <Form action={action} actionState={actionState}>
+    <Form action={action} actionState={actionState} onSuccess={handleSuccess}>
       <Label htmlFor="title">Title</Label>
       <Input
         id="title"
@@ -67,7 +61,7 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
           <DatePicker
             id="deadline"
             name="deadline"
-            key={actionState.timestamp}
+            imperativeHandleRef={dateImperativeHandleRef}
             defaultValue={
               (actionState.payload?.get("deadline") as string) ??
               ticket?.deadline
