@@ -1,10 +1,29 @@
-import { homePagePath, ticketsPagePath } from "@/path";
+import {
+  homePagePath,
+  signInPagePath,
+  signUpPagePath,
+  ticketsPagePath,
+} from "@/path";
 import { LucideTickets } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import ThemeSwitcher from "./theme/theme-switcher";
 
 const Header = () => {
+  const navItems = (
+    <>
+      <Button asChild>
+        <Link href={ticketsPagePath()}>Tickets</Link>
+      </Button>
+      <Button asChild variant="outline">
+        <Link href={signUpPagePath()}>Sign Up</Link>
+      </Button>
+      <Button asChild variant="outline">
+        <Link href={signInPagePath()}>Sign In</Link>
+      </Button>
+    </>
+  );
+
   return (
     <nav
       className="
@@ -23,9 +42,7 @@ const Header = () => {
 
       <div className="flex gap-x-1 items-center">
         <ThemeSwitcher />
-        <Button asChild>
-          <Link href={ticketsPagePath()}>Tickets</Link>
-        </Button>
+        {navItems}
       </div>
     </nav>
   );
