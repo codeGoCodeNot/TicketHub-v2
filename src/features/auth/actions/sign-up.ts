@@ -2,11 +2,11 @@
 
 import fromErrorToActionState, {
   ActionState,
-  toActionState,
 } from "@/components/form/utils/to-action-state";
 import { auth } from "@/lib/auth";
 import { passwordSchema } from "@/lib/validation";
 import { ticketsPagePath } from "@/path";
+import { redirect } from "next/navigation";
 import z from "zod";
 
 const signUpSchema = z
@@ -32,14 +32,13 @@ const signUp = async (_actionState: ActionState, formData: FormData) => {
         name,
         email,
         password,
-        callbackURL: ticketsPagePath(),
       },
     });
   } catch (error) {
     return fromErrorToActionState(error, formData);
   }
 
-  return toActionState("SUCCESS", "Sign up successful!");
+  redirect(ticketsPagePath());
 };
 
 export default signUp;
