@@ -8,6 +8,7 @@ export type Session = typeof auth.$Infer.Session;
 export type User = typeof auth.$Infer.Session.user;
 
 export const auth = betterAuth({
+  baseURL: process.env.BETTER_AUTH_URL,
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),

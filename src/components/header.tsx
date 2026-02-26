@@ -21,6 +21,11 @@ const Header = () => {
       <Button asChild variant="outline">
         <Link href={signInPagePath()}>Sign In</Link>
       </Button>
+      <form action="">
+        <Button type="submit" variant="outline">
+          Sign Out
+        </Button>
+      </form>
     </>
   );
 
