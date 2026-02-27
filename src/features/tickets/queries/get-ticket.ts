@@ -7,6 +7,13 @@ const getTicket = async (id: string) => {
     where: {
       id,
     },
+    include: {
+      user: {
+        select: {
+          name: true,
+        },
+      },
+    },
   });
 };
 

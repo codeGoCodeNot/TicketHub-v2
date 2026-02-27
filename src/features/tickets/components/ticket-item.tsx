@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Ticket } from "@/generated/prisma/client";
+import { Prisma, Ticket } from "@/generated/prisma/client";
 import { ticketEditPagePath, ticketPagePath } from "@/path";
 import { toCurrencyFromCents } from "@/utils/currency";
 import clsx from "clsx";
@@ -19,9 +19,10 @@ import Link from "next/link";
 import { TICKET_ICONS } from "../constants";
 import TicketMoreMenu from "./ticket-more-menu";
 import ToolTip from "@/components/tool-tip";
+import { TicketWithMetada } from "../type";
 
 type TicketItemProps = {
-  ticket: Ticket;
+  ticket: TicketWithMetada;
   isDetail?: boolean;
 };
 
@@ -90,7 +91,7 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
         <CardFooter className="flex justify-between">
           <p className="text-sm text-muted-foreground">{ticket.deadline}</p>
           <p className="text-sm text-muted-foreground">
-            {toCurrencyFromCents(ticket.bounty)}
+            {toCurrencyFromCents(ticket.bounty)} by {ticket.user.name}
           </p>
         </CardFooter>
       </Card>
