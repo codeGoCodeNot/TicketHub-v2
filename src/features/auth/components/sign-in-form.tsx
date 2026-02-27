@@ -10,7 +10,7 @@ import { passwordForgotPagePath } from "@/path";
 import Link from "next/link";
 import { useActionState } from "react";
 import signInEmail from "../actions/sign-in-email";
-import SignInProviderForm from "./sign-provider-form";
+import SignInProviderForm from "./sign-in-provider-form";
 
 const SignInForm = () => {
   const [actionState, action] = useActionState(signInEmail, EMPTY_ACTION_STATE);
