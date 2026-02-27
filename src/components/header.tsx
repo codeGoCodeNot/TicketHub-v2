@@ -8,6 +8,7 @@ import { LucideTickets } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import ThemeSwitcher from "./theme/theme-switcher";
+import SignOutItem from "@/features/auth/components/sign-out-item";
 
 const Header = () => {
   const navItems = (
@@ -21,11 +22,7 @@ const Header = () => {
       <Button asChild variant="outline">
         <Link href={signInPagePath()}>Sign In</Link>
       </Button>
-      <form action="">
-        <Button type="submit" variant="outline">
-          Sign Out
-        </Button>
-      </form>
+      <SignOutItem />
     </>
   );
 
