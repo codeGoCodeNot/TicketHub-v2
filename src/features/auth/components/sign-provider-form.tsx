@@ -32,9 +32,14 @@ const SignInProviderForm = () => {
           variant="outline"
           className="w-full"
           onClick={() => handleGoogleSignIn("google")}
+          disabled={loading}
         >
-          <GoogleIcon width="0.98em" height="1em" />
-          Sign in with Google
+          {loading ? (
+            <span className="mr-2 animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full align-middle" />
+          ) : (
+            <GoogleIcon width="0.98em" height="1em" />
+          )}
+          {loading ? "Signing in..." : "Sign in with Google"}
         </Button>
 
         {error && (
