@@ -9,7 +9,6 @@ export type User = typeof auth.$Infer.Session.user;
 
 export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL,
-  trustedOrigins: ["https://tickethubv2.johnsenb.dev"],
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
@@ -24,7 +23,6 @@ export const auth = betterAuth({
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      redirectURI: "http://tickethubv2.johnsenb.dev/api/auth/callback/google",
     },
   },
   session: {
