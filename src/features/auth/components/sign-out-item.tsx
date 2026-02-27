@@ -28,7 +28,7 @@ const SignOutItem = () => {
   };
 
   return (
-    <Button onClick={handleSignOut}>
+    <Button onClick={handleSignOut} variant="outline" disabled={loading}>
       {loading ? (
         <>
           <span>Sign Out</span>

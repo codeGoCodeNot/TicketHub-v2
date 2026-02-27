@@ -1,3 +1,5 @@
+"use server";
+
 import { getSession } from "@/lib/get-session";
 
 const getAuth = async () => {
