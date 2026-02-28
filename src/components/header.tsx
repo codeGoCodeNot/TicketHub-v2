@@ -1,15 +1,10 @@
 "use client";
 
-import SignOutItem from "@/features/auth/components/sign-out-item";
 import useAuth from "@/features/auth/hooks/use-auth";
-import {
-  homePagePath,
-  signInPagePath,
-  signUpPagePath,
-  ticketsPagePath,
-} from "@/path";
+import { homePagePath, signInPagePath, signUpPagePath } from "@/path";
 import { LucideTickets } from "lucide-react";
 import Link from "next/link";
+import AccountDropdown from "./account-dropdown";
 import ThemeSwitcher from "./theme/theme-switcher";
 import { Button } from "./ui/button";
 import { SidebarTrigger } from "./ui/sidebar";
@@ -21,10 +16,7 @@ const Header = () => {
 
   const navItems = user ? (
     <>
-      <Button asChild>
-        <Link href={ticketsPagePath()}>Tickets</Link>
-      </Button>
-      <SignOutItem />
+      <AccountDropdown user={user} />
     </>
   ) : (
     <>
@@ -50,7 +42,7 @@ const Header = () => {
         </Button>
       </div>
 
-      <div className="flex gap-x-1 items-center">
+      <div className="flex gap-x-2 items-center">
         <ThemeSwitcher />
         {navItems}
       </div>
