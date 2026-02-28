@@ -7,11 +7,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import useAuth from "@/features/auth/hooks/use-auth";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { navItems } from "../constant";
-import { cn } from "@/lib/utils";
-import useAuth from "@/features/auth/hooks/use-auth";
 
 const SideBar = () => {
   const pathname = usePathname();

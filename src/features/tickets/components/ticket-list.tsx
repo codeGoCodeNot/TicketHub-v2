@@ -1,4 +1,3 @@
-import { use } from "react";
 import getTickets from "../queries/get-tickets";
 import TicketItem from "./ticket-item";
 

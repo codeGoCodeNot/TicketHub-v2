@@ -1,3 +1,4 @@
+import ToolTip from "@/components/tool-tip";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -6,22 +7,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Prisma, Ticket } from "@/generated/prisma/client";
+import getAuth from "@/features/auth/actions/get-auth";
+import isOwnership from "@/features/auth/utils/is-ownership";
 import { ticketEditPagePath, ticketPagePath } from "@/path";
 import { toCurrencyFromCents } from "@/utils/currency";
 import clsx from "clsx";
 import {
   LucideEdit,
-  LucideMenu,
+  LucideMoreVertical,
   LucideSquareArrowOutUpRight,
 } from "lucide-react";
 import Link from "next/link";
 import { TICKET_ICONS } from "../constants";
-import TicketMoreMenu from "./ticket-more-menu";
-import ToolTip from "@/components/tool-tip";
 import { TicketWithMetada } from "../type";
-import getAuth from "@/features/auth/actions/get-auth";
-import isOwnership from "@/features/auth/utils/is-ownership";
+import TicketMoreMenu from "./ticket-more-menu";
 
 type TicketItemProps = {
   ticket: TicketWithMetada;
@@ -62,7 +61,7 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
       ticket={ticket}
       trigger={
         <Button variant="outline" size="icon">
-          <LucideMenu />
+          <LucideMoreVertical />
         </Button>
       }
     />
@@ -108,8 +107,8 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
           </>
         ) : (
           <>
-            {editButton}
             {detailButton}
+            {editButton}
           </>
         )}
       </div>

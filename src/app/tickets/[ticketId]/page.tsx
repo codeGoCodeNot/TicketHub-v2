@@ -1,5 +1,8 @@
+import BreadCrumbs from "@/components/breadcrumbs";
+import { Separator } from "@/components/ui/separator";
 import TicketItem from "@/features/tickets/components/ticket-item";
 import getTicket from "@/features/tickets/queries/get-ticket";
+import { ticketsPagePath } from "@/path";
 import { notFound } from "next/navigation";
 
 type TicketPageProps = {
@@ -15,8 +18,18 @@ const TicketPage = async ({ params }: TicketPageProps) => {
   }
 
   return (
-    <div className="flex justify-center animate-fade-from-top">
-      <TicketItem ticket={ticket} isDetail />
+    <div className="flex flex-col gap-y-8 flex-1">
+      <BreadCrumbs
+        breadcrumbs={[
+          { title: "Tickets", href: ticketsPagePath() },
+          { title: ticket.title },
+        ]}
+      />
+      <Separator />
+
+      <div className="flex justify-center animate-fade-from-top">
+        <TicketItem ticket={ticket} isDetail />
+      </div>
     </div>
   );
 };

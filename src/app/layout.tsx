@@ -42,7 +42,7 @@ export default function RootLayout({
               "
             >
               <SideBar />
-              <TooltipProvider delayDuration={2000}>{children}</TooltipProvider>
+              <TooltipProvider delayDuration={1500}>{children}</TooltipProvider>
             </main>
           </SidebarProvider>
           <RedirectToast />
