@@ -1,7 +1,5 @@
 import Heading from "@/components/heading";
 import AccountTabs from "@/features/account/components/account-tabs";
-import { accountProfilePagePath } from "@/path";
-import { LucideUser } from "lucide-react";
 
 const AccountProfilePage = () => {
   return (

@@ -1,5 +1,6 @@
 "use client";
 
+import { Separator } from "@/components/ui/separator";
 import {
   Sidebar,
   SidebarContent,
@@ -9,23 +10,30 @@ import {
 } from "@/components/ui/sidebar";
 import useAuth from "@/features/auth/hooks/use-auth";
 import { cn } from "@/lib/utils";
+import { signInPagePath, signUpPagePath } from "@/path";
+import getActivePath from "@/utils/get-active-path";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { navItems } from "../constant";
-import { Separator } from "@/components/ui/separator";
 
 const SideBar = () => {
   const pathname = usePathname();
   const { user, isFetched } = useAuth();
 
+  const { activeIndex } = getActivePath(
+    pathname,
+    navItems.map((item) => item.href),
+    [signInPagePath(), signUpPagePath()],
+  );
+
   if (!user || !isFetched) return null;
 
   return (
     <Sidebar className="w-50">
-      <SidebarContent className="pt-10 px-2 md:pt-20">
+      <SidebarContent className="pt-8 px-2 md:pt-20">
         <SidebarMenu>
-          {navItems.map((item) => {
-            const isActive = pathname === item.href;
+          {navItems.map((item, index) => {
+            const isActive = activeIndex === index;
             return (
               <SidebarMenuItem key={item.title}>
                 {item.separator && <Separator />}
