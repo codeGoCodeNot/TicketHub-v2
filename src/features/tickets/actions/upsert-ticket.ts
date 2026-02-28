@@ -5,7 +5,8 @@ import fromErrorToActionState, {
   ActionState,
   toActionState,
 } from "@/components/form/utils/to-action-state";
-import getAuth from "@/features/auth/actions/get-auth";
+import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
+import isOwnership from "@/features/auth/utils/is-ownership";
 import prisma from "@/lib/prisma";
 import { signInPagePath, ticketPagePath, ticketsPagePath } from "@/path";
 import { toCent } from "@/utils/currency";
@@ -25,11 +26,26 @@ const upsertTicket = async (
   _actionState: ActionState,
   formData: FormData,
 ) => {
-  const user = await getAuth();
+  const user = await getAuthOrRedirect();
 
   if (!user) redirect(signInPagePath());
 
   try {
+    if (id) {
+      const ticket = await prisma.ticket.findUnique({
+        where: {
+          id,
+        },
+      });
+
+      if (!ticket || !isOwnership(user, ticket)) {
+        return toActionState(
+          "ERROR",
+          "You are not authorized to edit this ticket.",
+        );
+      }
+    }
+
     const data = upsertTicketSchema.parse(
       Object.fromEntries(formData.entries()),
     );

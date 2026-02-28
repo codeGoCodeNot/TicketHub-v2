@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { ticketsPagePath } from "@/path";
 import Link from "next/link";
 
 export default function ForbiddenPage() {
@@ -13,7 +14,7 @@ export default function ForbiddenPage() {
         </div>
         <div>
           <Button asChild>
-            <Link href="/dashboard">Go to Dashboard</Link>
+            <Link href={ticketsPagePath()}>Go to Tickets</Link>
           </Button>
         </div>
       </div>

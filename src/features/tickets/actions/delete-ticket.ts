@@ -1,14 +1,33 @@
 "use server";
 
 import { setCookieByKey } from "@/actions/cookies";
-import fromErrorToActionState from "@/components/form/utils/to-action-state";
+import fromErrorToActionState, {
+  toActionState,
+} from "@/components/form/utils/to-action-state";
+import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
+import isOwnership from "@/features/auth/utils/is-ownership";
 import prisma from "@/lib/prisma";
 import { ticketsPagePath } from "@/path";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 const deleteTicket = async (id: string) => {
+  const user = await getAuthOrRedirect();
+
   try {
+    const ticket = await prisma.ticket.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!ticket || isOwnership(user, ticket)) {
+      return toActionState(
+        "ERROR",
+        "You are not authorized to delete this ticket.",
+      );
+    }
+
     await prisma.ticket.delete({
       where: {
         id,
