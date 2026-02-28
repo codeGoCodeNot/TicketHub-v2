@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { navItems } from "../constant";
+import { Separator } from "@/components/ui/separator";
 
 const SideBar = () => {
   const pathname = usePathname();
@@ -27,6 +28,7 @@ const SideBar = () => {
             const isActive = pathname === item.href;
             return (
               <SidebarMenuItem key={item.title}>
+                {item.separator && <Separator />}
                 <SidebarMenuButton asChild>
                   <Link
                     href={item.href}

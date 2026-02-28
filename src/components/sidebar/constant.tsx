@@ -1,5 +1,10 @@
-import { homePagePath, ticketsPagePath } from "@/path";
-import { LucideBookCopy, LucideLibrary } from "lucide-react";
+import {
+  accountPasswordPagePath,
+  accountProfilePagePath,
+  homePagePath,
+  ticketsPagePath,
+} from "@/path";
+import { LucideBookCopy, LucideCircleUser, LucideLibrary } from "lucide-react";
 import { NavItem } from "./components/type";
 
 export const navItems: NavItem[] = [
@@ -12,5 +17,11 @@ export const navItems: NavItem[] = [
     title: "My Tickets",
     href: ticketsPagePath(),
     icon: <LucideBookCopy />,
+  },
+  {
+    separator: true,
+    title: "Account",
+    href: accountProfilePagePath(),
+    icon: <LucideCircleUser />,
   },
 ];
