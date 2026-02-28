@@ -1,8 +1,6 @@
 import Heading from "@/components/heading";
 import Spinner from "@/components/spinner";
 import TicketList from "@/features/tickets/components/ticket-list";
-import { ticketsPagePath } from "@/path";
-import Link from "next/link";
 import { Suspense } from "react";
 
 const HomePage = () => {

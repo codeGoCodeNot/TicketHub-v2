@@ -1,11 +1,13 @@
 import Header from "@/components/header";
+import RedirectToast from "@/components/redirect-toast";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Roboto } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
-import RedirectToast from "@/components/redirect-toast";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import SideBar from "@/components/sidebar/components/sidebar";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -31,15 +33,18 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
-          <main
-            className="py-24 px-8 flex flex-col flex-1
-          overflow-x-hidden overflow-y-auto
-          min-h-screen
-          "
-          >
-            <TooltipProvider delayDuration={2000}>{children}</TooltipProvider>
-          </main>
+          <SidebarProvider>
+            <Header />
+            <main
+              className="py-24 px-8 flex flex-col flex-1
+              overflow-x-hidden overflow-y-auto
+              min-h-screen
+              "
+            >
+              <SideBar />
+              <TooltipProvider delayDuration={2000}>{children}</TooltipProvider>
+            </main>
+          </SidebarProvider>
           <RedirectToast />
           <Toaster expand />
         </ThemeProvider>
