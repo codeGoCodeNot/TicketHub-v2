@@ -20,14 +20,19 @@ import { TICKET_ICONS } from "../constants";
 import TicketMoreMenu from "./ticket-more-menu";
 import ToolTip from "@/components/tool-tip";
 import { TicketWithMetada } from "../type";
+import getAuth from "@/features/auth/actions/get-auth";
+import isOwnership from "@/features/auth/utils/is-ownership";
 
 type TicketItemProps = {
   ticket: TicketWithMetada;
   isDetail?: boolean;
 };
 
-const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
-  const editButton = (
+const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
+  const user = await getAuth();
+  const isTicketOwner = isOwnership(user, ticket);
+
+  const editButton = isTicketOwner && (
     <ToolTip label="Edit ticket">
       <Button variant="outline" size="icon" asChild>
         <Link prefetch href={ticketEditPagePath(ticket.id)}>
@@ -52,7 +57,7 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
     </ToolTip>
   );
 
-  const moreMenu = (
+  const moreMenu = isTicketOwner && (
     <TicketMoreMenu
       ticket={ticket}
       trigger={
