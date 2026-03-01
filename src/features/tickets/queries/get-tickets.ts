@@ -7,6 +7,8 @@ const getTickets = async (
   userId: string | undefined,
   searchParams: SearchParams,
 ) => {
+  console.log(searchParams.search);
+
   return await prisma.ticket.findMany({
     where: {
       userId,
