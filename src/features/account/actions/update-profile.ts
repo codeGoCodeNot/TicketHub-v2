@@ -27,8 +27,9 @@ const updateProfile = async (_actionState: ActionState, formData: FormData) => {
     );
 
     const user = await prisma.user.findUnique({
-      where: { id: sessionUser.id },
-      select: { email: true, name: true },
+      where: {
+        id: sessionUser.id,
+      },
     });
 
     if (!user) {
@@ -40,14 +41,6 @@ const updateProfile = async (_actionState: ActionState, formData: FormData) => {
 
     const isEmailChanged = normalizedEmail !== user.email.toLowerCase();
     const isNameChanged = normalizedName !== user.name;
-    const changeCount = Number(isEmailChanged) + Number(isNameChanged);
-
-    if (changeCount !== 1) {
-      return toActionState(
-        "ERROR",
-        "Change exactly one field: email or username.",
-      );
-    }
 
     if (isEmailChanged) {
       await auth.api.changeEmail({
@@ -62,7 +55,6 @@ const updateProfile = async (_actionState: ActionState, formData: FormData) => {
       await auth.api.updateUser({
         body: {
           name: normalizedName,
-          image,
         },
         headers: await headers(),
       });
