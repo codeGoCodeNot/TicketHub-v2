@@ -94,7 +94,9 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
                   {user?.name?.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <div className="text-xs text-muted-foreground">{user?.name}</div>
+              <div className="text-xs text-muted-foreground">
+                {user?.name.split(" ")[0]}
+              </div>
             </div>
           </CardTitle>
         </CardHeader>
