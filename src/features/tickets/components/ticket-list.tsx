@@ -1,3 +1,4 @@
+import SearchInput from "@/components/search-input";
 import getTickets from "../queries/get-tickets";
 import TicketItem from "./ticket-item";
 
@@ -10,6 +11,9 @@ const TicketList = async ({ userId }: TicketListProps) => {
 
   return (
     <div className="flex flex-1 flex-col items-center gap-y-4 animate-fade-from-top">
+      <div className="w-full max-w-[420px]">
+        <SearchInput placeholder="Search tickets..." />
+      </div>
       {tickets.length === 0 ? (
         <p className="text-muted-foreground">No tickets found.</p>
       ) : (
