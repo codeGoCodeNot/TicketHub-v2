@@ -17,13 +17,22 @@ export const auth = betterAuth({
   user: {
     changeEmail: {
       enabled: true,
-      sendChangeEmailVerification: async ({ user, url, newEmail }) => {
+      sendChangeEmailConfirmation: async ({ user, url, newEmail }) => {
         await sendEmail({
           to: user.email,
           subject: "Email Change Verification",
           text: `Your email has been changed to ${newEmail}. If you did not request this change, please click the following link to secure your account: ${url}`,
         });
       },
+    },
+  },
+  emailVerification: {
+    sendVerificationEmail: async ({ user, url }) => {
+      await sendEmail({
+        to: user.email,
+        subject: "Email Verification",
+        text: `Please verify your email by clicking the following link: ${url}`,
+      });
     },
   },
   emailAndPassword: {
