@@ -3,6 +3,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import prisma from "./prisma";
 import { hashPassword, verifyPassword } from "@/utils/password";
 import { nextCookies } from "better-auth/next-js";
+import { sendEmail } from "./resend";
 
 export type Session = typeof auth.$Infer.Session;
 export type User = typeof auth.$Infer.Session.user;
@@ -13,6 +14,18 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  user: {
+    changeEmail: {
+      enabled: true,
+      sendChangeEmailVerification: async ({ user, url, newEmail }) => {
+        await sendEmail({
+          to: user.email,
+          subject: "Email Change Verification",
+          text: `Your email has been changed to ${newEmail}. If you did not request this change, please click the following link to secure your account: ${url}`,
+        });
+      },
+    },
+  },
   emailAndPassword: {
     enabled: true,
     password: {

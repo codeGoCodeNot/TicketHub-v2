@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import { signInPagePath } from "@/path";
 import { LucideLogOut } from "lucide-react";
@@ -28,7 +27,11 @@ const SignOutItem = () => {
   };
 
   return (
-    <Button onClick={handleSignOut} variant="ghost" disabled={loading}>
+    <button
+      onClick={handleSignOut}
+      disabled={loading}
+      className="flex items-center gap-x-2"
+    >
       {loading ? (
         <>
           <span>Sign Out</span>
@@ -40,7 +43,7 @@ const SignOutItem = () => {
           <LucideLogOut />
         </>
       )}
-    </Button>
+    </button>
   );
 };
 

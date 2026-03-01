@@ -6,18 +6,18 @@ const nextConfig: NextConfig = {
   experimental: {
     authInterrupts: true,
   },
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "lh3.googleusercontent.com",
-      },
-      {
-        protocol: "https",
-        hostname: "avatars.githubusercontent.com",
-      },
-    ],
-  },
+  // images: {
+  //   remotePatterns: [
+  //     {
+  //       protocol: "https",
+  //       hostname: "lh3.googleusercontent.com",
+  //     },
+  //     {
+  //       protocol: "https",
+  //       hostname: "avatars.githubusercontent.com",
+  //     },
+  //   ],
+  // },
 };
 
 export default nextConfig;

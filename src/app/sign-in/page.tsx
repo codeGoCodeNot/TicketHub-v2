@@ -1,8 +1,6 @@
 import CardCompact from "@/components/card-compact";
 import SignInForm from "@/features/auth/components/sign-in-form";
-import SignInProviderForm from "@/features/auth/components/sign-in-provider-form";
 import { signUpPagePath } from "@/path";
-import { Sign } from "crypto";
 import Link from "next/link";
 
 const SignInPage = () => {
