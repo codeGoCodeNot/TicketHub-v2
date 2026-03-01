@@ -5,6 +5,7 @@ export type TicketWithMetada = Prisma.TicketGetPayload<{
     user: {
       select: {
         name: true;
+        image: true;
       };
     };
   };

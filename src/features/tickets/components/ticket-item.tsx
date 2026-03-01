@@ -84,18 +84,18 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
                 <span className="truncate text-lg">{ticket.title}</span>
               </div>
             </div>
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center gap-y-2">
               <Avatar>
                 <AvatarImage
-                  src={user?.image ?? undefined}
-                  alt={user?.name || "User Avatar"}
+                  src={ticket.user.image ?? undefined}
+                  alt={ticket.user.name || "User Avatar"}
                 />
                 <AvatarFallback>
-                  {user?.name?.charAt(0).toUpperCase()}
+                  {ticket.user.name?.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <div className="text-xs text-muted-foreground">
-                {user?.name.split(" ")[0]}
+                {ticket.user?.name.split(" ")[0]}
               </div>
             </div>
           </CardTitle>
