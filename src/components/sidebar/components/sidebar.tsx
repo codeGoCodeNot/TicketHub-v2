@@ -29,7 +29,7 @@ const SideBar = () => {
   if (!user || !isFetched) return null;
 
   return (
-    <Sidebar className="w-35 md:w-40">
+    <Sidebar>
       <SidebarContent className="pt-8 px-2 md:pt-20">
         <SidebarMenu>
           {navItems.map((item, index) => {
