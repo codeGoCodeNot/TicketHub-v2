@@ -4,9 +4,14 @@ import Spinner from "@/components/spinner";
 import getAuth from "@/features/auth/actions/get-auth";
 import TicketList from "@/features/tickets/components/ticket-list";
 import TicketUpsertForm from "@/features/tickets/components/ticket-upsert-form";
+import { SearchParams } from "@/features/tickets/search-params";
 import { Suspense } from "react";
 
-const TicketsPage = async () => {
+type TicketsPageProps = {
+  searchParams: Promise<SearchParams>;
+};
+
+const TicketsPage = async ({ searchParams }: TicketsPageProps) => {
   const user = await getAuth();
 
   return (
@@ -21,7 +26,7 @@ const TicketsPage = async () => {
       />
 
       <Suspense fallback={<Spinner />}>
-        <TicketList userId={user?.id} />
+        <TicketList userId={user?.id} searchParams={await searchParams} />
       </Suspense>
     </div>
   );

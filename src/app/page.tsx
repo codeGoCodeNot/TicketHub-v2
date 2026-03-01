@@ -1,9 +1,15 @@
 import Heading from "@/components/heading";
 import Spinner from "@/components/spinner";
 import TicketList from "@/features/tickets/components/ticket-list";
+import { SearchParams } from "@/features/tickets/search-params";
+
 import { Suspense } from "react";
 
-const HomePage = () => {
+type HomePageProps = {
+  searchParams: Promise<SearchParams>;
+};
+
+const HomePage = async ({ searchParams }: HomePageProps) => {
   return (
     <div className="flex flex-col gap-y-8 flex-1">
       <Heading
@@ -12,7 +18,7 @@ const HomePage = () => {
       />
 
       <Suspense fallback={<Spinner />}>
-        <TicketList />
+        <TicketList searchParams={await searchParams} />
       </Suspense>
     </div>
   );
