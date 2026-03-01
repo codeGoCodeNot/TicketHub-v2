@@ -1,12 +1,3 @@
-import SignOutItem from "@/features/auth/components/sign-out-item";
-import {
-  accountPasswordPagePath,
-  accountProfilePagePath,
-  ticketsPagePath,
-} from "@/path";
-import Link from "next/link";
-import { Button } from "./ui/button";
-import { User } from "better-auth/types";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +7,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import SignOutItem from "@/features/auth/components/sign-out-item";
+import { accountPasswordPagePath, accountProfilePagePath } from "@/path";
+import { User } from "better-auth/types";
+import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 type AccountDropdownProps = {
@@ -36,7 +31,7 @@ const AccountDropdown = ({ user }: AccountDropdownProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuGroup>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Link href={accountProfilePagePath()}>Profile</Link>
