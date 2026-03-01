@@ -21,6 +21,7 @@ import Link from "next/link";
 import { TICKET_ICONS } from "../constants";
 import { TicketWithMetada } from "../type";
 import TicketMoreMenu from "./ticket-more-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type TicketItemProps = {
   ticket: TicketWithMetada;
@@ -76,10 +77,24 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
     >
       <Card className="w-full">
         <CardHeader>
-          <CardTitle className="flex gap-x-2 items-center">
-            <span>{TICKET_ICONS[ticket.status]}</span>
-            <div>
-              <span className="truncate text-lg">{ticket.title}</span>
+          <CardTitle className="flex justify-between items-center">
+            <div className="flex gap-x-2 items-center">
+              <span>{TICKET_ICONS[ticket.status]}</span>
+              <div>
+                <span className="truncate text-lg">{ticket.title}</span>
+              </div>
+            </div>
+            <div className="flex flex-col items-center">
+              <Avatar>
+                <AvatarImage
+                  src={user?.image ?? undefined}
+                  alt={user?.name || "User Avatar"}
+                />
+                <AvatarFallback>
+                  {user?.name?.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <div className="text-xs text-muted-foreground">{user?.name}</div>
             </div>
           </CardTitle>
         </CardHeader>
@@ -95,7 +110,7 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
         <CardFooter className="flex justify-between">
           <p className="text-sm text-muted-foreground">{ticket.deadline}</p>
           <p className="text-sm text-muted-foreground">
-            {toCurrencyFromCents(ticket.bounty)} by {ticket.user.name}
+            {toCurrencyFromCents(ticket.bounty)}
           </p>
         </CardFooter>
       </Card>
