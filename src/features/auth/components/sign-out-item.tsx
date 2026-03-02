@@ -30,7 +30,7 @@ const SignOutItem = () => {
     <button
       onClick={handleSignOut}
       disabled={loading}
-      className="flex items-center gap-x-2"
+      className="flex items-center gap-x-2 w-full"
     >
       {loading ? (
         <>
