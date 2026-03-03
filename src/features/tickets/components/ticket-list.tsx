@@ -23,6 +23,12 @@ const TicketList = async ({ userId, searchParams }: TicketListProps) => {
               sortValue: "desc",
               label: "Newest",
             },
+            // need composite key to avoid duplicate keys in select items
+            {
+              sortKey: "createdAt",
+              sortValue: "asc",
+              label: "Oldest",
+            },
             {
               sortKey: "bounty",
               sortValue: "desc",
