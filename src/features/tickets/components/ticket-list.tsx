@@ -3,6 +3,7 @@ import SortSelect from "@/components/sort-select";
 import getTickets from "../queries/get-tickets";
 import { ParsedSearchParams } from "../search-params";
 import TicketItem from "./ticket-item";
+import Pagination from "@/components/pagination";
 
 type TicketListProps = {
   userId?: string;
@@ -42,6 +43,10 @@ const TicketList = async ({ userId, searchParams }: TicketListProps) => {
       ) : (
         tickets.map((ticket) => <TicketItem key={ticket.id} ticket={ticket} />)
       )}
+
+      <div className="w-full max-w-[420px] flex gap-x-2">
+        <Pagination />
+      </div>
     </div>
   );
 };
