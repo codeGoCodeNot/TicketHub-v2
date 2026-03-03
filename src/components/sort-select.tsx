@@ -12,14 +12,14 @@ import {
 } from "@/components/ui/select";
 
 type SortSelectProps = {
-  defaltValue: string;
+  defaultValue: string;
   options: {
     label: string;
     value: string;
   }[];
 };
 
-const SortSelect = ({ defaltValue, options }: SortSelectProps) => {
+const SortSelect = ({ defaultValue, options }: SortSelectProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -27,7 +27,7 @@ const SortSelect = ({ defaltValue, options }: SortSelectProps) => {
   const handleSearch = (value: string) => {
     const params = new URLSearchParams(searchParams);
 
-    if (value === defaltValue) {
+    if (value === defaultValue) {
       params.delete("sort");
     } else {
       params.set("sort", value);
@@ -40,7 +40,7 @@ const SortSelect = ({ defaltValue, options }: SortSelectProps) => {
 
   return (
     <Select
-      defaultValue={searchParams.get("sort") || defaltValue}
+      defaultValue={searchParams.get("sort") || defaultValue}
       onValueChange={handleSearch}
     >
       <SelectTrigger className="w-full max-w-38">

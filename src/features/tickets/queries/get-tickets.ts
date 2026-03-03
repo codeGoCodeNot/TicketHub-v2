@@ -1,11 +1,11 @@
 import prisma from "@/lib/prisma";
-import { SearchParams } from "../search-params";
+import { ParsedSearchParams } from "../search-params";
 
 // Query to fetch all tickets
 
 const getTickets = async (
   userId: string | undefined,
-  searchParams: SearchParams,
+  searchParams: ParsedSearchParams,
 ) => {
   console.log(searchParams.sort);
 
@@ -18,7 +18,7 @@ const getTickets = async (
       },
     },
     orderBy: {
-      ...(searchParams.sort === undefined && { createdAt: "desc" }),
+      ...(searchParams.sort === "newest" && { createdAt: "desc" }),
       ...(searchParams.sort === "bounty" && { bounty: "desc" }),
     },
     include: {

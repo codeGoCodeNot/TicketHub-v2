@@ -8,6 +8,7 @@ import { Roboto } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 import SideBar from "@/components/sidebar/components/sidebar";
+import { NuqsAdapter } from "nuqs/adapters/next/pages";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -27,27 +28,31 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${roboto.className} antialiased`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <SidebarProvider>
-            <Header />
-            <main
-              className="py-24 px-8 flex flex-col flex-1
+        <NuqsAdapter>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <SidebarProvider>
+              <Header />
+              <main
+                className="py-24 px-8 flex flex-col flex-1
               overflow-x-hidden overflow-y-auto
               min-h-screen
               "
-            >
-              <SideBar />
-              <TooltipProvider delayDuration={1500}>{children}</TooltipProvider>
-            </main>
-          </SidebarProvider>
-          <RedirectToast />
-          <Toaster expand />
-        </ThemeProvider>
+              >
+                <SideBar />
+                <TooltipProvider delayDuration={1500}>
+                  {children}
+                </TooltipProvider>
+              </main>
+            </SidebarProvider>
+            <RedirectToast />
+            <Toaster expand />
+          </ThemeProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );
