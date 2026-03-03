@@ -7,19 +7,18 @@ const getTickets = async (
   userId: string | undefined,
   searchParams: ParsedSearchParams,
 ) => {
-  console.log(searchParams.sort);
-
   return await prisma.ticket.findMany({
     where: {
       userId,
+      // search by title with case-insensitive matching
       title: {
         contains: searchParams.search,
         mode: "insensitive",
       },
     },
     orderBy: {
-      ...(searchParams.sort === "newest" && { createdAt: "desc" }),
-      ...(searchParams.sort === "bounty" && { bounty: "desc" }),
+      [searchParams.sortKey]: searchParams.sortValue,
+      // generic sorting based on sortKey and sortValue
     },
     include: {
       user: {
