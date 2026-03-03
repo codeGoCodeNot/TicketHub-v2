@@ -8,7 +8,7 @@ import { Roboto } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 import SideBar from "@/components/sidebar/components/sidebar";
-import { NuqsAdapter } from "nuqs/adapters/next/pages";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const roboto = Roboto({
   variable: "--font-roboto",
