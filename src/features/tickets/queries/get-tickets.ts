@@ -16,29 +16,33 @@ const getTickets = async (
     },
   };
 
-  // calculate skip and take for pagination and count total tickets for pagination metadata
+  // calculate skip and take for pagination
   const skip = searchParams.page * searchParams.size;
   const take = searchParams.size;
-  const count = await prisma.ticket.count({ where });
 
-  const tickets = await prisma.ticket.findMany({
-    where,
-    skip,
-    take,
-    // dynamic sorting based on sortKey and sortValue from searchParams
-    orderBy: {
-      [searchParams.sortKey]: searchParams.sortValue,
-      // generic sorting based on sortKey and sortValue
-    },
-    include: {
-      user: {
-        select: {
-          name: true,
-          image: true,
+  const [tickets, count] = await prisma.$transaction([
+    prisma.ticket.findMany({
+      where,
+      skip,
+      take,
+      // dynamic sorting based on sortKey and sortValue from searchParams
+      orderBy: {
+        // generic sorting based on sortKey and sortValue
+        [searchParams.sortKey]: searchParams.sortValue,
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            image: true,
+          },
         },
       },
-    },
-  });
+    }),
+    prisma.ticket.count({
+      where,
+    }),
+  ]);
 
   return {
     list: tickets,

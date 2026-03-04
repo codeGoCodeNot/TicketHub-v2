@@ -3,12 +3,12 @@
 import {
   paginationOptions,
   paginationParser,
+  searchParser,
 } from "@/features/tickets/search-params";
-import { useQueryStates } from "nuqs";
-import { Button } from "./ui/button";
-import { useState, useTransition } from "react";
-import { is } from "date-fns/locale";
 import { LucideLoader2 } from "lucide-react";
+import { useQueryState, useQueryStates } from "nuqs";
+import { useEffect, useRef, useState, useTransition } from "react";
+import { Button } from "./ui/button";
 
 type PaginationProps = {
   paginatedMetadata: {
@@ -19,6 +19,10 @@ type PaginationProps = {
 
 const Pagination = ({ paginatedMetadata }: PaginationProps) => {
   const { count, hasNextPage } = paginatedMetadata;
+
+  // listening to pagination to change instead of search query to reset page to 0 when search query changes
+  const [search] = useQueryState("search", searchParser);
+  const prevSearch = useRef(search);
 
   const [isLoading, startTransition] = useTransition();
   const [paginationAction, setPaginationAction] = useState<
@@ -37,6 +41,14 @@ const Pagination = ({ paginatedMetadata }: PaginationProps) => {
   const endOffset = startOffset + pagination.size - 1;
   const actualEndOffset = Math.min(endOffset, count);
   const label = `${startOffset} - ${actualEndOffset} of ${count}`;
+
+  // reset to first page when search query changes
+  useEffect(() => {
+    if (prevSearch.current !== search) return;
+    prevSearch.current = search;
+
+    setPagination({ ...pagination, page: 0 });
+  }, [pagination, search, setPagination]);
 
   const handleNextPage = () => {
     setPaginationAction("next");
@@ -72,10 +84,7 @@ const Pagination = ({ paginatedMetadata }: PaginationProps) => {
   );
 
   return (
-    <div
-      className="flex items-center justify-between w-full gap-x-2 text-sm text-muted-foreground 
-    border-t pt-4"
-    >
+    <div className="flex items-center justify-between w-full gap-x-2 text-sm text-muted-foreground border-t pt-4">
       <div>
         <p>{label}</p>
       </div>

@@ -41,10 +41,10 @@ const TicketList = async ({ userId, searchParams }: TicketListProps) => {
           ]}
         />
       </div>
-      {ticketMetadata.count === 0 ? (
-        <p className="text-muted-foreground text-sm">No tickets found.</p>
-      ) : (
+      {tickets.length ? (
         tickets.map((ticket) => <TicketItem key={ticket.id} ticket={ticket} />)
+      ) : (
+        <p className="text-muted-foreground text-sm">No tickets found.</p>
       )}
 
       <div className="w-full max-w-[420px] flex gap-x-2">
