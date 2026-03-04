@@ -20,14 +20,14 @@ type PaginationProps = {
 const Pagination = ({ paginatedMetadata }: PaginationProps) => {
   const { count, hasNextPage } = paginatedMetadata;
 
-  // listening to pagination to change instead of search query to reset page to 0 when search query changes
-  const [search] = useQueryState("search", searchParser);
-  const prevSearch = useRef(search);
-
   const [isLoading, startTransition] = useTransition();
   const [paginationAction, setPaginationAction] = useState<
     "next" | "prev" | null
   >(null);
+
+  // listening to pagination to change instead of search query to reset page to 0 when search query changes
+  const [search] = useQueryState("search", searchParser);
+  const prevSearchRef = useRef(search);
 
   const isNextPageLoading = isLoading && paginationAction === "next";
   const isPrevPageLoading = isLoading && paginationAction === "prev";
@@ -42,13 +42,11 @@ const Pagination = ({ paginatedMetadata }: PaginationProps) => {
   const actualEndOffset = Math.min(endOffset, count);
   const label = `${startOffset} - ${actualEndOffset} of ${count}`;
 
-  // reset to first page when search query changes
   useEffect(() => {
-    if (prevSearch.current !== search) return;
-    prevSearch.current = search;
-
+    if (prevSearchRef.current === search) return;
+    prevSearchRef.current = search;
     setPagination({ ...pagination, page: 0 });
-  }, [pagination, search, setPagination]);
+  }, [search, pagination, setPagination]);
 
   const handleNextPage = () => {
     setPaginationAction("next");
