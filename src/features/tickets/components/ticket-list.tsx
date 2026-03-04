@@ -11,7 +11,10 @@ type TicketListProps = {
 };
 
 const TicketList = async ({ userId, searchParams }: TicketListProps) => {
-  const tickets = await getTickets(userId, searchParams);
+  const { list: tickets, metadata: ticketMetadata } = await getTickets(
+    userId,
+    searchParams,
+  );
 
   return (
     <div className="flex flex-1 flex-col items-center gap-y-4 animate-fade-from-top">
@@ -38,14 +41,14 @@ const TicketList = async ({ userId, searchParams }: TicketListProps) => {
           ]}
         />
       </div>
-      {tickets.length === 0 ? (
+      {ticketMetadata.count === 0 ? (
         <p className="text-muted-foreground text-sm">No tickets found.</p>
       ) : (
         tickets.map((ticket) => <TicketItem key={ticket.id} ticket={ticket} />)
       )}
 
       <div className="w-full max-w-[420px] flex gap-x-2">
-        <Pagination />
+        <Pagination paginatedMetadata={ticketMetadata} />
       </div>
     </div>
   );

@@ -7,15 +7,25 @@ const getTickets = async (
   userId: string | undefined,
   searchParams: ParsedSearchParams,
 ) => {
-  return await prisma.ticket.findMany({
-    where: {
-      userId,
-      // search by title with case-insensitive matching
-      title: {
-        contains: searchParams.search,
-        mode: "insensitive",
-      },
+  const where = {
+    userId,
+    // search by title with case-insensitive matching
+    title: {
+      contains: searchParams.search,
+      mode: "insensitive" as const,
     },
+  };
+
+  // calculate skip and take for pagination and count total tickets for pagination metadata
+  const skip = searchParams.page * searchParams.size;
+  const take = searchParams.size;
+  const count = await prisma.ticket.count({ where });
+
+  const tickets = await prisma.ticket.findMany({
+    where,
+    skip,
+    take,
+    // dynamic sorting based on sortKey and sortValue from searchParams
     orderBy: {
       [searchParams.sortKey]: searchParams.sortValue,
       // generic sorting based on sortKey and sortValue
@@ -29,6 +39,11 @@ const getTickets = async (
       },
     },
   });
+
+  return {
+    list: tickets,
+    metadata: { count, hasNextPage: count > skip + take },
+  };
 };
 
 export default getTickets;
