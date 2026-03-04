@@ -9,6 +9,15 @@ import { LucideLoader2 } from "lucide-react";
 import { useQueryState, useQueryStates } from "nuqs";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { Button } from "./ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type PaginationProps = {
   paginatedMetadata: {
@@ -58,6 +67,30 @@ const Pagination = ({ paginatedMetadata }: PaginationProps) => {
     setPagination({ ...pagination, page: Math.max(0, pagination.page - 1) });
   };
 
+  const handleChangeSize = (size: string) => {
+    setPagination({ page: 0, size: parseInt(size) });
+  };
+
+  const sizeButton = (
+    <Select
+      defaultValue={pagination.size.toString()}
+      onValueChange={handleChangeSize}
+    >
+      <SelectTrigger className="w-full max-w-48">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectItem value="2">2</SelectItem>
+          <SelectItem value="5">5</SelectItem>
+          <SelectItem value="10">10</SelectItem>
+          <SelectItem value="20">20</SelectItem>
+          <SelectItem value="50">50</SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  );
+
   const nextButton = (
     <Button
       variant="outline"
@@ -86,7 +119,8 @@ const Pagination = ({ paginatedMetadata }: PaginationProps) => {
       <div>
         <p>{label}</p>
       </div>
-      <div className="flex gap-x-2 items-center">
+      <div className="flex gap-x-1 items-center">
+        {sizeButton}
         {prevButton}
         {nextButton}
       </div>
