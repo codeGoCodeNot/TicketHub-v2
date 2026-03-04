@@ -22,6 +22,7 @@ import { TICKET_ICONS } from "../constants";
 import { TicketWithMetada } from "../type";
 import TicketMoreMenu from "./ticket-more-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Comments from "@/features/comment/components/comments";
 
 type TicketItemProps = {
   ticket: TicketWithMetada;
@@ -70,65 +71,68 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
 
   return (
     <div
-      className={clsx("flex gap-x-1 w-full", {
+      className={clsx("flex flex-col gap-x-1 w-full", {
         "max-w-[420px]": !isDetail,
         "max-w-[550px]": isDetail,
       })}
     >
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle className="flex justify-between items-center">
-            <div className="flex gap-x-2 items-center">
-              <span>{TICKET_ICONS[ticket.status]}</span>
-              <div>
-                <span className="truncate text-lg">{ticket.title}</span>
+      <div className="flex gap-x-1 mb-6">
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle className="flex justify-between items-center">
+              <div className="flex gap-x-2 items-center">
+                <span>{TICKET_ICONS[ticket.status]}</span>
+                <div>
+                  <span className="truncate text-lg">{ticket.title}</span>
+                </div>
               </div>
-            </div>
-            <div className="flex flex-col items-center gap-y-2">
-              <Avatar>
-                <AvatarImage
-                  src={ticket.user.image ?? undefined}
-                  alt={ticket.user.name || "User Avatar"}
-                />
-                <AvatarFallback>
-                  {ticket.user.name?.charAt(0).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <div className="text-xs text-muted-foreground">
-                {ticket.user?.name.split(" ")[0]}
+              <div className="flex flex-col items-center gap-y-2">
+                <Avatar>
+                  <AvatarImage
+                    src={ticket.user.image ?? undefined}
+                    alt={ticket.user.name || "User Avatar"}
+                  />
+                  <AvatarFallback>
+                    {ticket.user.name?.charAt(0).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="text-xs text-muted-foreground">
+                  {ticket.user?.name.split(" ")[0]}
+                </div>
               </div>
-            </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <span
-            className={clsx("whitespace-break-spaces", {
-              "line-clamp-3": !isDetail,
-            })}
-          >
-            {ticket.content}
-          </span>
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <p className="text-sm text-muted-foreground">{ticket.deadline}</p>
-          <p className="text-sm text-muted-foreground">
-            {toCurrencyFromCents(ticket.bounty)}
-          </p>
-        </CardFooter>
-      </Card>
-      <div className="flex flex-col gap-y-1">
-        {isDetail ? (
-          <>
-            {editButton}
-            {moreMenu}
-          </>
-        ) : (
-          <>
-            {detailButton}
-            {editButton}
-          </>
-        )}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <span
+              className={clsx("whitespace-break-spaces", {
+                "line-clamp-3": !isDetail,
+              })}
+            >
+              {ticket.content}
+            </span>
+          </CardContent>
+          <CardFooter className="flex justify-between">
+            <p className="text-sm text-muted-foreground">{ticket.deadline}</p>
+            <p className="text-sm text-muted-foreground">
+              {toCurrencyFromCents(ticket.bounty)}
+            </p>
+          </CardFooter>
+        </Card>
+        <div className="flex flex-col gap-y-1">
+          {isDetail ? (
+            <>
+              {editButton}
+              {moreMenu}
+            </>
+          ) : (
+            <>
+              {detailButton}
+              {editButton}
+            </>
+          )}
+        </div>
       </div>
+      {isDetail && <Comments ticketId={ticket.id} />}
     </div>
   );
 };
