@@ -1,9 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
-import { CommentWithMetadata } from "../type";
-import CommentDeleteButton from "./comment-delete-button";
 import getAuth from "@/features/auth/actions/get-auth";
 import isOwnership from "@/features/auth/utils/is-ownership";
+import { CommentWithMetadata } from "../type";
+import CommentDeleteButton from "./comment-delete-button";
+import CommentEditInline from "./comment-edit-inline";
+import CommentEditTriggerButton from "./comment-edit-trigger-button";
 
 type CommentItemProps = {
   comment: CommentWithMetadata;
@@ -11,6 +13,13 @@ type CommentItemProps = {
 
 const CommentItem = async ({ comment }: CommentItemProps) => {
   const user = await getAuth();
+  // Only the comment owner should see edit/delete controls.
+  const isCommentOwner = isOwnership(user, comment);
+
+  // Show "(edited)" when the comment has been updated after creation.
+  const isEdited =
+    new Date(comment.updatedAt).getTime() >
+    new Date(comment.createdAt).getTime();
 
   return (
     <div className="flex gap-x-1">
@@ -30,12 +39,25 @@ const CommentItem = async ({ comment }: CommentItemProps) => {
           </div>
           <p className="text-muted-foreground text-xs">
             {new Date(comment.createdAt).toLocaleString()}
+            {isEdited && " (edited)"}
           </p>
         </div>
-        <p className="text-muted-foreground">{comment.content}</p>
+
+        <CommentEditInline
+          commentId={comment.id}
+          content={comment.content}
+          isOwner={isCommentOwner}
+        />
       </Card>
+
       <div className="flex flex-col gap-y-1">
-        {isOwnership(user, comment) && <CommentDeleteButton id={comment.id} />}
+        {/* Keep actions outside the form: Edit above Delete. */}
+        {isCommentOwner && (
+          <>
+            <CommentEditTriggerButton commentId={comment.id} />
+            <CommentDeleteButton id={comment.id} />
+          </>
+        )}
       </div>
     </div>
   );
