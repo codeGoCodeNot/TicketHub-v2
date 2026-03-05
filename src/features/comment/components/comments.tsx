@@ -1,7 +1,8 @@
 import CardCompact from "@/components/card-compact";
+import getAuth from "@/features/auth/actions/get-auth";
 import getComments from "../queries/get-comments";
-import CommentItem from "./comment-item";
 import CommentCreateForm from "./comment-create-form";
+import CommentItem from "./comment-item";
 
 type CommentsProps = {
   ticketId: string;
@@ -9,6 +10,7 @@ type CommentsProps = {
 
 const Comments = async ({ ticketId }: CommentsProps) => {
   const comments = await getComments(ticketId);
+  const user = await getAuth();
 
   return (
     <>
