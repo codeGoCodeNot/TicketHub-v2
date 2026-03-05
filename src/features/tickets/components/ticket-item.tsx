@@ -71,12 +71,12 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
 
   return (
     <div
-      className={clsx("flex flex-col gap-x-1 w-full", {
+      className={clsx("flex flex-col gap-x-1 w-full gap-y-4", {
         "max-w-[420px]": !isDetail,
         "max-w-[550px]": isDetail,
       })}
     >
-      <div className="flex gap-x-1 mb-6">
+      <div className="flex gap-x-1">
         <Card className="w-full">
           <CardHeader>
             <CardTitle className="flex justify-between items-center">
