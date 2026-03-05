@@ -1,16 +1,15 @@
 import CardCompact from "@/components/card-compact";
-import getComments from "../queries/get-comments";
+import { CommentWithMetadata } from "../type";
 import CommentCreateForm from "./comment-create-form";
 import CommentEditStateProvider from "./comment-edit-state";
 import CommentItem from "./comment-item";
 
 type CommentsProps = {
   ticketId: string;
+  comments?: CommentWithMetadata[];
 };
 
-const Comments = async ({ ticketId }: CommentsProps) => {
-  const comments = await getComments(ticketId);
-
+const Comments = async ({ ticketId, comments }: CommentsProps) => {
   return (
     <>
       <CardCompact
@@ -21,7 +20,7 @@ const Comments = async ({ ticketId }: CommentsProps) => {
       />
       <CommentEditStateProvider>
         <div className="flex flex-col gap-y-2 ml-8 mt-2">
-          {comments.map((comment) => (
+          {comments?.map((comment) => (
             <CommentItem key={comment.id} comment={comment} />
           ))}
         </div>

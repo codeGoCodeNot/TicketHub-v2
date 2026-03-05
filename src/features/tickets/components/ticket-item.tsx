@@ -1,4 +1,5 @@
 import ToolTip from "@/components/tool-tip";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,6 +10,8 @@ import {
 } from "@/components/ui/card";
 import getAuth from "@/features/auth/actions/get-auth";
 import isOwnership from "@/features/auth/utils/is-ownership";
+import Comments from "@/features/comment/components/comments";
+import { CommentWithMetadata } from "@/features/comment/type";
 import { ticketEditPagePath, ticketPagePath } from "@/path";
 import { toCurrencyFromCents } from "@/utils/currency";
 import clsx from "clsx";
@@ -21,15 +24,14 @@ import Link from "next/link";
 import { TICKET_ICONS } from "../constants";
 import { TicketWithMetada } from "../type";
 import TicketMoreMenu from "./ticket-more-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Comments from "@/features/comment/components/comments";
 
 type TicketItemProps = {
   ticket: TicketWithMetada;
   isDetail?: boolean;
+  comments?: CommentWithMetadata[];
 };
 
-const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
+const TicketItem = async ({ ticket, isDetail, comments }: TicketItemProps) => {
   const user = await getAuth();
   const isTicketOwner = isOwnership(user, ticket);
 
@@ -132,7 +134,7 @@ const TicketItem = async ({ ticket, isDetail }: TicketItemProps) => {
           )}
         </div>
       </div>
-      {isDetail && <Comments ticketId={ticket.id} />}
+      {isDetail && <Comments ticketId={ticket.id} comments={comments} />}
     </div>
   );
 };
