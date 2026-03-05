@@ -15,7 +15,7 @@ const Comments = async ({ ticketId }: CommentsProps) => {
     <>
       <CardCompact
         className="mb-1"
-        title="Create Comment"
+        title="Write a Comment"
         description="A new comment will be created"
         content={<CommentCreateForm ticketId={ticketId} />}
       />
