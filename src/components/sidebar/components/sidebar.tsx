@@ -9,7 +9,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import useAuth from "@/features/auth/hooks/use-auth";
-import { cn } from "@/lib/utils";
 import { signInPagePath, signUpPagePath } from "@/path";
 import getActivePath from "@/utils/get-active-path";
 import Link from "next/link";
@@ -30,22 +29,36 @@ const SideBar = () => {
 
   return (
     <Sidebar>
-      <SidebarContent className="pt-8 px-2 md:pt-20">
-        <SidebarMenu>
+      <SidebarContent className="px-2.5 pt-8 md:pt-20">
+        <div className="mb-2 rounded-lg border border-sidebar-border/70 px-3 py-2.5">
+          <p className="text-[11px] font-semibold tracking-[0.14em] text-sidebar-foreground/60 uppercase">
+            Navigation
+          </p>
+          <p className="mt-0.5 text-sm font-semibold text-sidebar-foreground/90">
+            TicketHub
+          </p>
+        </div>
+
+        <SidebarMenu className="gap-1.5">
           {navItems.map((item, index) => {
             const isActive = activeIndex === index;
             return (
               <SidebarMenuItem key={item.title}>
-                {item.separator && <Separator />}
-                <SidebarMenuButton asChild>
+                {item.separator && <Separator className="my-2" />}
+                <SidebarMenuButton
+                  asChild
+                  isActive={isActive}
+                  className="h-10 rounded-lg px-2.5 transition-colors hover:bg-sidebar-foreground/5 hover:text-sidebar-foreground active:bg-sidebar-foreground/5 active:text-sidebar-foreground data-[active=true]:bg-muted data-[active=true]:text-sidebar-foreground data-[active=true]:font-semibold data-[active=true]:hover:bg-muted data-[active=true]:active:bg-muted"
+                >
                   <Link
                     href={item.href}
-                    className={cn(
-                      isActive && "bg-muted font-bold hover:bg-muted",
-                    )}
+                    aria-current={isActive ? "page" : undefined}
+                    className="flex items-center gap-3"
                   >
-                    {item.icon}
-                    <span>{item.title}</span>
+                    <span className="shrink-0 [&>svg]:size-4 [&>svg]:shrink-0">
+                      {item.icon}
+                    </span>
+                    <span className="truncate">{item.title}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
