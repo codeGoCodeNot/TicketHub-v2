@@ -1,3 +1,5 @@
+"use client";
+
 import ToolTip from "@/components/tool-tip";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -8,10 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import getAuth from "@/features/auth/actions/get-auth";
-import isOwnership from "@/features/auth/utils/is-ownership";
-import Comments from "@/features/comment/components/comments";
-import { CommentWithMetadata } from "@/features/comment/type";
 import { ticketEditPagePath, ticketPagePath } from "@/path";
 import { toCurrencyFromCents } from "@/utils/currency";
 import clsx from "clsx";
@@ -28,14 +26,11 @@ import TicketMoreMenu from "./ticket-more-menu";
 type TicketItemProps = {
   ticket: TicketWithMetada;
   isDetail?: boolean;
-  comments?: CommentWithMetadata[];
+  comments?: React.ReactNode;
 };
 
-const TicketItem = async ({ ticket, isDetail, comments }: TicketItemProps) => {
-  const user = await getAuth();
-  const isTicketOwner = isOwnership(user, ticket);
-
-  const editButton = isTicketOwner && (
+const TicketItem = ({ ticket, isDetail, comments }: TicketItemProps) => {
+  const editButton = ticket.isOwner && (
     <ToolTip label="Edit ticket">
       <Button variant="outline" size="icon" asChild>
         <Link prefetch href={ticketEditPagePath(ticket.id)}>
@@ -60,7 +55,7 @@ const TicketItem = async ({ ticket, isDetail, comments }: TicketItemProps) => {
     </ToolTip>
   );
 
-  const moreMenu = isTicketOwner && (
+  const moreMenu = ticket.isOwner && (
     <TicketMoreMenu
       ticket={ticket}
       trigger={
@@ -134,7 +129,7 @@ const TicketItem = async ({ ticket, isDetail, comments }: TicketItemProps) => {
           )}
         </div>
       </div>
-      {isDetail && <Comments ticketId={ticket.id} comments={comments} />}
+      {comments}
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { CommentWithMetadata } from "../type";
 import CommentCreateForm from "./comment-create-form";
 import CommentEditStateProvider from "./comment-edit-state";
 import CommentItem from "./comment-item";
+import { Button } from "@/components/ui/button";
 
 type CommentsProps = {
   ticketId: string;
@@ -10,6 +11,8 @@ type CommentsProps = {
 };
 
 const Comments = async ({ ticketId, comments }: CommentsProps) => {
+  console.log("Where am i displayed?. comments page");
+
   return (
     <>
       <CardCompact
@@ -25,6 +28,9 @@ const Comments = async ({ ticketId, comments }: CommentsProps) => {
           ))}
         </div>
       </CommentEditStateProvider>
+      <div className="flex flex-col justify-center ml-8">
+        <Button variant="ghost">More</Button>
+      </div>
     </>
   );
 };

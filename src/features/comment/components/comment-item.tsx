@@ -1,7 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
-import getAuth from "@/features/auth/actions/get-auth";
-import isOwnership from "@/features/auth/utils/is-ownership";
 import { CommentWithMetadata } from "../type";
 import CommentDeleteButton from "./comment-delete-button";
 import CommentEditInline from "./comment-edit-inline";
@@ -12,10 +10,6 @@ type CommentItemProps = {
 };
 
 const CommentItem = async ({ comment }: CommentItemProps) => {
-  const user = await getAuth();
-  // Only the comment owner should see edit/delete controls.
-  const isCommentOwner = isOwnership(user, comment);
-
   // Show "(edited)" when the comment has been updated after creation.
   const isEdited =
     new Date(comment.updatedAt).getTime() >
@@ -46,13 +40,13 @@ const CommentItem = async ({ comment }: CommentItemProps) => {
         <CommentEditInline
           commentId={comment.id}
           content={comment.content}
-          isOwner={isCommentOwner}
+          isOwner={comment.isOwner}
         />
       </Card>
 
       <div className="flex flex-col gap-y-1">
         {/* Keep actions outside the form: Edit above Delete. */}
-        {isCommentOwner && (
+        {comment.isOwner && (
           <>
             <CommentEditTriggerButton commentId={comment.id} />
             <CommentDeleteButton id={comment.id} />

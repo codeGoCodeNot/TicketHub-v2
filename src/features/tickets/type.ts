@@ -9,4 +9,6 @@ export type TicketWithMetada = Prisma.TicketGetPayload<{
       };
     };
   };
-}>;
+}> & {
+  isOwner: boolean;
+};

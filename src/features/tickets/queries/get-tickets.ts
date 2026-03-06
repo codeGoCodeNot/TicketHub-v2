@@ -1,5 +1,7 @@
 import prisma from "@/lib/prisma";
 import { ParsedSearchParams } from "../search-params";
+import getAuth from "@/features/auth/actions/get-auth";
+import isOwnership from "@/features/auth/utils/is-ownership";
 
 // Query to fetch all tickets
 
@@ -7,6 +9,8 @@ const getTickets = async (
   userId: string | undefined,
   searchParams: ParsedSearchParams,
 ) => {
+  const user = await getAuth();
+
   const where = {
     userId,
     // search by title with case-insensitive matching
@@ -45,7 +49,10 @@ const getTickets = async (
   ]);
 
   return {
-    list: tickets,
+    list: tickets.map((ticket) => ({
+      ...ticket,
+      isOwner: isOwnership(user, ticket),
+    })),
     metadata: { count, hasNextPage: count > skip + take },
   };
 };
