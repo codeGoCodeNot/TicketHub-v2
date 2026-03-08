@@ -31,7 +31,7 @@ type UseConfirmDialogProps = {
   title?: string;
   description?: string;
   pendingMessage?: string;
-  onSuccess?: (actionState: ActionState) => void;
+  onSuccess?: (actionState?: ActionState) => void;
 };
 
 const useConfirmDialog = ({
@@ -44,16 +44,16 @@ const useConfirmDialog = ({
 }: UseConfirmDialogProps) => {
   const [open, setOpen] = useState(false);
 
+  const [actionState, formAction, isPending] = useActionState(
+    action,
+    EMPTY_ACTION_STATE,
+  );
+
   const dialogTrigger = cloneElement(trigger, {
     onClick: () => {
       setOpen((prev) => !prev);
     },
   });
-
-  const [actionState, formAction, isPending] = useActionState(
-    action,
-    EMPTY_ACTION_STATE,
-  );
 
   const toastRef = useRef<string | number | null>(null);
 
@@ -97,7 +97,9 @@ const useConfirmDialog = ({
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction asChild>
             <form action={formAction}>
-              <Button type="submit">Confirm</Button>
+              <Button type="submit" disabled={isPending}>
+                {isPending ? pendingMessage : "Yes, delete it"}
+              </Button>
             </form>
           </AlertDialogAction>
         </AlertDialogFooter>

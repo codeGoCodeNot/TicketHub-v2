@@ -7,9 +7,10 @@ import CommentEditTriggerButton from "./comment-edit-trigger-button";
 
 type CommentItemProps = {
   comment: CommentWithMetadata;
+  onHandleDelete?: (id: string) => void;
 };
 
-const CommentItem = async ({ comment }: CommentItemProps) => {
+const CommentItem = ({ comment, onHandleDelete }: CommentItemProps) => {
   // Show "(edited)" when the comment has been updated after creation.
   const isEdited =
     new Date(comment.updatedAt).getTime() >
@@ -49,7 +50,10 @@ const CommentItem = async ({ comment }: CommentItemProps) => {
         {comment.isOwner && (
           <>
             <CommentEditTriggerButton commentId={comment.id} />
-            <CommentDeleteButton id={comment.id} />
+            <CommentDeleteButton
+              id={comment.id}
+              onHandleDelete={onHandleDelete}
+            />
           </>
         )}
       </div>

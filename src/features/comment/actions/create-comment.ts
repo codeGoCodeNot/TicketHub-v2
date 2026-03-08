@@ -21,14 +21,23 @@ export const createComment = async (
 ) => {
   const user = await getAuthOrRedirect();
 
+  let comment;
+
   try {
     const data = createSchema.parse(Object.fromEntries(formData.entries()));
-
-    await prisma.comment.create({
+    comment = await prisma.comment.create({
       data: {
         userId: user.id,
         ticketId,
         ...data,
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+            image: true,
+          },
+        },
       },
     });
   } catch (error) {
@@ -36,5 +45,8 @@ export const createComment = async (
   }
 
   revalidatePath(ticketPagePath(ticketId));
-  return toActionState("SUCCESS", "Comment created successfully");
+  return toActionState("SUCCESS", "Comment created successfully", undefined, {
+    ...comment,
+    isOwner: true,
+  });
 };
