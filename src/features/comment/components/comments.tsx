@@ -13,7 +13,11 @@ type CommentsProps = {
   ticketId: string;
   comments: {
     list: CommentWithMetadata[];
-    metadata: { count: number; hasMore: boolean };
+    metadata: {
+      count: number;
+      hasNextPage?: boolean;
+      cursor?: { id: string; createdAt: number };
+    };
   };
 };
 
@@ -22,10 +26,7 @@ const Comments = ({ ticketId, comments }: CommentsProps) => {
   const [metadata, setMetadata] = useState(comments.metadata);
 
   const handleMore = async () => {
-    const morePaginatedComments = await getComments(
-      ticketId,
-      paginatedComments.length,
-    );
+    const morePaginatedComments = await getComments(ticketId, metadata.cursor);
     const moreComments = morePaginatedComments.list;
 
     setHasPaginatedComments([...paginatedComments, ...moreComments]);
@@ -67,7 +68,7 @@ const Comments = ({ ticketId, comments }: CommentsProps) => {
         </div>
       </CommentEditStateProvider>
       <div className="flex flex-col justify-center ml-8 text-sm text-muted-foreground underline">
-        {metadata.hasMore && (
+        {metadata.cursor && (
           <Button variant="ghost" onClick={handleMore}>
             More
           </Button>
