@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import useConfirmDialog from "@/features/tickets/hooks/use-confirm-dialog";
-import { LucideTrash2 } from "lucide-react";
+import { LucideLoaderCircle, LucideTrash2 } from "lucide-react";
 import { deleteComment } from "../actions/delete-comment";
 
 type CommentDeleteButtonProps = {
@@ -16,9 +16,13 @@ const CommentDeleteButton = ({
 }: CommentDeleteButtonProps) => {
   const [deleteButton, deleteDialog] = useConfirmDialog({
     action: deleteComment.bind(null, id),
-    trigger: (
+    trigger: (isPending) => (
       <Button variant="destructive" size="icon">
-        <LucideTrash2 />
+        {isPending ? (
+          <LucideLoaderCircle className="animate-spin" />
+        ) : (
+          <LucideTrash2 />
+        )}
       </Button>
     ),
     onSuccess: () => onHandleDelete?.(id),

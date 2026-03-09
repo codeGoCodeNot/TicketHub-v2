@@ -27,7 +27,9 @@ import { toast } from "sonner";
 
 type UseConfirmDialogProps = {
   action: () => Promise<ActionState>;
-  trigger: React.ReactElement<{ onClick?: () => void }>;
+  trigger:
+    | React.ReactElement<{ onClick?: () => void }>
+    | ((isPending: boolean) => React.ReactElement<{ onClick?: () => void }>);
   title?: string;
   description?: string;
   pendingMessage?: string;
@@ -49,11 +51,14 @@ const useConfirmDialog = ({
     EMPTY_ACTION_STATE,
   );
 
-  const dialogTrigger = cloneElement(trigger, {
-    onClick: () => {
-      setOpen((prev) => !prev);
+  const dialogTrigger = cloneElement(
+    typeof trigger === "function" ? trigger(isPending) : trigger,
+    {
+      onClick: () => {
+        setOpen((prev) => !prev);
+      },
     },
-  });
+  );
 
   const toastRef = useRef<string | number | null>(null);
 
@@ -98,7 +103,7 @@ const useConfirmDialog = ({
           <AlertDialogAction asChild>
             <form action={formAction}>
               <Button type="submit" disabled={isPending}>
-                {isPending ? pendingMessage : "Yes, delete it"}
+                Confirm
               </Button>
             </form>
           </AlertDialogAction>
