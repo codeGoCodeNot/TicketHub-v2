@@ -9,6 +9,7 @@ import { Toaster } from "sonner";
 import "./globals.css";
 import SideBar from "@/components/sidebar/components/sidebar";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import Providers from "./_provider/react-query/react-query-provider";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -35,22 +36,24 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <SidebarProvider>
-              <Header />
-              <main
-                className="py-24 px-8 flex flex-col flex-1
+            <Providers>
+              <SidebarProvider>
+                <Header />
+                <main
+                  className="py-24 px-8 flex flex-col flex-1
               overflow-x-hidden overflow-y-auto
               min-h-screen
               "
-              >
-                <SideBar />
-                <TooltipProvider delayDuration={1500}>
-                  {children}
-                </TooltipProvider>
-              </main>
-            </SidebarProvider>
-            <RedirectToast />
-            <Toaster expand />
+                >
+                  <SideBar />
+                  <TooltipProvider delayDuration={1500}>
+                    {children}
+                  </TooltipProvider>
+                </main>
+              </SidebarProvider>
+              <RedirectToast />
+              <Toaster expand />
+            </Providers>
           </ThemeProvider>
         </NuqsAdapter>
       </body>
