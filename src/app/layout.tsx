@@ -4,12 +4,15 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
-import { Roboto } from "next/font/google";
+import { Roboto, Inter } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 import SideBar from "@/components/sidebar/components/sidebar";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import Providers from "./_provider/react-query/react-query-provider";
+import { cn } from "@/lib/utils";
+
+const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -27,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={cn("font-sans", inter.variable)}>
       <body className={`${roboto.className} antialiased`}>
         <NuqsAdapter>
           <ThemeProvider
