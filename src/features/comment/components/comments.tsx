@@ -68,10 +68,12 @@ const Comments = ({ ticketId, comments }: CommentsProps) => {
         </div>
       </CommentEditStateProvider>
       <div className="flex flex-col justify-center ml-8 text-sm text-muted-foreground underline">
-        {metadata.cursor && (
+        {metadata.hasNextPage ? (
           <Button variant="ghost" onClick={handleMore}>
             More
           </Button>
+        ) : (
+          <p className="text-right text-xs italic">No more comments.</p>
         )}
       </div>
     </>

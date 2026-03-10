@@ -19,10 +19,10 @@ const getComments = async (
 
   const take = 2;
 
-  const [comments, count] = await prisma.$transaction([
+  let [comments, count] = await prisma.$transaction([
     prisma.comment.findMany({
       where,
-      take,
+      take: take + 1,
       cursor: cursor
         ? { createdAt: new Date(cursor.createdAt), id: cursor.id }
         : undefined,
@@ -43,7 +43,12 @@ const getComments = async (
     }),
   ]);
 
-  const hasNextPage = true;
+  const hasNextPage = comments.length > take;
+
+  // Remove the extra comment used to check for the next page
+  comments = hasNextPage ? comments.slice(0, -1) : comments;
+
+  // Get the last comment for the next page cursor
   const lastComment = comments.at(-1);
 
   return {
