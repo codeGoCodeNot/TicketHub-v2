@@ -1,6 +1,14 @@
 "use client";
 
 import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   paginationOptions,
   paginationParser,
   searchParser,
@@ -9,15 +17,6 @@ import { LucideLoader2 } from "lucide-react";
 import { useQueryState, useQueryStates } from "nuqs";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { Button } from "./ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 type PaginationProps = {
   paginatedMetadata: {

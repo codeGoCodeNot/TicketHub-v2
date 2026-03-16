@@ -4,7 +4,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
-import { Roboto, Inter } from "next/font/google";
+import { Roboto, Inter, JetBrains_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
 import SideBar from "@/components/sidebar/components/sidebar";
@@ -12,7 +12,9 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import Providers from "./_provider/react-query/react-query-provider";
 import { cn } from "@/lib/utils";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
+const jetbrainsMono = JetBrains_Mono({subsets:['latin'],variable:'--font-mono'});
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -30,7 +32,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={cn("font-sans", inter.variable)}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn( inter.variable, "font-mono", jetbrainsMono.variable)}
+    >
       <body className={`${roboto.className} antialiased`}>
         <NuqsAdapter>
           <ThemeProvider
@@ -49,9 +55,7 @@ export default function RootLayout({
               "
                 >
                   <SideBar />
-                  <TooltipProvider delayDuration={1500}>
-                    {children}
-                  </TooltipProvider>
+                  <TooltipProvider delay={1500}>{children}</TooltipProvider>
                 </main>
               </SidebarProvider>
               <RedirectToast />
