@@ -1,21 +1,18 @@
 import Header from "@/components/header";
 import RedirectToast from "@/components/redirect-toast";
+import SideBar from "@/components/sidebar/components/sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
-import { Roboto, Inter } from "next/font/google";
-import { Toaster } from "sonner";
-import "./globals.css";
-import SideBar from "@/components/sidebar/components/sidebar";
+import { Roboto, JetBrains_Mono } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { Toaster } from "sonner";
 import Providers from "./_provider/react-query/react-query-provider";
-import { cn } from "@/lib/utils";
+import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
-
-const roboto = Roboto({
-  variable: "--font-roboto",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
 });
 
@@ -30,12 +27,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={cn("font-sans", inter.variable)}
-    >
-      <body className={`${roboto.className} antialiased`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${jetbrainsMono.className} antialiased`}>
         <NuqsAdapter>
           <ThemeProvider
             attribute="class"
