@@ -29,14 +29,21 @@ const AccountDropdown = ({ user }: AccountDropdownProps) => {
           <AvatarFallback>{user.name?.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent
+        align="end"
+        sideOffset={8}
+        collisionPadding={12}
+        className="w-56 rounded-md"
+      >
         <DropdownMenuGroup>
-          <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
+          <DropdownMenuLabel className="truncate">
+            {user.email}
+          </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Link href={accountProfilePagePath()}>Profile</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem asChild>
             <Link href={accountPasswordPagePath()}>Password</Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
