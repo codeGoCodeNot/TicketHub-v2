@@ -15,18 +15,16 @@ const PasswordForgotForm = () => {
   );
 
   return (
-    <>
-      <Form action={action} actionState={actionState}>
-        <Input
-          name="email"
-          placeholder="Email"
-          defaultValue={actionState.payload?.get("email") as string}
-        />
-        <FieldError actionState={actionState} name="email" />
+    <Form action={action} actionState={actionState}>
+      <Input
+        name="email"
+        placeholder="Email"
+        defaultValue={actionState.payload?.get("email") as string}
+      />
+      <FieldError actionState={actionState} name="email" />
 
-        <SubmitButton label="Send Reset Link" />
-      </Form>
-    </>
+      <SubmitButton label="Send Reset Link" />
+    </Form>
   );
 };
 
