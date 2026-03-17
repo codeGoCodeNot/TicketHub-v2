@@ -86,6 +86,9 @@ importers:
       tailwind-merge:
         specifier: ^3.5.0
         version: 3.5.0
+      tickethub:
+        specifier: 'link:'
+        version: 'link:'
       use-debounce:
         specifier: ^10.1.0
         version: 10.1.0(react@19.2.3)

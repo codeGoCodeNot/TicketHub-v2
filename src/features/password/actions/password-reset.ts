@@ -6,18 +6,20 @@ import fromErrorToActionState, {
 } from "@/components/form/utils/to-action-state";
 import { auth } from "@/lib/auth";
 import { passwordSchema } from "@/lib/validation";
-import { ticketsPagePath } from "@/path";
+import { signInPagePath, ticketsPagePath } from "@/path";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import z from "zod";
 
 const passwordResetSchema = z.object({
   newPassword: passwordSchema,
   confirmPassword: passwordSchema,
+  token: z.string(),
 });
 
 const passwordReset = async (_actionState: ActionState, formData: FormData) => {
   try {
-    const { newPassword, confirmPassword } = passwordResetSchema.parse(
+    const { newPassword, confirmPassword, token } = passwordResetSchema.parse(
       Object.fromEntries(formData),
     );
     if (newPassword !== confirmPassword) {
@@ -27,13 +29,15 @@ const passwordReset = async (_actionState: ActionState, formData: FormData) => {
     await auth.api.resetPassword({
       body: {
         newPassword,
+        token,
       },
+      headers: await headers(),
     });
   } catch (error) {
     return fromErrorToActionState(error, formData);
   }
 
-  redirect(ticketsPagePath());
+  redirect(signInPagePath());
 };
 
 export default passwordReset;

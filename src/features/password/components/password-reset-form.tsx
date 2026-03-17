@@ -7,7 +7,12 @@ import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
 import { PasswordInput } from "@/components/password-input";
 import { useActionState } from "react";
 import passwordReset from "../actions/password-reset";
+import { Input } from "@/components/ui/input";
+import { useSearchParams } from "next/navigation";
 const PasswordResetForm = () => {
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token") || "";
+
   const [actionState, action] = useActionState(
     passwordReset,
     EMPTY_ACTION_STATE,
@@ -16,13 +21,15 @@ const PasswordResetForm = () => {
   return (
     <>
       <Form action={action} actionState={actionState}>
+        <Input type="hidden" name="token" value={token} />
+
         <PasswordInput
           autoComplete="new-password"
           placeholder="Password"
-          name="password"
-          defaultValue={actionState.payload?.get("password") as string}
+          name="newPassword"
+          defaultValue={actionState.payload?.get("newPassword") as string}
         />
-        <FieldError actionState={actionState} name="password" />
+        <FieldError actionState={actionState} name="newPassword" />
 
         <PasswordInput
           autoComplete="new-password"

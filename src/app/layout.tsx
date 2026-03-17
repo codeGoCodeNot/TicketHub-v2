@@ -5,15 +5,15 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
-import { Roboto, JetBrains_Mono } from "next/font/google";
+import { Roboto } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "sonner";
 import Providers from "./_provider/react-query/react-query-provider";
 import "./globals.css";
 
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
+const roboto = Roboto({
   subsets: ["latin"],
+  variable: "--font-roboto",
 });
 
 export const metadata: Metadata = {
@@ -28,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${jetbrainsMono.className} antialiased`}>
+      <body className={`${roboto.className} antialiased`}>
         <NuqsAdapter>
           <ThemeProvider
             attribute="class"
