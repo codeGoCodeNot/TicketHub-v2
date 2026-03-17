@@ -5,12 +5,14 @@ import Form from "@/components/form/form";
 import SubmitButton from "@/components/form/submit-button";
 import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
 import { Input } from "@/components/ui/input";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import signUp from "../actions/sign-up";
 import { PasswordInput } from "@/components/password-input";
+import PasswordStrengthMeter from "@/components/password-strenght-meter";
 
 const SignUpForm = () => {
   const [actionState, action] = useActionState(signUp, EMPTY_ACTION_STATE);
+  const [password, setPassword] = useState("");
 
   return (
     <Form action={action} actionState={actionState}>
@@ -33,8 +35,10 @@ const SignUpForm = () => {
         placeholder="Password"
         name="password"
         defaultValue={actionState.payload?.get("password") as string}
+        onChange={(e) => setPassword(e.target.value)}
       />
       <FieldError actionState={actionState} name="password" />
+      <PasswordStrengthMeter password={password} />
 
       <PasswordInput
         autoComplete="new-password"

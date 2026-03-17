@@ -5,9 +5,10 @@ import Form from "@/components/form/form";
 import SubmitButton from "@/components/form/submit-button";
 import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
 import { PasswordInput } from "@/components/password-input";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import passwordReset from "../actions/password-reset";
 import { Input } from "@/components/ui/input";
+import PasswordStrengthMeter from "@/components/password-strenght-meter";
 
 type PasswordResetFormProps = {
   token: string;
@@ -19,6 +20,8 @@ const PasswordResetForm = ({ token }: PasswordResetFormProps) => {
     EMPTY_ACTION_STATE,
   );
 
+  const [password, setPassword] = useState("");
+
   return (
     <>
       <Form action={action} actionState={actionState}>
@@ -29,8 +32,11 @@ const PasswordResetForm = ({ token }: PasswordResetFormProps) => {
           placeholder="Password"
           name="newPassword"
           defaultValue={actionState.payload?.get("newPassword") as string}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <FieldError actionState={actionState} name="newPassword" />
+
+        <PasswordStrengthMeter password={password} />
 
         <PasswordInput
           autoComplete="new-password"
