@@ -8,11 +8,12 @@ import { PasswordInput } from "@/components/password-input";
 import { useActionState } from "react";
 import passwordReset from "../actions/password-reset";
 import { Input } from "@/components/ui/input";
-import { useSearchParams } from "next/navigation";
-const PasswordResetForm = () => {
-  const searchParams = useSearchParams();
-  const token = searchParams.get("token") || "";
 
+type PasswordResetFormProps = {
+  token: string;
+};
+
+const PasswordResetForm = ({ token }: PasswordResetFormProps) => {
   const [actionState, action] = useActionState(
     passwordReset,
     EMPTY_ACTION_STATE,
