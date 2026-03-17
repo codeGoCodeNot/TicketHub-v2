@@ -6,7 +6,7 @@ import SubmitButton from "@/components/form/submit-button";
 import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
 import { Input } from "@/components/ui/input";
 import { useActionState } from "react";
-import passwordForgot from "../actions/passwordforgot";
+import passwordForgot from "../actions/password-forgot";
 
 const PasswordForgotForm = () => {
   const [actionState, action] = useActionState(
@@ -24,7 +24,7 @@ const PasswordForgotForm = () => {
         />
         <FieldError actionState={actionState} name="email" />
 
-        <SubmitButton label="Reset Password" />
+        <SubmitButton label="Send Reset Link" />
       </Form>
     </>
   );
