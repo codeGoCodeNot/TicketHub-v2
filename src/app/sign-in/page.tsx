@@ -2,6 +2,9 @@ import CardCompact from "@/components/card-compact";
 import SignInForm from "@/features/auth/components/sign-in-form";
 import { signUpPagePath } from "@/path";
 import Link from "next/link";
+import { Inter } from "next/font/google";
+
+const inter = Inter({ subsets: ["latin"] });
 
 const SignInPage = () => {
   return (
@@ -9,7 +12,7 @@ const SignInPage = () => {
       <CardCompact
         title="Sign In"
         description="Sign in to your account to get started"
-        className="w-full max-w-[420px] animate-fade-from-top"
+        className={`${inter.className} w-full max-w-[420px] animate-fade-from-top`}
         content={<SignInForm />}
         footer={
           <Link

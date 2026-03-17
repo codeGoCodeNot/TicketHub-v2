@@ -1,8 +1,8 @@
+import { hashPassword, verifyPassword } from "@/utils/password";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import prisma from "./prisma";
-import { hashPassword, verifyPassword } from "@/utils/password";
 import { nextCookies } from "better-auth/next-js";
+import prisma from "./prisma";
 import { sendEmail } from "./resend";
 
 export type Session = typeof auth.$Infer.Session;
@@ -40,6 +40,20 @@ export const auth = betterAuth({
     password: {
       hash: hashPassword,
       verify: verifyPassword,
+    },
+    sendResetPassword: async ({ user, url }) => {
+      await sendEmail({
+        to: user.email,
+        subject: "Password Reset Request",
+        text: `You requested a password reset. Please click the following link to reset your password: ${url}`,
+      });
+    },
+    onPasswordReset: async ({ user }) => {
+      await sendEmail({
+        to: user.email,
+        subject: "Password Reset Successful",
+        text: "Your password has been successfully reset.",
+      });
     },
   },
   socialProviders: {
