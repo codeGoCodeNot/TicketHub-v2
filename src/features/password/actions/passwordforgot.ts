@@ -22,7 +22,7 @@ const passwordForgot = async (
     await auth.api.requestPasswordReset({
       body: {
         email,
-        redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/password-reset`,
+        redirectTo: `https://tickethubv2.johnsenb.dev/password-reset`,
       },
       headers: await headers(),
     });
