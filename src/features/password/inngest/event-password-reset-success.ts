@@ -2,7 +2,7 @@ import { inngest } from "@/lib/inngest";
 import prisma from "@/lib/prisma";
 import { sendEmailPasswordResetSuccess } from "../emails/send-email-password-reset-success";
 
-const passwordResetEventSuccess = inngest.createFunction(
+export const passwordResetEventSuccess = inngest.createFunction(
   {
     id: "password-reset-success",
     triggers: { event: "app/password.password-reset-success" },
