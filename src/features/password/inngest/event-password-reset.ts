@@ -9,16 +9,14 @@ export const passwordResetEvent = inngest.createFunction(
     retries: 6,
   },
 
-  async ({ event, step }) => {
-    await step.sleep("wait-1-min", "1 min");
-
-    const { userId } = event.data;
+  async ({ event }) => {
+    const { userId, url } = event.data;
 
     const user = await prisma.user.findUniqueOrThrow({
       where: { id: userId },
     });
 
-    const result = await sendEmailPasswordReset(user.email, user.name);
+    const result = await sendEmailPasswordReset(user.email, user.name, url);
 
     return { event, body: result };
   },
