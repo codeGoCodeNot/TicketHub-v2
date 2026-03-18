@@ -10,7 +10,7 @@ export const passwordResetEvent = inngest.createFunction(
   },
 
   async ({ event, step }) => {
-    await step.sleep("wait-1-min", "1m"); // 5 minutes
+    await step.sleep("wait-1-min", "1 min"); // 5 minutes
 
     const { userId } = event.data;
 
