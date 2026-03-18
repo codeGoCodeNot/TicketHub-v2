@@ -1,27 +1,37 @@
-import { Text } from "@react-email/components";
+import { Button, Section, Text } from "@react-email/components";
 import TicketHubEmailLayout from "@/emails/components/tickethub-email-layout";
 
 type EmailPasswordResetSuccessProps = {
   toName?: string | null;
-  signInUrl: string;
 };
 
 const EmailPasswordResetSuccess = ({
   toName,
-  signInUrl,
 }: EmailPasswordResetSuccessProps) => {
-  const recipient = toName?.trim() || "there";
+  const recipient = toName?.trim();
 
   return (
     <TicketHubEmailLayout
       preview="Your TicketHub password was updated"
       title="Password reset successful"
-      toName={recipient}
-      description="Your password has been updated successfully. You can now sign in with your new password."
-      buttonLabel="Sign in"
-      buttonUrl={signInUrl}
+      description={`Hi ${recipient}, your password has been updated successfully.`}
     >
-      <Text className="m-0 text-[14px] leading-[1.6] text-[#6b7280]">
+      <Section className="mb-[18px] rounded-[10px] border border-[#ead8c9] bg-[#f7ede6] px-[14px] py-3">
+        <Text className="m-0 mb-1 text-[16px] font-bold text-[#3f2d24]">
+          Your account is secure
+        </Text>
+        <Text className="m-0 text-[14px] leading-[1.6] text-[#6f5b4e]">
+          You can now sign in using your new password.
+        </Text>
+      </Section>
+
+      <Section className="mb-[18px] text-center">
+        <Button className="inline-block rounded-[10px] bg-[#b85c2c] px-[18px] py-3 text-[14px] font-bold text-white no-underline">
+          Sign in to TicketHub
+        </Button>
+      </Section>
+
+      <Text className="m-0 text-center text-[14px] leading-[1.6] text-[#6f5b4e]">
         If this was not you, contact support immediately and review your recent
         account activity.
       </Text>
@@ -31,7 +41,6 @@ const EmailPasswordResetSuccess = ({
 
 EmailPasswordResetSuccess.PreviewProps = {
   toName: "Johnsen Berdin",
-  signInUrl: "https://localhost:3000/sign-in",
 };
 
 export default EmailPasswordResetSuccess;

@@ -8,7 +8,7 @@ type EmailChangeProps = {
 };
 
 const EmailChange = ({ toName, newEmail, url }: EmailChangeProps) => {
-  const recipient = toName?.trim() || "there";
+  const recipient = toName?.trim();
 
   return (
     <TicketHubEmailLayout

@@ -7,7 +7,7 @@ type EmailVerificationProps = {
 };
 
 const EmailVerification = ({ toName, url }: EmailVerificationProps) => {
-  const recipient = toName?.trim() || "there";
+  const recipient = toName?.trim();
 
   return (
     <TicketHubEmailLayout
