@@ -16,7 +16,7 @@ export const passwordResetEvent = inngest.createFunction(
       where: { id: userId },
     });
 
-    const result = await sendEmailPasswordReset(user.email, user.name, url);
+    const result = await sendEmailPasswordReset(user.name, user.email, url);
 
     return { event, body: result };
   },
