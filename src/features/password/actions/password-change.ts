@@ -4,6 +4,7 @@ import fromErrorToActionState, {
   ActionState,
   toActionState,
 } from "@/components/form/utils/to-action-state";
+import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import { auth } from "@/lib/auth";
 import { passwordSchema } from "@/lib/validation";
 import { accountPasswordPagePath } from "@/path";

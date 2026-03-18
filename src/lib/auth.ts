@@ -3,7 +3,11 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
 import prisma from "./prisma";
-import { sendEmail } from "./resend";
+import { sendEmailChange } from "@/features/password/emails/send-email-change";
+import { sendEmailVerification } from "@/features/password/emails/send-email-verification";
+
+import { sendEmailPasswordReset } from "@/features/password/emails/send-email-password-reset";
+import { sendEmailPasswordResetSuccess } from "@/features/password/emails/send-email-password-reset-success";
 
 export type Session = typeof auth.$Infer.Session;
 export type User = typeof auth.$Infer.Session.user;
@@ -18,21 +22,13 @@ export const auth = betterAuth({
     changeEmail: {
       enabled: true,
       sendChangeEmailConfirmation: async ({ user, url, newEmail }) => {
-        await sendEmail({
-          to: user.email,
-          subject: "Email Change Verification",
-          text: `Your email has been changed to ${newEmail}. If you did not request this change, please click the following link to secure your account: ${url}`,
-        });
+        await sendEmailChange(user.name, user.email, newEmail, url);
       },
     },
   },
   emailVerification: {
     sendVerificationEmail: async ({ user, url }) => {
-      await sendEmail({
-        to: user.email,
-        subject: "Email Verification",
-        text: `Please verify your email by clicking the following link: ${url}`,
-      });
+      await sendEmailVerification(user.name, user.email, url);
     },
   },
   emailAndPassword: {
@@ -42,18 +38,10 @@ export const auth = betterAuth({
       verify: verifyPassword,
     },
     sendResetPassword: async ({ user, url }) => {
-      await sendEmail({
-        to: user.email,
-        subject: "Password Reset Request",
-        text: `You requested a password reset. Please click the following link to reset your password: ${url}`,
-      });
+      await sendEmailPasswordReset(user.name, user.email, url);
     },
     onPasswordReset: async ({ user }) => {
-      await sendEmail({
-        to: user.email,
-        subject: "Password Reset Successful",
-        text: "Your password has been successfully reset.",
-      });
+      await sendEmailPasswordResetSuccess(user.name, user.email);
     },
   },
   socialProviders: {
