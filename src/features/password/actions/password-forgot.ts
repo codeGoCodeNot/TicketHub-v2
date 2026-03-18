@@ -5,7 +5,6 @@ import fromErrorToActionState, {
   toActionState,
 } from "@/components/form/utils/to-action-state";
 import { auth } from "@/lib/auth";
-import { inngest } from "@/lib/inngest";
 import prisma from "@/lib/prisma";
 import { headers } from "next/headers";
 import z from "zod";
@@ -36,11 +35,6 @@ const passwordForgot = async (
         // redirectTo: "http://localhost:3000/password-reset",
       },
       headers: await headers(),
-    });
-
-    await inngest.send({
-      name: "app/password.password-reset",
-      data: { userId: user.id },
     });
   } catch (error) {
     return fromErrorToActionState(error, formData);

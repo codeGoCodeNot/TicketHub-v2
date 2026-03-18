@@ -7,6 +7,7 @@ import { sendEmailChange } from "@/features/password/emails/send-email-change";
 import { sendEmailVerification } from "@/features/password/emails/send-email-verification";
 import { sendEmailPasswordReset } from "@/features/password/emails/send-email-password-reset";
 import { sendEmailPasswordResetSuccess } from "@/features/password/emails/send-email-password-reset-success";
+import { inngest } from "./inngest";
 
 export type Session = typeof auth.$Infer.Session;
 export type User = typeof auth.$Infer.Session.user;
@@ -37,7 +38,13 @@ export const auth = betterAuth({
       verify: verifyPassword,
     },
     sendResetPassword: async ({ user, url }) => {
-      await sendEmailPasswordReset(user.name, user.email, url);
+      await inngest.send({
+        name: "app/password.password-reset",
+        data: {
+          userId: user.id,
+          url,
+        },
+      });
     },
     onPasswordReset: async ({ user }) => {
       await sendEmailPasswordResetSuccess(user.name, user.email);
