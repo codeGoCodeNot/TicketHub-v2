@@ -5,7 +5,6 @@ import { nextCookies } from "better-auth/next-js";
 import prisma from "./prisma";
 import { sendEmailChange } from "@/features/password/emails/send-email-change";
 import { sendEmailVerification } from "@/features/password/emails/send-email-verification";
-
 import { sendEmailPasswordReset } from "@/features/password/emails/send-email-password-reset";
 import { sendEmailPasswordResetSuccess } from "@/features/password/emails/send-email-password-reset-success";
 
