@@ -32,7 +32,6 @@ const passwordForgot = async (
       body: {
         email,
         redirectTo: `https://tickethubv2.johnsenb.dev/password-reset`,
-        // redirectTo: "http://localhost:3000/password-reset",
       },
       headers: await headers(),
     });
