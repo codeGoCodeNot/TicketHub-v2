@@ -47,7 +47,12 @@ export const auth = betterAuth({
       });
     },
     onPasswordReset: async ({ user }) => {
-      await sendEmailPasswordResetSuccess(user.name, user.email);
+      await inngest.send({
+        name: "app/password.password-reset-success",
+        data: {
+          userId: user.id,
+        },
+      });
     },
   },
   socialProviders: {
