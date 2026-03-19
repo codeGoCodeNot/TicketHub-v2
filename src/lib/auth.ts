@@ -22,7 +22,14 @@ export const auth = betterAuth({
     changeEmail: {
       enabled: true,
       sendChangeEmailConfirmation: async ({ user, url, newEmail }) => {
-        await sendEmailChange(user.name, user.email, newEmail, url);
+        await inngest.send({
+          name: "app/password.email-change",
+          data: {
+            userId: user.id,
+            newEmail,
+            url,
+          },
+        });
       },
     },
   },
