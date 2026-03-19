@@ -10,10 +10,10 @@ export const eventEmailVerification = inngest.createFunction(
   async ({ event }) => {
     const { userId, url } = event.data;
 
-    // Always fetch user from DB since only userId and url are sent
-    const user = await prisma.user.findUniqueOrThrow({
+    const user = await prisma.user.findFirstOrThrow({
       where: { id: userId },
     });
+
     const result = await sendEmailVerification(user.name, user.email, url);
     return { event, body: result };
   },
