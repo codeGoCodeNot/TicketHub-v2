@@ -1,5 +1,5 @@
-import { Button, Link, Section, Text } from "@react-email/components";
 import TicketHubEmailLayout from "@/emails/components/tickethub-email-layout";
+import { Button, Section, Text } from "@react-email/components";
 
 type EmailPasswordResetProps = {
   toName?: string | null;
@@ -27,12 +27,6 @@ const EmailPasswordReset = ({ toName, url }: EmailPasswordResetProps) => {
       <Text className="m-0 mb-2 text-center text-[14px] leading-[1.6] text-[#6f5b4e]">
         If you did not request this, you can safely ignore this email.
       </Text>
-      <Link
-        href={url}
-        className="m-0 break-all text-[12px] leading-[1.5] text-[#8a7668]"
-      >
-        Click here to reset your password
-      </Link>
     </TicketHubEmailLayout>
   );
 };

@@ -1,5 +1,5 @@
-import { Button, Link, Section, Text } from "@react-email/components";
 import TicketHubEmailLayout from "@/emails/components/tickethub-email-layout";
+import { Button, Section, Text } from "@react-email/components";
 
 type EmailChangeProps = {
   toName?: string | null;
@@ -38,12 +38,6 @@ const EmailChange = ({ toName, newEmail, url }: EmailChangeProps) => {
         If you did not request this change, use the link above to secure your
         account.
       </Text>
-      <Link
-        href={url}
-        className="m-0 break-all text-[12px] leading-[1.5] text-[#8a7668]"
-      >
-        Click here to review your email change request
-      </Link>
     </TicketHubEmailLayout>
   );
 };
