@@ -64,7 +64,10 @@ const updateProfile = async (_actionState: ActionState, formData: FormData) => {
   }
 
   revalidatePath(accountProfilePagePath());
-  return toActionState("SUCCESS", "Profile updated successfully");
+  return toActionState(
+    "SUCCESS",
+    "Confirmation email sent if email was changed. Please verify to update email.",
+  );
 };
 
 export default updateProfile;
