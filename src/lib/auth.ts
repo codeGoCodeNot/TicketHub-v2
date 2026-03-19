@@ -39,6 +39,7 @@ export const auth = betterAuth({
         name: "app/password.email-verification",
         data: {
           userId: user.id,
+          email: user.email,
           url,
         },
       });
