@@ -8,20 +8,16 @@ export const eventEmailVerification = inngest.createFunction(
     triggers: { event: "app/password.email-verification" },
   },
   async ({ event }) => {
-    const { userId, email, url } = event.data;
+    const { userId, name, email, url } = event.data;
 
-    let userName: string | null | undefined = undefined;
+    let userName: string | null | undefined = name;
     let userEmail: string | undefined = email;
-    if (!userEmail) {
+    if (!userName || !userEmail) {
       const user = await prisma.user.findUniqueOrThrow({
         where: { id: userId },
       });
       userName = user.name;
       userEmail = user.email;
-    } else {
-      // Optionally fetch name for personalization if needed
-      const user = await prisma.user.findUnique({ where: { id: userId } });
-      userName = user?.name;
     }
 
     const result = await sendEmailVerification(userName, userEmail, url);
