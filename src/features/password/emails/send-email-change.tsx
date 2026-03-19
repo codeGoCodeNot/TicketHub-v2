@@ -10,7 +10,7 @@ export const sendEmailChange = async (
   await resend.emails.send({
     from: "noreply@tickethubv2.johnsenb.dev",
     to: email,
-    subject: "Email Change Verification",
+    subject: "Email Change Review",
     react: (
       <EmailChange toName={user} newEmail={newEmail} url={confirmationLink} />
     ),
