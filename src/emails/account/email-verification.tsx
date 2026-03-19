@@ -1,6 +1,5 @@
-import { Button, Section, Text } from "@react-email/components";
+import { Button, Link, Section, Text } from "@react-email/components";
 import TicketHubEmailLayout from "@/emails/components/tickethub-email-layout";
-import Link from "next/dist/client/link";
 
 type EmailVerificationProps = {
   toName?: string | null;

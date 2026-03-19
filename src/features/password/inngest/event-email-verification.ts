@@ -10,7 +10,7 @@ export const eventEmailVerification = inngest.createFunction(
   async ({ event }) => {
     const { userId, url } = event.data;
 
-    const user = await prisma.user.findFirstOrThrow({
+    const user = await prisma.user.findUniqueOrThrow({
       where: { id: userId },
     });
 
