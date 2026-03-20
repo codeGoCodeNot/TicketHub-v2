@@ -17,11 +17,22 @@ const getOrganizationsByUser = async () => {
           image: true,
         },
       },
-      organization: true,
+      organization: {
+        include: {
+          members: {
+            where: {
+              userId: user.id,
+            },
+          },
+        },
+      },
     },
   });
 
-  return organizations;
+  return organizations.map((org) => ({
+    ...org,
+    membershipByUser: org.organization.members[0],
+  }));
 };
 
 export default getOrganizationsByUser;
