@@ -24,6 +24,12 @@ const getOrganizationsByUser = async () => {
               userId: user.id,
             },
           },
+          _count: {
+            select: {
+              members: true,
+              invitations: true,
+            },
+          },
         },
       },
     },

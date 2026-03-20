@@ -6,16 +6,13 @@ const OrganizationList = async () => {
 
   return (
     <div>
-      {organizations.map((org) => (
-        <div key={org.id}>
-          <div>Name: {org.organization.name ?? "Unnamed Organization"}</div>
+      {organizations.map(({ organization, membershipByUser }) => (
+        <div key={organization.id}>
+          <div>Name: {organization.name ?? "Unnamed Organization"}</div>
           <div>
-            Joined At:{" "}
-            {format(org.membershipByUser.createdAt, "yyyy/MM/dd, HH:mm")}
+            Joined At: {format(membershipByUser.createdAt, "yyyy/MM/dd, HH:mm")}
           </div>
-          <p className="text-muted-foreground">
-            Role: {org.membershipByUser?.role ?? "No Role"}
-          </p>
+          <div>Members: {organization._count.members}</div>
         </div>
       ))}
     </div>
