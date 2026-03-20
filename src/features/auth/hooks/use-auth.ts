@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import getAuth from "../actions/get-auth";
+import getAuth from "../../../lib/get-auth";
 import { usePathname } from "next/navigation";
 import { User } from "better-auth/types";
 

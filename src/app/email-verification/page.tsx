@@ -1,6 +1,5 @@
 import Heading from "@/components/heading";
-import getAuth from "@/features/auth/actions/get-auth";
-import { LucideMail } from "lucide-react";
+import getAuth from "@/lib/get-auth";
 
 const EmailVerificationPage = async () => {
   const user = await getAuth();

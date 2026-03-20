@@ -1,7 +1,7 @@
 import BreadCrumbs from "@/components/breadcrumbs";
 import CardCompact from "@/components/card-compact";
 import { Separator } from "@/components/ui/separator";
-import getAuth from "@/features/auth/actions/get-auth";
+import getAuth from "@/lib/get-auth";
 import isOwnership from "@/features/auth/utils/is-ownership";
 import TicketUpsertForm from "@/features/tickets/components/ticket-upsert-form";
 import getTicket from "@/features/tickets/queries/get-ticket";

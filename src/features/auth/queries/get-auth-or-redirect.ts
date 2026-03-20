@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import getAuth from "../actions/get-auth";
+import getAuth from "../../../lib/get-auth";
 import { emailVerificationPagePath, signInPagePath } from "@/path";
 
 const getAuthOrRedirect = async () => {

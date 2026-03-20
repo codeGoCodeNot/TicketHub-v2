@@ -17,3 +17,6 @@ export const accountPasswordPagePath = () => "/account/password";
 
 // email verification
 export const emailVerificationPagePath = () => "/email-verification";
+
+// organization
+export const organizationPagePath = () => "/organization";

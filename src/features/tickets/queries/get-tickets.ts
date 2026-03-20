@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { ParsedSearchParams } from "../search-params";
-import getAuth from "@/features/auth/actions/get-auth";
+import getAuth from "@/lib/get-auth";
 import isOwnership from "@/features/auth/utils/is-ownership";
 
 // Query to fetch all tickets

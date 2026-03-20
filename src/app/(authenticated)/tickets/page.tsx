@@ -1,7 +1,7 @@
 import CardCompact from "@/components/card-compact";
 import Heading from "@/components/heading";
 import Spinner from "@/components/spinner";
-import getAuth from "@/features/auth/actions/get-auth";
+import getAuth from "@/lib/get-auth";
 import TicketList from "@/features/tickets/components/ticket-list";
 import TicketUpsertForm from "@/features/tickets/components/ticket-upsert-form";
 import { SearchParams } from "nuqs/server";
