@@ -75,24 +75,24 @@ const TicketItem = ({ ticket, isDetail, comments }: TicketItemProps) => {
         <Card className="w-full">
           <CardHeader>
             <CardTitle className="flex justify-between items-center">
-              <div className="flex gap-x-2 items-center">
-                <span>{TICKET_ICONS[ticket.status]}</span>
-                <div>
-                  <span className="truncate text-lg">{ticket.title}</span>
+              <div className="flex flex-col gap-y-2 w-full">
+                <div className="flex items-center gap-x-1 w-full justify-end mb-2">
+                  <Avatar>
+                    <AvatarImage
+                      src={ticket.user.image ?? undefined}
+                      alt={ticket.user.name || "User Avatar"}
+                    />
+                    <AvatarFallback>
+                      {ticket.user.name?.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="text-xs text-muted-foreground">
+                    {ticket.user?.name.split(" ")[0]}
+                  </div>
                 </div>
-              </div>
-              <div className="flex flex-col items-center gap-y-2">
-                <Avatar>
-                  <AvatarImage
-                    src={ticket.user.image ?? undefined}
-                    alt={ticket.user.name || "User Avatar"}
-                  />
-                  <AvatarFallback>
-                    {ticket.user.name?.charAt(0).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="text-xs text-muted-foreground">
-                  {ticket.user?.name.split(" ")[0]}
+                <div className="flex gap-x-2 items-center">
+                  <span>{TICKET_ICONS[ticket.status]}</span>
+                  <span className="truncate text-lg">{ticket.title}</span>
                 </div>
               </div>
             </CardTitle>
