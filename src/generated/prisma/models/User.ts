@@ -265,7 +265,7 @@ export type UserCreateInput = {
   id: string
   name: string
   email: string
-  emailVerified: boolean
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -279,7 +279,7 @@ export type UserUncheckedCreateInput = {
   id: string
   name: string
   email: string
-  emailVerified: boolean
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -321,7 +321,7 @@ export type UserCreateManyInput = {
   id: string
   name: string
   email: string
-  emailVerified: boolean
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -450,7 +450,7 @@ export type UserCreateWithoutTicketsInput = {
   id: string
   name: string
   email: string
-  emailVerified: boolean
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -463,7 +463,7 @@ export type UserUncheckedCreateWithoutTicketsInput = {
   id: string
   name: string
   email: string
-  emailVerified: boolean
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -518,7 +518,7 @@ export type UserCreateWithoutCommentsInput = {
   id: string
   name: string
   email: string
-  emailVerified: boolean
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -531,7 +531,7 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   id: string
   name: string
   email: string
-  emailVerified: boolean
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -586,7 +586,7 @@ export type UserCreateWithoutSessionsInput = {
   id: string
   name: string
   email: string
-  emailVerified: boolean
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -599,7 +599,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   id: string
   name: string
   email: string
-  emailVerified: boolean
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -654,7 +654,7 @@ export type UserCreateWithoutAccountsInput = {
   id: string
   name: string
   email: string
-  emailVerified: boolean
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -667,7 +667,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   id: string
   name: string
   email: string
-  emailVerified: boolean
+  emailVerified?: boolean
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string

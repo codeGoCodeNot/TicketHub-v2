@@ -14,3 +14,6 @@ export const passwordForgotPagePath = () => "/password-forgot";
 // account
 export const accountProfilePagePath = () => "/account/profile";
 export const accountPasswordPagePath = () => "/account/password";
+
+// email verification
+export const emailVerificationPagePath = () => "/email-verification";
