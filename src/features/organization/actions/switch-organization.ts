@@ -14,7 +14,7 @@ const switchOrganization = async (organizationId: string) => {
     const organizations = await getOrganizationsByUser();
 
     const canSwitch = organizations.some(
-      (organization) => organization.id === organizationId,
+      ({ organization }) => organization.id === organizationId,
     );
 
     if (!canSwitch)

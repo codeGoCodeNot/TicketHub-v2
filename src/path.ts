@@ -24,3 +24,5 @@ export const organizationCreatePagePath = () => "/organization/create";
 
 // onboard
 export const onboardPath = () => "/onboarding";
+export const selectActiveOrganizationPath = () =>
+  "/onboarding/select-active-organization";

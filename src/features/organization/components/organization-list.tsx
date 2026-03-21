@@ -20,7 +20,13 @@ import OrganizationSwitchButton from "./organization-switch-button";
 import { getSession } from "@/lib/get-session";
 import SubmitButton from "@/components/form/submit-button";
 
-const OrganizationList = async () => {
+type OrganizationListProps = {
+  onlySwitch?: boolean;
+};
+
+const OrganizationList = async ({
+  onlySwitch = false,
+}: OrganizationListProps) => {
   const [session, organizations] = await Promise.all([
     getSession(),
     getOrganizationsByUser(),
@@ -78,9 +84,9 @@ const OrganizationList = async () => {
           const buttons = (
             <>
               {switchButton}
-              {detailButton}
-              {editButton}
-              {deleteButton}
+              {!onlySwitch && detailButton}
+              {!onlySwitch && editButton}
+              {!onlySwitch && deleteButton}
             </>
           );
 
