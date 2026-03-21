@@ -1,3 +1,4 @@
+import SubmitButton from "@/components/form/submit-button";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -8,17 +9,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getSession } from "@/lib/get-session";
 import { format } from "date-fns";
 import {
   LucideArrowLeftRight,
   LucideArrowUpRightFromSquare,
   LucidePen,
-  LucideTrash,
 } from "lucide-react";
 import getOrganizationsByUser from "../queries/get-organizations-by-user";
+import OrganizationDeleteButton from "./organization-delete-button";
 import OrganizationSwitchButton from "./organization-switch-button";
-import { getSession } from "@/lib/get-session";
-import SubmitButton from "@/components/form/submit-button";
 
 type OrganizationListProps = {
   onlySwitch?: boolean;
@@ -76,9 +76,7 @@ const OrganizationList = async ({
           );
 
           const deleteButton = (
-            <Button variant="destructive" size="icon">
-              <LucideTrash />
-            </Button>
+            <OrganizationDeleteButton organizationId={organization.id} />
           );
 
           const buttons = (

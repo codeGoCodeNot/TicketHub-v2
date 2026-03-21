@@ -6,7 +6,7 @@ import fromErrorToActionState, {
 } from "@/components/form/utils/to-action-state";
 import { auth } from "@/lib/auth";
 import getAuth from "@/lib/get-auth";
-import { signInPagePath, ticketsPagePath } from "@/path";
+import { organizationPagePath, signInPagePath } from "@/path";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import z from "zod";
@@ -47,7 +47,7 @@ const createOrganization = async (
   }
 
   await setCookieByKey("toast", "Organization created successfully");
-  redirect(ticketsPagePath());
+  redirect(organizationPagePath());
 };
 
 export default createOrganization;
