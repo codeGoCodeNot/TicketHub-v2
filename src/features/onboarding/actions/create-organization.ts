@@ -29,8 +29,6 @@ const createOrganization = async (
       Object.fromEntries(_formData.entries()),
     );
 
-    console.log("data:", data);
-
     await auth.api.createOrganization({
       body: {
         name: data.name,

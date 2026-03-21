@@ -1,29 +1,34 @@
-import { format } from "date-fns";
-import getOrganizationsByUser from "../queries/get-organizations-by-user";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
 import {
   LucideArrowLeftRight,
   LucideArrowUpRightFromSquare,
   LucidePen,
   LucideTrash,
 } from "lucide-react";
+import getOrganizationsByUser from "../queries/get-organizations-by-user";
+import OrganizationSwitchButton from "./organization-switch-button";
+import { getSession } from "@/lib/get-session";
+import SubmitButton from "@/components/form/submit-button";
 
 const OrganizationList = async () => {
-  const organizations = await getOrganizationsByUser();
+  const [session, organizations] = await Promise.all([
+    getSession(),
+    getOrganizationsByUser(),
+  ]);
 
   return (
     <Table>
-      <TableCaption>A list of your recent invoices.</TableCaption>
+      <TableCaption>A list of your organizations</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead>Name</TableHead>
@@ -34,10 +39,23 @@ const OrganizationList = async () => {
       </TableHeader>
       <TableBody>
         {organizations.map(({ organization, membershipByUser }) => {
+          const activeOrganizationId = session?.session.activeOrganizationId;
+          const hasActive = organization.id === activeOrganizationId;
+          const isActive = activeOrganizationId === organization.id;
+
           const switchButton = (
-            <Button variant="outline" size="icon">
-              <LucideArrowLeftRight />
-            </Button>
+            <OrganizationSwitchButton
+              organizationId={organization.id}
+              trigger={
+                <SubmitButton
+                  variant={
+                    !hasActive ? "secondary" : isActive ? "default" : "outline"
+                  }
+                  size="icon"
+                  icon={<LucideArrowLeftRight />}
+                />
+              }
+            />
           );
           const detailButton = (
             <Button variant="outline" size="icon">

@@ -15,9 +15,9 @@ const EmailVerificationPage = async () => {
         <p className="text-muted-foreground flex flex-wrap items-center gap-x-1 text-center justify-center">
           A verification email has been sent to{" "}
           <span className="text-foreground flex items-center gap-x-1 font-semibold">
-            {user?.email}
+            {user?.email}.
           </span>
-          . Please check your inbox and click on the verification link to verify
+          Please check your inbox and click on the verification link to verify
           your email address.
         </p>
       </div>
