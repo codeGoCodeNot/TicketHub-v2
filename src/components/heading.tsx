@@ -5,17 +5,20 @@ type HeadingProps = {
   title: string;
   description?: string;
   tabs?: React.ReactNode;
+  actions?: React.ReactNode;
 };
 
-const Heading = ({ title, description, tabs }: HeadingProps) => {
+const Heading = ({ title, description, tabs, actions }: HeadingProps) => {
   return (
     <>
       {tabs}
-      <div className="px-8">
-        <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
-        <p className="text-gray-500">{description}</p>
+      <div className="flex justify-between items-center px-8">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
+          <p className="text-gray-500">{description}</p>
+        </div>
+        <div>{actions}</div>
       </div>
-
       <Separator />
     </>
   );
