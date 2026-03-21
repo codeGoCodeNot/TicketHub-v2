@@ -1,7 +1,7 @@
 import Header from "@/components/header";
 import RedirectToast from "@/components/redirect-toast";
 import SideBar from "@/components/sidebar/components/sidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";

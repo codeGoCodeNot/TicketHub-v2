@@ -1,11 +1,9 @@
 "use client";
 
-import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Slot } from "radix-ui";
+import * as React from "react";
 
-import { useIsMobile } from "@/hooks/use-mobile";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -22,7 +20,9 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { SidebarIcon } from "@phosphor-icons/react";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
+import { LucideMenu } from "lucide-react";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -149,7 +149,7 @@ function SidebarProvider({
 }
 
 function Sidebar({
-  side = "left",
+  side = "right",
   variant = "sidebar",
   collapsible = "offcanvas",
   className,
@@ -204,6 +204,10 @@ function Sidebar({
     );
   }
 
+  // Show overlay only when sidebar is expanded and offcanvas (desktop)
+  const { setOpen } = useSidebar();
+  const showOverlay = collapsible === "offcanvas" && state === "expanded";
+
   return (
     <div
       className="group peer hidden text-sidebar-foreground md:block"
@@ -213,6 +217,15 @@ function Sidebar({
       data-side={side}
       data-slot="sidebar"
     >
+      {/* Overlay for closing sidebar when clicking outside (desktop only, offcanvas mode) */}
+      {showOverlay && (
+        <div
+          // Clicking this overlay will close the sidebar
+          onClick={() => setOpen(false)}
+          className="fixed inset-0 z-9 bg-black/10 cursor-pointer md:block"
+          aria-label="Close sidebar overlay"
+        />
+      )}
       {/* This is what handles the sidebar gap on desktop */}
       <div
         data-slot="sidebar-gap"
@@ -261,7 +274,7 @@ function SidebarTrigger({
     <Button
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
-      variant="ghost"
+      variant="outline"
       size="icon-sm"
       className={cn(className)}
       onClick={(event) => {
@@ -270,7 +283,7 @@ function SidebarTrigger({
       }}
       {...props}
     >
-      <SidebarIcon />
+      <LucideMenu />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );

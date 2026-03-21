@@ -30,7 +30,7 @@ const AccountDropdown = ({ user }: AccountDropdownProps) => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        align="end"
+        align="center"
         sideOffset={8}
         collisionPadding={12}
         className="w-56 rounded-md"
