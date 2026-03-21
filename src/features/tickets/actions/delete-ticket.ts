@@ -21,7 +21,7 @@ const deleteTicket = async (id: string) => {
       },
     });
 
-    if (!ticket || isOwnership(user, ticket)) {
+    if (!ticket || !isOwnership(user, ticket)) {
       return toActionState(
         "ERROR",
         "You are not authorized to delete this ticket.",
