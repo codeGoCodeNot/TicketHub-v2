@@ -2,10 +2,13 @@ import getOrganizationsByUser from "@/features/organization/queries/get-organiza
 import { emailVerificationPagePath, onboardPath, signInPagePath } from "@/path";
 import { redirect } from "next/navigation";
 import getAuth from "../../../lib/get-auth";
+import { getSession } from "@/lib/get-session";
 
 const getAuthOrRedirect = async () => {
   const user = await getAuth();
   const organizations = await getOrganizationsByUser();
+
+  const session = await getSession();
 
   if (!user) {
     redirect(signInPagePath());
@@ -16,6 +19,8 @@ const getAuthOrRedirect = async () => {
   if (!organizations.length) {
     redirect(onboardPath());
   }
+
+  if (!session?.session.activeOrganizationId) redirect(onboardPath());
 
   return user;
 };

@@ -4,7 +4,6 @@ import { setCookieByKey } from "@/actions/cookies";
 import fromErrorToActionState, {
   ActionState,
 } from "@/components/form/utils/to-action-state";
-import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import { auth } from "@/lib/auth";
 import getAuth from "@/lib/get-auth";
 import { signInPagePath, ticketsPagePath } from "@/path";
@@ -29,12 +28,19 @@ const createOrganization = async (
       Object.fromEntries(_formData.entries()),
     );
 
-    await auth.api.createOrganization({
+    const createdOrg = await auth.api.createOrganization({
+      headers: await headers(),
       body: {
         name: data.name,
         slug: data.name.toLowerCase().replace(/\s+/g, "-"),
       },
+    });
+
+    await auth.api.setActiveOrganization({
       headers: await headers(),
+      body: {
+        organizationId: createdOrg.id,
+      },
     });
   } catch (error) {
     return fromErrorToActionState(error);
