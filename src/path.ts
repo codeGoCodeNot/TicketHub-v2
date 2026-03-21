@@ -22,4 +22,4 @@ export const emailVerificationPagePath = () => "/email-verification";
 export const organizationPagePath = () => "/organization";
 
 // onboard
-export const onboardPath = () => "/onboard";
+export const onboardPath = () => "/onboarding";
