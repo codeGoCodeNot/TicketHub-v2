@@ -3,7 +3,7 @@ import OrganizationCreateForm from "@/features/onboarding/components/organizatio
 
 const CreateOrganizationPage = () => {
   return (
-    <div className="flex flex-1 flex-col justify-center items-center">
+    <div className="flex flex-1 flex-col  justify-center items-center">
       <CardCompact
         title="Create Organization"
         description="Create a new organization to manage your tickets"
