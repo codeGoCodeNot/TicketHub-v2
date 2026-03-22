@@ -24,6 +24,7 @@ import Link from "next/link";
 import getOrganizationsByUser from "../queries/get-organizations-by-user";
 import OrganizationDeleteButton from "./organization-delete-button";
 import OrganizationSwitchButton from "./organization-switch-button";
+import OrganizationLeaveButton from "./organization-leave-button";
 
 type OrganizationListProps = {
   onlySwitch?: boolean;
@@ -147,6 +148,9 @@ const OrganizationList = async ({
                     <Button variant="outline" size="icon">
                       <LucidePen />
                     </Button>
+                  )}
+                  {!onlySwitch && (
+                    <OrganizationLeaveButton organizationId={organization.id} />
                   )}
                   {!onlySwitch && (
                     <OrganizationDeleteButton
