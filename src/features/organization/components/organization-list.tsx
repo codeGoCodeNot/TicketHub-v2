@@ -44,7 +44,6 @@ const OrganizationList = async ({
         {organizations.map(({ organization, membershipByUser }) => {
           const activeOrganizationId = session?.session.activeOrganizationId;
           const isActive = activeOrganizationId === organization.id;
-          const hasActive = organization.id === activeOrganizationId;
 
           const switchButton = (
             <OrganizationSwitchButton
@@ -71,7 +70,8 @@ const OrganizationList = async ({
                 </CardHeader>
                 <CardContent className="flex flex-col gap-1 pt-0">
                   <CardDescription>
-                    Joined: {format(membershipByUser.createdAt, "yyyy/MM/dd")}
+                    Joined:{" "}
+                    {format(membershipByUser.createdAt, "yyyy/MM/dd, hh:mm")}
                   </CardDescription>
                   <CardDescription>
                     Members: {organization._count.members}
@@ -161,7 +161,7 @@ const OrganizationList = async ({
                   <TableCell>{organization.id}</TableCell>
                   <TableCell>{organization.name}</TableCell>
                   <TableCell>
-                    {format(membershipByUser.createdAt, "yyyy/MM/dd")}
+                    {format(membershipByUser.createdAt, "yyyy/MM/dd, hh:mm")}
                   </TableCell>
                   <TableCell>{organization._count.members}</TableCell>
                   <TableCell className="flex flex-shrink flex-wrap gap-1 min-w-0">
