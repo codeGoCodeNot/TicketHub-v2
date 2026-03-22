@@ -4,11 +4,13 @@ import { Separator } from "@/components/ui/separator";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import useAuth from "@/features/auth/hooks/use-auth";
+import { authClient } from "@/lib/auth-client";
 import { signInPagePath, signUpPagePath } from "@/path";
 import getActivePath from "@/utils/get-active-path";
 import Link from "next/link";
@@ -18,6 +20,8 @@ import { navItems } from "../constant";
 const SideBar = () => {
   const pathname = usePathname();
   const { user, isFetched } = useAuth();
+
+  const { data: activeOrganization } = authClient.useActiveOrganization();
 
   const { activeIndex } = getActivePath(
     pathname,
@@ -30,7 +34,7 @@ const SideBar = () => {
   return (
     <Sidebar>
       <SidebarContent className="px-2.5 pt-8 md:pt-20">
-        <div className="mb-2 rounded-lg border border-sidebar-border/70 px-3 py-2.5">
+        <div className="mb-2 rounded-lg border border-sidebar-border/90 px-3 py-2.5">
           <p className="text-[11px] font-semibold tracking-[0.14em] text-sidebar-foreground/60 uppercase">
             Navigation
           </p>
@@ -38,7 +42,6 @@ const SideBar = () => {
             TicketHub
           </p>
         </div>
-
         <SidebarMenu className="gap-1.5">
           {navItems.map((item, index) => {
             const isActive = activeIndex === index;
@@ -66,6 +69,21 @@ const SideBar = () => {
           })}
         </SidebarMenu>
       </SidebarContent>
+      <SidebarFooter className="p-3">
+        <div className="flex items-center gap-2 rounded-lg border border-sidebar-border/90 px-3 py-2">
+          <div className="flex size-7 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground text-xs font-bold">
+            {activeOrganization?.name?.charAt(0).toUpperCase() ?? "?"}
+          </div>
+          <div className="flex flex-col min-w-0">
+            <p className="text-xs font-semibold text-sidebar-foreground truncate">
+              {activeOrganization?.name ?? "No organization"}
+            </p>
+            <p className="text-[10px] text-sidebar-foreground/50 truncate">
+              Active workspace
+            </p>
+          </div>
+        </div>
+      </SidebarFooter>
     </Sidebar>
   );
 };
