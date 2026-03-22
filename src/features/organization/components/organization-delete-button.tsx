@@ -1,11 +1,10 @@
 "use client";
-import { authClient } from "@/lib/auth-client";
+import { toActionState } from "@/components/form/utils/to-action-state";
 import { Button } from "@/components/ui/button";
 import useConfirmDialog from "@/features/tickets/hooks/use-confirm-dialog";
-import { toActionState } from "@/components/form/utils/to-action-state";
+import { authClient } from "@/lib/auth-client";
 import { LucideLoaderCircle, LucideTrash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 
 type OrganizationDeleteButton = {
   organizationId: string;
