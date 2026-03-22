@@ -26,6 +26,7 @@ const OrganizationLeaveButton = ({
   const [leaveButton, leaveDialog] = useConfirmDialog({
     title: "Leave Organization",
     description: "Are you sure you want to leave this organization?",
+    pendingMessage: "Leaving organization...",
     action: handleLeave,
     trigger: (isPending) => (
       <Button variant="destructive" size="icon">
