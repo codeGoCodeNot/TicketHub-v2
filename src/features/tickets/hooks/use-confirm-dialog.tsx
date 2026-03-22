@@ -26,7 +26,7 @@ import {
 import { toast } from "sonner";
 
 type UseConfirmDialogProps = {
-  action: () => Promise<ActionState>;
+  action: (actionState: ActionState) => Promise<ActionState>;
   trigger:
     | React.ReactElement<{ onClick?: () => void }>
     | ((isPending: boolean) => React.ReactElement<{ onClick?: () => void }>);

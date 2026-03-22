@@ -1,10 +1,11 @@
 "use client";
-
+import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import useConfirmDialog from "@/features/tickets/hooks/use-confirm-dialog";
+import { toActionState } from "@/components/form/utils/to-action-state";
 import { LucideLoaderCircle, LucideTrash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import deleteOrganization from "../actions/delete-organization";
+import { toast } from "sonner";
 
 type OrganizationDeleteButton = {
   organizationId: string;
@@ -15,8 +16,14 @@ const OrganizationDeleteButton = ({
 }: OrganizationDeleteButton) => {
   const router = useRouter();
 
+  const handleDelete = async () => {
+    const { error } = await authClient.organization.delete({ organizationId });
+    if (error) return toActionState("ERROR", "Failed to delete organization");
+    return toActionState("SUCCESS", "Deleted organization successfully");
+  };
+
   const [deleteButton, deleteDialog] = useConfirmDialog({
-    action: deleteOrganization.bind(null, organizationId),
+    action: handleDelete,
     trigger: (isPending) => (
       <Button variant="destructive" size="icon">
         {isPending ? (
