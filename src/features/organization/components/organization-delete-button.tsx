@@ -1,9 +1,10 @@
 "use client";
 
-import useConfirmDialog from "@/features/tickets/hooks/use-confirm-dialog";
-import deleteOrganization from "../actions/delete-organization";
 import { Button } from "@/components/ui/button";
+import useConfirmDialog from "@/features/tickets/hooks/use-confirm-dialog";
 import { LucideLoaderCircle, LucideTrash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import deleteOrganization from "../actions/delete-organization";
 
 type OrganizationDeleteButton = {
   organizationId: string;
@@ -12,6 +13,8 @@ type OrganizationDeleteButton = {
 const OrganizationDeleteButton = ({
   organizationId,
 }: OrganizationDeleteButton) => {
+  const router = useRouter();
+
   const [deleteButton, deleteDialog] = useConfirmDialog({
     action: deleteOrganization.bind(null, organizationId),
     trigger: (isPending) => (
@@ -23,6 +26,9 @@ const OrganizationDeleteButton = ({
         )}
       </Button>
     ),
+    onSuccess: () => {
+      router.refresh();
+    },
   });
 
   return (

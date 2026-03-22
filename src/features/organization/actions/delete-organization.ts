@@ -1,15 +1,19 @@
 "use server";
 
+import { setCookieByKey } from "@/actions/cookies";
 import fromErrorToActionState, {
+  ActionState,
   toActionState,
 } from "@/components/form/utils/to-action-state";
 import { auth } from "@/lib/auth";
-import { organizationPagePath } from "@/path";
-import { revalidatePath } from "next/cache";
+import { getSession } from "@/lib/get-session";
 import { headers } from "next/headers";
 import getOrganizationsByUser from "../queries/get-organizations-by-user";
 
 const deleteOrganization = async (organizationId: string) => {
+  const session = await getSession();
+  const isActive = session?.session.activeOrganizationId === organizationId;
+
   try {
     const organizations = await getOrganizationsByUser();
 
@@ -23,17 +27,22 @@ const deleteOrganization = async (organizationId: string) => {
         "You are not a member of this organization",
       );
 
-    await auth.api.deleteOrganization({
+    const result = await auth.api.deleteOrganization({
       headers: await headers(),
       body: {
         organizationId,
       },
     });
+
+    console.log("deleteOrganization result", result);
   } catch (error) {
+    console.log("Error deleting organization", error);
     return fromErrorToActionState(error);
   }
 
-  revalidatePath(organizationPagePath());
+  if (isActive)
+    await setCookieByKey("toast", "Deleted organization successfully");
+
   return toActionState("SUCCESS", "Deleted organization successfully");
 };
 
