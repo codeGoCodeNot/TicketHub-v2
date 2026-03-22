@@ -4,7 +4,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
 import { inngest } from "./inngest";
 import prisma from "./prisma";
-import { organization } from "better-auth/plugins";
+import { admin, organization } from "better-auth/plugins";
 
 export type Session = typeof auth.$Infer.Session;
 export type User = typeof auth.$Infer.Session.user;
@@ -83,5 +83,5 @@ export const auth = betterAuth({
     expiresIn: 60 * 60 * 24 * 30, // 30 days
     updateAge: 60 * 60 * 24,
   },
-  plugins: [nextCookies(), organization()],
+  plugins: [nextCookies(), organization(), admin()],
 });

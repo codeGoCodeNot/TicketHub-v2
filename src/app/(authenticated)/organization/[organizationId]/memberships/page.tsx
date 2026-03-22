@@ -3,8 +3,7 @@ import Spinner from "@/components/spinner";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import MembershipList from "@/features/membership/components/membership-list";
 import getMembership from "@/features/membership/queries/get-membership";
-import { ticketsPagePath } from "@/path";
-import { redirect } from "next/navigation";
+import { forbidden } from "next/navigation";
 import { Suspense } from "react";
 
 type MembershipPageProps = {
@@ -21,7 +20,7 @@ const MembershipPage = async ({ params }: MembershipPageProps) => {
   });
 
   if (!["admin", "owner"].includes(membership?.role || "")) {
-    redirect(ticketsPagePath());
+    forbidden();
   }
 
   return (
