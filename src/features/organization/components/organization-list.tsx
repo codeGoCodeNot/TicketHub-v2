@@ -1,5 +1,12 @@
-import SubmitButton from "@/components/form/submit-button";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -9,26 +16,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardDescription,
-  CardFooter,
-} from "@/components/ui/card";
 import { getSession } from "@/lib/get-session";
+import { organizationMembershiPagePath } from "@/path";
 import { format } from "date-fns";
-import {
-  LucideArrowLeftRight,
-  LucideArrowUpRightFromSquare,
-  LucidePen,
-} from "lucide-react";
+import { LucideArrowUpRightFromSquare, LucidePen } from "lucide-react";
+import Link from "next/link";
 import getOrganizationsByUser from "../queries/get-organizations-by-user";
 import OrganizationDeleteButton from "./organization-delete-button";
 import OrganizationSwitchButton from "./organization-switch-button";
-import Link from "next/link";
-import { organizationMembershiPagePath } from "@/path";
 
 type OrganizationListProps = {
   onlySwitch?: boolean;
@@ -54,15 +49,7 @@ const OrganizationList = async ({
           const switchButton = (
             <OrganizationSwitchButton
               organizationId={organization.id}
-              trigger={
-                <SubmitButton
-                  variant={
-                    !hasActive ? "secondary" : isActive ? "default" : "outline"
-                  }
-                  size="icon"
-                  icon={<LucideArrowLeftRight />}
-                />
-              }
+              isActive={isActive}
             />
           );
 
@@ -140,19 +127,7 @@ const OrganizationList = async ({
               const switchButton = (
                 <OrganizationSwitchButton
                   organizationId={organization.id}
-                  trigger={
-                    <SubmitButton
-                      variant={
-                        !hasActive
-                          ? "secondary"
-                          : isActive
-                            ? "default"
-                            : "outline"
-                      }
-                      size="icon"
-                      icon={<LucideArrowLeftRight />}
-                    />
-                  }
+                  isActive={isActive}
                 />
               );
 

@@ -1,29 +1,54 @@
 "use client";
-
-import Form from "@/components/form/form";
-import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
-import { useActionState } from "react";
-import switchOrganization from "../actions/switch-organization";
+import { Button } from "@/components/ui/button";
+import { authClient } from "@/lib/auth-client";
+import { LucideArrowLeftRight, LucideLoaderCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 type OrganizationSwitchButtonProps = {
   organizationId: string;
-  trigger: React.ReactNode;
+  isActive?: boolean;
 };
 
-const OrganizationSwitchButtons = ({
+const OrganizationSwitchButton = ({
   organizationId,
-  trigger,
+  isActive,
 }: OrganizationSwitchButtonProps) => {
-  const [actionState, action] = useActionState(
-    switchOrganization.bind(null, organizationId),
-    EMPTY_ACTION_STATE,
-  );
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  const handleSwitch = async () => {
+    setLoading(true);
+    const { error } = await authClient.organization.setActive({
+      organizationId,
+    });
+
+    setLoading(false);
+
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+
+    toast.success("Switched organization successfully");
+    router.refresh();
+  };
 
   return (
-    <Form action={action} actionState={actionState}>
-      {trigger}
-    </Form>
+    <Button
+      variant={isActive ? "default" : "outline"}
+      size="icon"
+      disabled={loading}
+      onClick={handleSwitch}
+    >
+      {loading ? (
+        <LucideLoaderCircle className="animate-spin" />
+      ) : (
+        <LucideArrowLeftRight />
+      )}
+    </Button>
   );
 };
 
-export default OrganizationSwitchButtons;
+export default OrganizationSwitchButton;
