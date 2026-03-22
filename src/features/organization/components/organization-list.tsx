@@ -45,7 +45,10 @@ const OrganizationList = async ({
         {organizations.map(({ organization, membershipByUser }) => {
           const activeOrganizationId = session?.session.activeOrganizationId;
           const isActive = activeOrganizationId === organization.id;
-
+          const isAdminOrOwner = ["admin", "owner"].includes(
+            membershipByUser.role,
+          );
+          const showActions = !onlySwitch && isAdminOrOwner;
           const switchButton = (
             <OrganizationSwitchButton
               organizationId={organization.id}
@@ -84,22 +87,20 @@ const OrganizationList = async ({
               </Card>
               <div className="flex flex-col gap-y-1">
                 {switchButton}
-                {!onlySwitch && (
+                {<OrganizationLeaveButton organizationId={organization.id} />}
+                {showActions && (
                   <Button variant="outline" size="icon" asChild>
                     <Link href={organizationMembershiPagePath(organization.id)}>
                       <LucideArrowUpRightFromSquare />
                     </Link>
                   </Button>
                 )}
-                {!onlySwitch && (
+                {showActions && (
                   <Button variant="outline" size="icon">
                     <LucidePen />
                   </Button>
                 )}
-                {!onlySwitch && (
-                  <OrganizationLeaveButton organizationId={organization.id} />
-                )}
-                {!onlySwitch && (
+                {showActions && (
                   <OrganizationDeleteButton organizationId={organization.id} />
                 )}
               </div>
@@ -126,6 +127,10 @@ const OrganizationList = async ({
               const activeOrganizationId =
                 session?.session.activeOrganizationId;
               const isActive = activeOrganizationId === organization.id;
+              const isAdminOrOwner = ["admin", "owner"].includes(
+                membershipByUser.role,
+              );
+              const showActions = !onlySwitch && isAdminOrOwner;
 
               const switchButton = (
                 <OrganizationSwitchButton
@@ -137,7 +142,8 @@ const OrganizationList = async ({
               const buttons = (
                 <>
                   {switchButton}
-                  {!onlySwitch && (
+                  {<OrganizationLeaveButton organizationId={organization.id} />}
+                  {showActions && (
                     <Button variant="outline" size="icon" asChild>
                       <Link
                         href={organizationMembershiPagePath(organization.id)}
@@ -146,15 +152,12 @@ const OrganizationList = async ({
                       </Link>
                     </Button>
                   )}
-                  {!onlySwitch && (
+                  {showActions && (
                     <Button variant="outline" size="icon">
                       <LucidePen />
                     </Button>
                   )}
-                  {!onlySwitch && (
-                    <OrganizationLeaveButton organizationId={organization.id} />
-                  )}
-                  {!onlySwitch && (
+                  {showActions && (
                     <OrganizationDeleteButton
                       organizationId={organization.id}
                     />

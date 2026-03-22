@@ -24,7 +24,11 @@ const OrganizationDeleteButton = ({
   const [deleteButton, deleteDialog] = useConfirmDialog({
     action: handleDelete,
     trigger: (isPending) => (
-      <Button variant="destructive" size="icon">
+      <Button
+        variant="destructive"
+        size="icon"
+        className="text-primary-foreground"
+      >
         {isPending ? (
           <LucideLoaderCircle className="animate-spin" />
         ) : (
