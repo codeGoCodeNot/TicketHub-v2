@@ -97,6 +97,9 @@ const OrganizationList = async ({
                   </Button>
                 )}
                 {!onlySwitch && (
+                  <OrganizationLeaveButton organizationId={organization.id} />
+                )}
+                {!onlySwitch && (
                   <OrganizationDeleteButton organizationId={organization.id} />
                 )}
               </div>
@@ -122,7 +125,6 @@ const OrganizationList = async ({
             {organizations.map(({ organization, membershipByUser }) => {
               const activeOrganizationId =
                 session?.session.activeOrganizationId;
-              const hasActive = organization.id === activeOrganizationId;
               const isActive = activeOrganizationId === organization.id;
 
               const switchButton = (
