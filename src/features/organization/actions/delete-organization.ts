@@ -2,7 +2,6 @@
 
 import { setCookieByKey } from "@/actions/cookies";
 import fromErrorToActionState, {
-  ActionState,
   toActionState,
 } from "@/components/form/utils/to-action-state";
 import { auth } from "@/lib/auth";
@@ -27,14 +26,12 @@ const deleteOrganization = async (organizationId: string) => {
         "You are not a member of this organization",
       );
 
-    const result = await auth.api.deleteOrganization({
+    await auth.api.deleteOrganization({
       headers: await headers(),
       body: {
         organizationId,
       },
     });
-
-    console.log("deleteOrganization result", result);
   } catch (error) {
     console.log("Error deleting organization", error);
     return fromErrorToActionState(error);
