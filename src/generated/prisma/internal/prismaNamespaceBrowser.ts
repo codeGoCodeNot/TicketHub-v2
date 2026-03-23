@@ -87,7 +87,8 @@ export const TicketScalarFieldEnum = {
   status: 'status',
   deadline: 'deadline',
   bounty: 'bounty',
-  userId: 'userId'
+  userId: 'userId',
+  organizationId: 'organizationId'
 } as const
 
 export type TicketScalarFieldEnum = (typeof TicketScalarFieldEnum)[keyof typeof TicketScalarFieldEnum]
@@ -112,7 +113,11 @@ export const UserScalarFieldEnum = {
   emailVerified: 'emailVerified',
   image: 'image',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  role: 'role',
+  banned: 'banned',
+  banReason: 'banReason',
+  banExpires: 'banExpires'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -127,7 +132,8 @@ export const SessionScalarFieldEnum = {
   ipAddress: 'ipAddress',
   userAgent: 'userAgent',
   userId: 'userId',
-  activeOrganizationId: 'activeOrganizationId'
+  activeOrganizationId: 'activeOrganizationId',
+  impersonatedBy: 'impersonatedBy'
 } as const
 
 export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
