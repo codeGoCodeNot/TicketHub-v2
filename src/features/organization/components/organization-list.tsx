@@ -25,6 +25,7 @@ import getOrganizationsByUser from "../queries/get-organizations-by-user";
 import OrganizationDeleteButton from "./organization-delete-button";
 import OrganizationSwitchButton from "./organization-switch-button";
 import OrganizationLeaveButton from "./organization-leave-button";
+import OrganizationEditButton from "./organization-edit-button";
 
 type OrganizationListProps = {
   onlySwitch?: boolean;
@@ -96,9 +97,10 @@ const OrganizationList = async ({
                   </Button>
                 )}
                 {showActions && (
-                  <Button variant="outline" size="icon">
-                    <LucidePen />
-                  </Button>
+                  <OrganizationEditButton
+                    organizationId={organization.id}
+                    currentName={organization.name}
+                  />
                 )}
                 {showActions && (
                   <OrganizationDeleteButton organizationId={organization.id} />
@@ -153,9 +155,10 @@ const OrganizationList = async ({
                     </Button>
                   )}
                   {showActions && (
-                    <Button variant="outline" size="icon">
-                      <LucidePen />
-                    </Button>
+                    <OrganizationEditButton
+                      organizationId={organization.id}
+                      currentName={organization.name}
+                    />
                   )}
                   {showActions && (
                     <OrganizationDeleteButton
