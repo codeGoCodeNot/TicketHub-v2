@@ -8,11 +8,17 @@ import Pagination from "@/components/pagination";
 type TicketListProps = {
   userId?: string;
   searchParams: ParsedSearchParams;
+  byOrganization?: boolean;
 };
 
-const TicketList = async ({ userId, searchParams }: TicketListProps) => {
+const TicketList = async ({
+  userId,
+  searchParams,
+  byOrganization = false,
+}: TicketListProps) => {
   const { list: tickets, metadata: ticketMetadata } = await getTickets(
     userId,
+    byOrganization,
     searchParams,
   );
 

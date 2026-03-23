@@ -2,9 +2,11 @@ import {
   accountProfilePagePath,
   homePagePath,
   organizationPagePath,
+  ticketsByOrganizationPagePath,
   ticketsPagePath,
 } from "@/path";
 import {
+  LucideBook,
   LucideBookCopy,
   LucideCircleUser,
   LucideLibrary,
@@ -19,9 +21,14 @@ export const navItems: NavItem[] = [
     icon: <LucideLibrary />,
   },
   {
+    title: "Tickets by Organization",
+    href: ticketsByOrganizationPagePath(),
+    icon: <LucideBookCopy />,
+  },
+  {
     title: "My Tickets",
     href: ticketsPagePath(),
-    icon: <LucideBookCopy />,
+    icon: <LucideBook />,
   },
   {
     separator: true,
