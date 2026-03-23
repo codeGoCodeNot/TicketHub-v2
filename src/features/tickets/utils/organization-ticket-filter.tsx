@@ -5,7 +5,6 @@ import { Switch } from "@/components/ui/switch";
 import { organizationParser } from "@/features/tickets/search-params";
 import { authClient } from "@/lib/auth-client";
 import { useQueryState } from "nuqs";
-import { check } from "zod";
 
 const OrganizationTicketFilter = () => {
   const [byOrganization, setByOrganization] = useQueryState(

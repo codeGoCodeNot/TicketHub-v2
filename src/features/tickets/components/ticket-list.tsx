@@ -1,21 +1,21 @@
-import SearchInput from "@/components/search-input";
-import SortSelect from "@/components/sort-select";
+import SearchInput from "@/features/tickets/utils/search-input";
+import SortSelect from "@/features/tickets/utils/sort-select";
 import getTickets from "../queries/get-tickets";
 import { ParsedSearchParams } from "../search-params";
 import TicketItem from "./ticket-item";
 import Pagination from "@/components/pagination";
-import OrganizationTicketFilter from "@/components/organization-ticket-filter";
+import OrganizationTicketFilter from "@/features/tickets/utils/organization-ticket-filter";
 
 type TicketListProps = {
   userId?: string;
   searchParams: ParsedSearchParams;
-  byOrganization?: boolean;
+  showOrganizationFilter?: boolean;
 };
 
 const TicketList = async ({
   userId,
   searchParams,
-  byOrganization = false,
+  showOrganizationFilter = false,
 }: TicketListProps) => {
   const { list: tickets, metadata: ticketMetadata } = await getTickets(
     userId,
@@ -47,7 +47,7 @@ const TicketList = async ({
           ]}
         />
       </div>
-      <OrganizationTicketFilter />
+      {showOrganizationFilter && <OrganizationTicketFilter />}
       {tickets.length ? (
         tickets.map((ticket) => <TicketItem key={ticket.id} ticket={ticket} />)
       ) : (

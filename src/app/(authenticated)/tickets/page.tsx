@@ -30,6 +30,7 @@ const TicketsPage = async ({ searchParams }: TicketsPageProps) => {
         <TicketList
           userId={user?.id}
           searchParams={await searchParamsCache.parse(searchParams)}
+          showOrganizationFilter
         />
       </Suspense>
     </div>
