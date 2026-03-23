@@ -21,7 +21,7 @@ const CommentDeleteButton = ({
         {isPending ? (
           <LucideLoaderCircle className="animate-spin" />
         ) : (
-          <LucideTrash2 className="text-primary-foreground" />
+          <LucideTrash2 />
         )}
       </Button>
     ),

@@ -1,4 +1,11 @@
 import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
   Table,
   TableBody,
   TableCaption,
@@ -7,17 +14,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardDescription,
-} from "@/components/ui/card";
 import { format } from "date-fns/format";
+import { LucideBan, LucideCheck } from "lucide-react";
 import getMemberships from "../queries/get-memberships";
 import MembershipDeleteButton from "./membership-delete-button";
-import { LucideBan, LucideCheck } from "lucide-react";
+import MembershipMoreMenu from "./membership-more-menu";
 
 type MembershipListProps = {
   organizationId: string;
@@ -30,6 +31,13 @@ const MembershipList = async ({ organizationId }: MembershipListProps) => {
       {/* Mobile - Cards */}
       <div className="flex flex-col gap-2 lg:hidden">
         {memberships.map(({ user, createdAt, id, role, organizationId }) => {
+          const membershipMoreMenu = (
+            <MembershipMoreMenu
+              organizationId={organizationId}
+              memberRole={role}
+              memberId={id}
+            />
+          );
           const deleteButton = (
             <MembershipDeleteButton
               organizationId={organizationId}
@@ -56,7 +64,10 @@ const MembershipList = async ({ organizationId }: MembershipListProps) => {
                   </CardDescription>
                 </CardContent>
               </Card>
-              <div className="flex flex-col gap-y-1">{deleteButton}</div>
+              <div className="flex flex-col gap-y-1">
+                {membershipMoreMenu}
+                {deleteButton}
+              </div>
             </div>
           );
         })}
@@ -78,6 +89,14 @@ const MembershipList = async ({ organizationId }: MembershipListProps) => {
           <TableBody>
             {memberships.map(
               ({ user, createdAt, id, role, organizationId }) => {
+                const membershipMoreMenu = (
+                  <MembershipMoreMenu
+                    organizationId={organizationId}
+                    memberRole={role}
+                    memberId={id}
+                  />
+                );
+
                 const deleteButton = (
                   <MembershipDeleteButton
                     organizationId={organizationId}
@@ -96,7 +115,10 @@ const MembershipList = async ({ organizationId }: MembershipListProps) => {
                     <TableCell>
                       {user.emailVerified ? <LucideCheck /> : <LucideBan />}
                     </TableCell>
-                    <TableCell>{deleteButton}</TableCell>
+                    <TableCell className="flex gap-x-1">
+                      {membershipMoreMenu}
+                      {deleteButton}
+                    </TableCell>
                   </TableRow>
                 );
               },

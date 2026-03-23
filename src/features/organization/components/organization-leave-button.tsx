@@ -29,11 +29,7 @@ const OrganizationLeaveButton = ({
     pendingMessage: "Leaving organization...",
     action: handleLeave,
     trigger: (isPending) => (
-      <Button
-        variant="destructive"
-        size="icon"
-        className="text-primary-foreground"
-      >
+      <Button variant="destructive" size="icon">
         {isPending ? (
           <LucideLoaderCircle className="animate-spin" />
         ) : (
