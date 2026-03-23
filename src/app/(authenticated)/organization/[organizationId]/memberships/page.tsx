@@ -3,6 +3,7 @@ import Spinner from "@/components/spinner";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import MembershipList from "@/features/membership/components/membership-list";
 import getMembership from "@/features/membership/queries/get-membership";
+import { LucideShield, LucideShieldCheck } from "lucide-react";
 import { forbidden } from "next/navigation";
 import { Suspense } from "react";
 
@@ -26,7 +27,11 @@ const MembershipPage = async ({ params }: MembershipPageProps) => {
   return (
     <div className="flex flex-1 flex-col gap-y-8">
       <Heading
-        title="Membership"
+        title={
+          <span className="flex items-center gap-2">
+            Membership <LucideShieldCheck className="size-7" />
+          </span>
+        }
         description="Manage your organization memberships."
       />
 

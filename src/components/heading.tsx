@@ -2,7 +2,7 @@ import React from "react";
 import { Separator } from "./ui/separator";
 
 type HeadingProps = {
-  title: string;
+  title: React.ReactNode;
   description?: string;
   tabs?: React.ReactNode;
   actions?: React.ReactNode;
