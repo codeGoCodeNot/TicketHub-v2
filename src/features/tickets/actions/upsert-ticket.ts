@@ -7,9 +7,11 @@ import fromErrorToActionState, {
 } from "@/components/form/utils/to-action-state";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import isOwnership from "@/features/auth/utils/is-ownership";
+import { getSession } from "@/lib/get-session";
 import prisma from "@/lib/prisma";
-import { signInPagePath, ticketPagePath, ticketsPagePath } from "@/path";
+import { ticketPagePath, ticketsPagePath } from "@/path";
 import { toCent } from "@/utils/currency";
+
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -27,8 +29,11 @@ const upsertTicket = async (
   formData: FormData,
 ) => {
   const user = await getAuthOrRedirect();
+  const session = await getSession();
+  const organizationId = session?.session.activeOrganizationId;
 
-  if (!user) redirect(signInPagePath());
+  if (!organizationId)
+    return toActionState("ERROR", "Active organization not found.", formData);
 
   try {
     if (id) {
@@ -53,6 +58,7 @@ const upsertTicket = async (
     const dbData = {
       ...data,
       userId: user.id,
+      organizationId,
       bounty: toCent(data.bounty),
     };
 
