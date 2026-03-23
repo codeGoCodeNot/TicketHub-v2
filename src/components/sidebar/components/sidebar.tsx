@@ -16,12 +16,18 @@ import getActivePath from "@/utils/get-active-path";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { navItems } from "../constant";
+import { useEffect } from "react";
 
 const SideBar = () => {
   const pathname = usePathname();
   const { user, isFetched } = useAuth();
 
-  const { data: activeOrganization } = authClient.useActiveOrganization();
+  const { data: activeOrganization, refetch } =
+    authClient.useActiveOrganization();
+
+  useEffect(() => {
+    refetch();
+  }, [pathname]);
 
   const { activeIndex } = getActivePath(
     pathname,
