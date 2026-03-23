@@ -30,6 +30,7 @@ export type MemberMinAggregateOutputType = {
   userId: string | null
   role: string | null
   createdAt: Date | null
+  canDeleteTickets: boolean | null
 }
 
 export type MemberMaxAggregateOutputType = {
@@ -38,6 +39,7 @@ export type MemberMaxAggregateOutputType = {
   userId: string | null
   role: string | null
   createdAt: Date | null
+  canDeleteTickets: boolean | null
 }
 
 export type MemberCountAggregateOutputType = {
@@ -46,6 +48,7 @@ export type MemberCountAggregateOutputType = {
   userId: number
   role: number
   createdAt: number
+  canDeleteTickets: number
   _all: number
 }
 
@@ -56,6 +59,7 @@ export type MemberMinAggregateInputType = {
   userId?: true
   role?: true
   createdAt?: true
+  canDeleteTickets?: true
 }
 
 export type MemberMaxAggregateInputType = {
@@ -64,6 +68,7 @@ export type MemberMaxAggregateInputType = {
   userId?: true
   role?: true
   createdAt?: true
+  canDeleteTickets?: true
 }
 
 export type MemberCountAggregateInputType = {
@@ -72,6 +77,7 @@ export type MemberCountAggregateInputType = {
   userId?: true
   role?: true
   createdAt?: true
+  canDeleteTickets?: true
   _all?: true
 }
 
@@ -153,6 +159,7 @@ export type MemberGroupByOutputType = {
   userId: string
   role: string
   createdAt: Date
+  canDeleteTickets: boolean
   _count: MemberCountAggregateOutputType | null
   _min: MemberMinAggregateOutputType | null
   _max: MemberMaxAggregateOutputType | null
@@ -182,6 +189,7 @@ export type MemberWhereInput = {
   userId?: Prisma.StringFilter<"Member"> | string
   role?: Prisma.StringFilter<"Member"> | string
   createdAt?: Prisma.DateTimeFilter<"Member"> | Date | string
+  canDeleteTickets?: Prisma.BoolFilter<"Member"> | boolean
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
@@ -192,6 +200,7 @@ export type MemberOrderByWithRelationInput = {
   userId?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  canDeleteTickets?: Prisma.SortOrder
   organization?: Prisma.OrganizationOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
 }
@@ -205,6 +214,7 @@ export type MemberWhereUniqueInput = Prisma.AtLeast<{
   userId?: Prisma.StringFilter<"Member"> | string
   role?: Prisma.StringFilter<"Member"> | string
   createdAt?: Prisma.DateTimeFilter<"Member"> | Date | string
+  canDeleteTickets?: Prisma.BoolFilter<"Member"> | boolean
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
@@ -215,6 +225,7 @@ export type MemberOrderByWithAggregationInput = {
   userId?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  canDeleteTickets?: Prisma.SortOrder
   _count?: Prisma.MemberCountOrderByAggregateInput
   _max?: Prisma.MemberMaxOrderByAggregateInput
   _min?: Prisma.MemberMinOrderByAggregateInput
@@ -229,12 +240,14 @@ export type MemberScalarWhereWithAggregatesInput = {
   userId?: Prisma.StringWithAggregatesFilter<"Member"> | string
   role?: Prisma.StringWithAggregatesFilter<"Member"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Member"> | Date | string
+  canDeleteTickets?: Prisma.BoolWithAggregatesFilter<"Member"> | boolean
 }
 
 export type MemberCreateInput = {
   id: string
   role?: string
   createdAt: Date | string
+  canDeleteTickets?: boolean
   organization: Prisma.OrganizationCreateNestedOneWithoutMembersInput
   user: Prisma.UserCreateNestedOneWithoutMembersInput
 }
@@ -245,12 +258,14 @@ export type MemberUncheckedCreateInput = {
   userId: string
   role?: string
   createdAt: Date | string
+  canDeleteTickets?: boolean
 }
 
 export type MemberUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  canDeleteTickets?: Prisma.BoolFieldUpdateOperationsInput | boolean
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutMembersNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutMembersNestedInput
 }
@@ -261,6 +276,7 @@ export type MemberUncheckedUpdateInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  canDeleteTickets?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type MemberCreateManyInput = {
@@ -269,12 +285,14 @@ export type MemberCreateManyInput = {
   userId: string
   role?: string
   createdAt: Date | string
+  canDeleteTickets?: boolean
 }
 
 export type MemberUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  canDeleteTickets?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type MemberUncheckedUpdateManyInput = {
@@ -283,6 +301,7 @@ export type MemberUncheckedUpdateManyInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  canDeleteTickets?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type MemberListRelationFilter = {
@@ -301,6 +320,7 @@ export type MemberCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  canDeleteTickets?: Prisma.SortOrder
 }
 
 export type MemberMaxOrderByAggregateInput = {
@@ -309,6 +329,7 @@ export type MemberMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  canDeleteTickets?: Prisma.SortOrder
 }
 
 export type MemberMinOrderByAggregateInput = {
@@ -317,6 +338,7 @@ export type MemberMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   role?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  canDeleteTickets?: Prisma.SortOrder
 }
 
 export type MemberCreateNestedManyWithoutUserInput = {
@@ -407,6 +429,7 @@ export type MemberCreateWithoutUserInput = {
   id: string
   role?: string
   createdAt: Date | string
+  canDeleteTickets?: boolean
   organization: Prisma.OrganizationCreateNestedOneWithoutMembersInput
 }
 
@@ -415,6 +438,7 @@ export type MemberUncheckedCreateWithoutUserInput = {
   organizationId: string
   role?: string
   createdAt: Date | string
+  canDeleteTickets?: boolean
 }
 
 export type MemberCreateOrConnectWithoutUserInput = {
@@ -452,12 +476,14 @@ export type MemberScalarWhereInput = {
   userId?: Prisma.StringFilter<"Member"> | string
   role?: Prisma.StringFilter<"Member"> | string
   createdAt?: Prisma.DateTimeFilter<"Member"> | Date | string
+  canDeleteTickets?: Prisma.BoolFilter<"Member"> | boolean
 }
 
 export type MemberCreateWithoutOrganizationInput = {
   id: string
   role?: string
   createdAt: Date | string
+  canDeleteTickets?: boolean
   user: Prisma.UserCreateNestedOneWithoutMembersInput
 }
 
@@ -466,6 +492,7 @@ export type MemberUncheckedCreateWithoutOrganizationInput = {
   userId: string
   role?: string
   createdAt: Date | string
+  canDeleteTickets?: boolean
 }
 
 export type MemberCreateOrConnectWithoutOrganizationInput = {
@@ -499,12 +526,14 @@ export type MemberCreateManyUserInput = {
   organizationId: string
   role?: string
   createdAt: Date | string
+  canDeleteTickets?: boolean
 }
 
 export type MemberUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  canDeleteTickets?: Prisma.BoolFieldUpdateOperationsInput | boolean
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutMembersNestedInput
 }
 
@@ -513,6 +542,7 @@ export type MemberUncheckedUpdateWithoutUserInput = {
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  canDeleteTickets?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type MemberUncheckedUpdateManyWithoutUserInput = {
@@ -520,6 +550,7 @@ export type MemberUncheckedUpdateManyWithoutUserInput = {
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  canDeleteTickets?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type MemberCreateManyOrganizationInput = {
@@ -527,12 +558,14 @@ export type MemberCreateManyOrganizationInput = {
   userId: string
   role?: string
   createdAt: Date | string
+  canDeleteTickets?: boolean
 }
 
 export type MemberUpdateWithoutOrganizationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  canDeleteTickets?: Prisma.BoolFieldUpdateOperationsInput | boolean
   user?: Prisma.UserUpdateOneRequiredWithoutMembersNestedInput
 }
 
@@ -541,6 +574,7 @@ export type MemberUncheckedUpdateWithoutOrganizationInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  canDeleteTickets?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type MemberUncheckedUpdateManyWithoutOrganizationInput = {
@@ -548,6 +582,7 @@ export type MemberUncheckedUpdateManyWithoutOrganizationInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   role?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  canDeleteTickets?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 
@@ -558,6 +593,7 @@ export type MemberSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   userId?: boolean
   role?: boolean
   createdAt?: boolean
+  canDeleteTickets?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["member"]>
@@ -568,6 +604,7 @@ export type MemberSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   userId?: boolean
   role?: boolean
   createdAt?: boolean
+  canDeleteTickets?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["member"]>
@@ -578,6 +615,7 @@ export type MemberSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   userId?: boolean
   role?: boolean
   createdAt?: boolean
+  canDeleteTickets?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["member"]>
@@ -588,9 +626,10 @@ export type MemberSelectScalar = {
   userId?: boolean
   role?: boolean
   createdAt?: boolean
+  canDeleteTickets?: boolean
 }
 
-export type MemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "userId" | "role" | "createdAt", ExtArgs["result"]["member"]>
+export type MemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "userId" | "role" | "createdAt" | "canDeleteTickets", ExtArgs["result"]["member"]>
 export type MemberInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -616,6 +655,7 @@ export type $MemberPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     userId: string
     role: string
     createdAt: Date
+    canDeleteTickets: boolean
   }, ExtArgs["result"]["member"]>
   composites: {}
 }
@@ -1046,6 +1086,7 @@ export interface MemberFieldRefs {
   readonly userId: Prisma.FieldRef<"Member", 'String'>
   readonly role: Prisma.FieldRef<"Member", 'String'>
   readonly createdAt: Prisma.FieldRef<"Member", 'DateTime'>
+  readonly canDeleteTickets: Prisma.FieldRef<"Member", 'Boolean'>
 }
     
 

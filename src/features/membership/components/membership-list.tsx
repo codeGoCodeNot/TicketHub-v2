@@ -19,6 +19,7 @@ import { LucideBan, LucideCheck } from "lucide-react";
 import getMemberships from "../queries/get-memberships";
 import MembershipDeleteButton from "./membership-delete-button";
 import MembershipMoreMenu from "./membership-more-menu";
+import PermissionToggle from "./permission-toggle";
 
 type MembershipListProps = {
   organizationId: string;
@@ -30,47 +31,57 @@ const MembershipList = async ({ organizationId }: MembershipListProps) => {
     <>
       {/* Mobile - Cards */}
       <div className="flex flex-col gap-2 lg:hidden">
-        {memberships.map(({ user, createdAt, id, role, organizationId }) => {
-          const membershipMoreMenu = (
-            <MembershipMoreMenu
-              organizationId={organizationId}
-              memberRole={role}
-              memberId={id}
-            />
-          );
-          const deleteButton = (
-            <MembershipDeleteButton
-              organizationId={organizationId}
-              memberId={id}
-            />
-          );
-          return (
-            <div key={id} className="flex gap-x-1 w-full justify-center">
-              <Card className="max-w-[420px] w-full" size="sm">
-                <CardHeader className="flex flex-row items-center justify-between gap-2 pb-1">
-                  <CardTitle className="font-semibold">{user.name}</CardTitle>
-                  <span className="text-xs capitalize bg-muted px-2 py-1 rounded-full">
-                    {role}
-                  </span>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-1 pt-0">
-                  <CardDescription>{user.email}</CardDescription>
-                  <CardDescription>
-                    Joined: {format(createdAt, "yyyy/MM/dd, hh:mm")}
-                  </CardDescription>
-                  <CardDescription className="flex items-center gap-x-1">
-                    Verified:{" "}
-                    {user.emailVerified ? <LucideCheck /> : <LucideBan />}
-                  </CardDescription>
-                </CardContent>
-              </Card>
-              <div className="flex flex-col gap-y-1">
-                {membershipMoreMenu}
-                {deleteButton}
+        {memberships.map(
+          ({ user, createdAt, id, role, organizationId, canDeleteTickets }) => {
+            const membershipMoreMenu = (
+              <MembershipMoreMenu
+                organizationId={organizationId}
+                memberRole={role}
+                memberId={id}
+              />
+            );
+            const deleteButton = (
+              <MembershipDeleteButton
+                organizationId={organizationId}
+                memberId={id}
+              />
+            );
+            return (
+              <div key={id} className="flex gap-x-1 w-full justify-center">
+                <Card className="max-w-[420px] w-full" size="sm">
+                  <CardHeader className="flex flex-row items-center justify-between gap-2 pb-1">
+                    <CardTitle className="font-semibold">{user.name}</CardTitle>
+                    <span className="text-xs capitalize bg-muted px-2 py-1 rounded-full">
+                      {role}
+                    </span>
+                  </CardHeader>
+                  <CardContent className="flex flex-col gap-1 pt-0">
+                    <CardDescription>{user.email}</CardDescription>
+                    <CardDescription>
+                      Joined: {format(createdAt, "yyyy/MM/dd, hh:mm")}
+                    </CardDescription>
+                    <CardDescription className="flex items-center gap-x-1">
+                      Verified:{" "}
+                      {user.emailVerified ? <LucideCheck /> : <LucideBan />}
+                    </CardDescription>
+                    <CardDescription className="flex gap-x-1 items-center">
+                      Can Delete Tickets:{" "}
+                      <PermissionToggle
+                        userId={user.id}
+                        organizationId={organizationId}
+                        canDeleteTickets={canDeleteTickets}
+                      />
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+                <div className="flex flex-col gap-y-1">
+                  {membershipMoreMenu}
+                  {deleteButton}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          },
+        )}
       </div>
       {/* Desktop - Table */}
       <div className="hidden lg:block">
@@ -84,11 +95,19 @@ const MembershipList = async ({ organizationId }: MembershipListProps) => {
               <TableHead>Joined At</TableHead>
               <TableHead>Verified</TableHead>
               <TableHead>Actions</TableHead>
+              <TableHead>Can Delete Tickets</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {memberships.map(
-              ({ user, createdAt, id, role, organizationId }) => {
+              ({
+                user,
+                createdAt,
+                id,
+                role,
+                organizationId,
+                canDeleteTickets,
+              }) => {
                 const membershipMoreMenu = (
                   <MembershipMoreMenu
                     organizationId={organizationId}
@@ -118,6 +137,13 @@ const MembershipList = async ({ organizationId }: MembershipListProps) => {
                     <TableCell className="flex gap-x-1">
                       {membershipMoreMenu}
                       {deleteButton}
+                    </TableCell>
+                    <TableCell>
+                      <PermissionToggle
+                        userId={user.id}
+                        organizationId={organizationId}
+                        canDeleteTickets={canDeleteTickets}
+                      />
                     </TableCell>
                   </TableRow>
                 );
