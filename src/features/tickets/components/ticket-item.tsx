@@ -61,6 +61,7 @@ const TicketItem = ({ ticket, isDetail, comments }: TicketItemProps) => {
           <LucideMoreVertical />
         </Button>
       }
+      canDeleteTickets={ticket.canDeleteTickets}
     />
   );
 

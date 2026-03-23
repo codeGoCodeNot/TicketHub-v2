@@ -35,7 +35,7 @@ const TicketsByOrganizationPage = async ({
         <TicketList
           searchParams={{
             ...parsed,
-            byOrganization: activeOrganization?.slug ?? "",
+            byOrganization: activeOrganization ? "true" : "",
           }}
         />
       </Suspense>

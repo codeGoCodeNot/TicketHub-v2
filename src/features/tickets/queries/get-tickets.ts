@@ -3,6 +3,7 @@ import { ParsedSearchParams } from "../search-params";
 import getAuth from "@/lib/get-auth";
 import isOwnership from "@/features/auth/utils/is-ownership";
 import getActiveOrganization from "@/features/organization/queries/get-active-organization";
+import getMembership from "@/features/membership/queries/get-membership";
 
 // Query to fetch all tickets
 
@@ -12,6 +13,8 @@ const getTickets = async (
 ) => {
   const user = await getAuth();
   const activeOrganization = await getActiveOrganization();
+  console.log("activeOrg:", activeOrganization?.id);
+  console.log("byOrganization:", searchParams.byOrganization);
 
   const where = {
     userId,
@@ -53,10 +56,16 @@ const getTickets = async (
     }),
   ]);
 
+  const membership = await getMembership({
+    userId: user?.id!,
+    organizationId: activeOrganization?.id!,
+  });
+
   return {
     list: tickets.map((ticket) => ({
       ...ticket,
       isOwner: isOwnership(user, ticket),
+      canDeleteTickets: membership?.canDeleteTickets ?? false,
     })),
     metadata: { count, hasNextPage: count > skip + take },
   };

@@ -22,9 +22,14 @@ import ToolTip from "@/components/tool-tip";
 type TicketMoreMenuProps = {
   ticket: Ticket;
   trigger: React.ReactNode;
+  canDeleteTickets?: boolean;
 };
 
-const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
+const TicketMoreMenu = ({
+  ticket,
+  trigger,
+  canDeleteTickets = false,
+}: TicketMoreMenuProps) => {
   // handle update ticket status
   const handleUpdateTicketStatus = async (value: string) => {
     const promiseStatus = updateTicketStatus(ticket.id, value as TicketStatus);
@@ -43,7 +48,7 @@ const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
   const [deleteDialogTrigger, deleteDialog] = useConfirmDialog({
     action: deleteTicket.bind(null, ticket.id),
     trigger: (
-      <DropdownMenuItem>
+      <DropdownMenuItem disabled={!canDeleteTickets}>
         <LucideTrash2 className="text-red-800" />
         Delete
       </DropdownMenuItem>

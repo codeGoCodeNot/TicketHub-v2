@@ -5,7 +5,7 @@ import fromErrorToActionState, {
   toActionState,
 } from "@/components/form/utils/to-action-state";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
-import isOwnership from "@/features/auth/utils/is-ownership";
+import getMembership from "@/features/membership/queries/get-membership";
 import prisma from "@/lib/prisma";
 import { ticketsPagePath } from "@/path";
 import { revalidatePath } from "next/cache";
@@ -21,7 +21,14 @@ const deleteTicket = async (id: string) => {
       },
     });
 
-    if (!ticket || !isOwnership(user, ticket)) {
+    const membership = await getMembership({
+      userId: user.id,
+      organizationId: ticket?.organizationId!,
+    });
+
+    const canDelete = membership?.canDeleteTickets === true;
+
+    if (!ticket || !canDelete) {
       return toActionState(
         "ERROR",
         "You are not authorized to delete this ticket.",
