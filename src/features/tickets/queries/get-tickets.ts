@@ -8,7 +8,6 @@ import getActiveOrganization from "@/features/organization/queries/get-active-or
 
 const getTickets = async (
   userId: string | undefined,
-  byOrganization: boolean,
   searchParams: ParsedSearchParams,
 ) => {
   const user = await getAuth();
@@ -17,7 +16,7 @@ const getTickets = async (
   const where = {
     userId,
     // search by title with case-insensitive matching
-    ...(byOrganization && activeOrganization
+    ...(searchParams.byOrganization && activeOrganization
       ? { organizationId: activeOrganization.id }
       : {}),
     title: {

@@ -7,11 +7,7 @@ export const GET = async (request: Request) => {
   const untypedSearchParams = Object.fromEntries(searchParams);
   const typedSearchParams = searchParamsCache.parse(untypedSearchParams);
 
-  const { list, metadata } = await getTickets(
-    undefined,
-    false,
-    typedSearchParams,
-  );
+  const { list, metadata } = await getTickets(undefined, typedSearchParams);
 
   return Response.json({ list, metadata });
 };

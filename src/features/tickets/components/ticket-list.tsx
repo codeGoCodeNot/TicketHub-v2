@@ -4,6 +4,7 @@ import getTickets from "../queries/get-tickets";
 import { ParsedSearchParams } from "../search-params";
 import TicketItem from "./ticket-item";
 import Pagination from "@/components/pagination";
+import OrganizationTicketFilter from "@/components/organization-ticket-filter";
 
 type TicketListProps = {
   userId?: string;
@@ -18,7 +19,6 @@ const TicketList = async ({
 }: TicketListProps) => {
   const { list: tickets, metadata: ticketMetadata } = await getTickets(
     userId,
-    byOrganization,
     searchParams,
   );
 
@@ -47,6 +47,7 @@ const TicketList = async ({
           ]}
         />
       </div>
+      <OrganizationTicketFilter />
       {tickets.length ? (
         tickets.map((ticket) => <TicketItem key={ticket.id} ticket={ticket} />)
       ) : (

@@ -1,6 +1,7 @@
 import CardCompact from "@/components/card-compact";
 import Heading from "@/components/heading";
 import Spinner from "@/components/spinner";
+import getActiveOrganization from "@/features/organization/queries/get-active-organization";
 import TicketList from "@/features/tickets/components/ticket-list";
 import TicketUpsertForm from "@/features/tickets/components/ticket-upsert-form";
 import { searchParamsCache } from "@/features/tickets/search-params";
@@ -15,6 +16,9 @@ type TicketsByOrganizationPageProps = {
 const TicketsByOrganizationPage = async ({
   searchParams,
 }: TicketsByOrganizationPageProps) => {
+  const parsed = await searchParamsCache.parse(searchParams);
+  const activeOrganization = await getActiveOrganization();
+
   return (
     <div className="flex flex-col gap-y-8 flex-1">
       <Heading
@@ -29,8 +33,10 @@ const TicketsByOrganizationPage = async ({
       />
       <Suspense fallback={<Spinner />}>
         <TicketList
-          byOrganization
-          searchParams={await searchParamsCache.parse(searchParams)}
+          searchParams={{
+            ...parsed,
+            byOrganization: activeOrganization?.slug ?? "",
+          }}
         />
       </Suspense>
     </div>
