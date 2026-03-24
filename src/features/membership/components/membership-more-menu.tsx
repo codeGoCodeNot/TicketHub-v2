@@ -1,5 +1,6 @@
 "use client";
 
+import ToolTip from "@/components/tool-tip";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -47,11 +48,13 @@ const MembershipMoreMenu = ({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
-          <LucideUserCog />
-        </Button>
-      </DropdownMenuTrigger>
+      <ToolTip label="Manage member role">
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" size="icon">
+            <LucideUserCog />
+          </Button>
+        </DropdownMenuTrigger>
+      </ToolTip>
       <DropdownMenuContent>
         <DropdownMenuGroup>
           <DropdownMenuLabel>Roles</DropdownMenuLabel>

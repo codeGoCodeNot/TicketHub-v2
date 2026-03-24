@@ -26,6 +26,7 @@ import OrganizationDeleteButton from "./organization-delete-button";
 import OrganizationSwitchButton from "./organization-switch-button";
 import OrganizationLeaveButton from "./organization-leave-button";
 import OrganizationEditButton from "./organization-edit-button";
+import ToolTip from "@/components/tool-tip";
 
 type OrganizationListProps = {
   onlySwitch?: boolean;
@@ -146,13 +147,15 @@ const OrganizationList = async ({
                   {switchButton}
                   {<OrganizationLeaveButton organizationId={organization.id} />}
                   {showActions && (
-                    <Button variant="outline" size="icon" asChild>
-                      <Link
-                        href={organizationMembershiPagePath(organization.id)}
-                      >
-                        <LucideArrowUpRightFromSquare />
-                      </Link>
-                    </Button>
+                    <ToolTip label="View organization memberships">
+                      <Button variant="outline" size="icon" asChild>
+                        <Link
+                          href={organizationMembershiPagePath(organization.id)}
+                        >
+                          <LucideArrowUpRightFromSquare />
+                        </Link>
+                      </Button>
+                    </ToolTip>
                   )}
                   {showActions && (
                     <OrganizationEditButton

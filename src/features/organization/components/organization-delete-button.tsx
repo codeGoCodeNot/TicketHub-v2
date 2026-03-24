@@ -1,5 +1,6 @@
 "use client";
 import { toActionState } from "@/components/form/utils/to-action-state";
+import ToolTip from "@/components/tool-tip";
 import { Button } from "@/components/ui/button";
 import useConfirmDialog from "@/features/tickets/hooks/use-confirm-dialog";
 import { authClient } from "@/lib/auth-client";
@@ -24,13 +25,15 @@ const OrganizationDeleteButton = ({
   const [deleteButton, deleteDialog] = useConfirmDialog({
     action: handleDelete,
     trigger: (isPending) => (
-      <Button variant="destructive" size="icon">
-        {isPending ? (
-          <LucideLoaderCircle className="animate-spin" />
-        ) : (
-          <LucideTrash2 />
-        )}
-      </Button>
+      <ToolTip label="Delete this organization">
+        <Button variant="destructive" size="icon">
+          {isPending ? (
+            <LucideLoaderCircle className="animate-spin" />
+          ) : (
+            <LucideTrash2 />
+          )}
+        </Button>
+      </ToolTip>
     ),
     onSuccess: () => {
       router.refresh();

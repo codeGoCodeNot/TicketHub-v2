@@ -1,6 +1,7 @@
 "use client";
 
 import { toActionState } from "@/components/form/utils/to-action-state";
+import ToolTip from "@/components/tool-tip";
 import { Button } from "@/components/ui/button";
 import useConfirmDialog from "@/features/tickets/hooks/use-confirm-dialog";
 import { authClient } from "@/lib/auth-client";
@@ -29,13 +30,15 @@ const OrganizationLeaveButton = ({
     pendingMessage: "Leaving organization...",
     action: handleLeave,
     trigger: (isPending) => (
-      <Button variant="destructive" size="icon">
-        {isPending ? (
-          <LucideLoaderCircle className="animate-spin" />
-        ) : (
-          <LucideLogOut />
-        )}
-      </Button>
+      <ToolTip label="Leave this organization">
+        <Button variant="destructive" size="icon">
+          {isPending ? (
+            <LucideLoaderCircle className="animate-spin" />
+          ) : (
+            <LucideLogOut />
+          )}
+        </Button>
+      </ToolTip>
     ),
     onSuccess: () => router.refresh(),
   });

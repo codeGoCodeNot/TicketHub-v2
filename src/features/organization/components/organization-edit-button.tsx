@@ -1,4 +1,5 @@
 "use client";
+import ToolTip from "@/components/tool-tip";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -56,9 +57,11 @@ const OrganizationEditButton = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="icon">
-          <LucidePen />
-        </Button>
+        <ToolTip label="Edit organization">
+          <Button variant="outline" size="icon">
+            <LucidePen />
+          </Button>
+        </ToolTip>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

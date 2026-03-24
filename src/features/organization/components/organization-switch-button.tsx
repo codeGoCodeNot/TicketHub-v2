@@ -1,4 +1,5 @@
 "use client";
+import ToolTip from "@/components/tool-tip";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import { LucideArrowLeftRight, LucideLoaderCircle } from "lucide-react";
@@ -36,18 +37,22 @@ const OrganizationSwitchButton = ({
   };
 
   return (
-    <Button
-      variant={isActive ? "default" : "outline"}
-      size="icon"
-      disabled={loading}
-      onClick={handleSwitch}
+    <ToolTip
+      label={isActive ? "Current organization" : "Switch to this organization"}
     >
-      {loading ? (
-        <LucideLoaderCircle className="animate-spin" />
-      ) : (
-        <LucideArrowLeftRight />
-      )}
-    </Button>
+      <Button
+        variant={isActive ? "default" : "outline"}
+        size="icon"
+        disabled={loading}
+        onClick={handleSwitch}
+      >
+        {loading ? (
+          <LucideLoaderCircle className="animate-spin" />
+        ) : (
+          <LucideArrowLeftRight />
+        )}
+      </Button>
+    </ToolTip>
   );
 };
 
