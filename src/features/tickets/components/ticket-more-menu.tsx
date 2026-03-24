@@ -47,11 +47,18 @@ const TicketMoreMenu = ({
   // custom state and handlers for delete confirm dialog
   const [deleteDialogTrigger, deleteDialog] = useConfirmDialog({
     action: deleteTicket.bind(null, ticket.id),
-    trigger: (
+    trigger: canDeleteTickets ? (
       <DropdownMenuItem>
         <LucideTrash2 className="text-red-800" />
         Delete
       </DropdownMenuItem>
+    ) : (
+      <ToolTip label="You do not have permission to delete this ticket.">
+        <DropdownMenuItem disabled>
+          <LucideTrash2 className="text-red-800" />
+          Delete
+        </DropdownMenuItem>
+      </ToolTip>
     ),
     title: "Are you sure you want to delete this ticket?",
     description: "This action cannot be undone.",

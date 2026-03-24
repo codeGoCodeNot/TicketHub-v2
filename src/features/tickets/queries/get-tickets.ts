@@ -4,6 +4,7 @@ import getAuth from "@/lib/get-auth";
 import isOwnership from "@/features/auth/utils/is-ownership";
 import getActiveOrganization from "@/features/organization/queries/get-active-organization";
 import getMembership from "@/features/membership/queries/get-membership";
+import getTicketPermission from "./get-ticket-permission";
 
 // Query to fetch all tickets
 
@@ -56,20 +57,28 @@ const getTickets = async (
     }),
   ]);
 
-  const membership = await getMembership({
-    userId: user?.id!,
-    organizationId: activeOrganization?.id!,
-  });
-
   return {
-    list: tickets.map((ticket) => ({
-      ...ticket,
-      isOwner: isOwnership(user, ticket),
-      canDeleteTickets:
-        ticket.organizationId === activeOrganization?.id
-          ? (membership?.canDeleteTickets ?? false)
-          : false,
-    })),
+    list: await Promise.all(
+      tickets.map(async (ticket) => {
+        const permissions = await getTicketPermission({
+          organizationId: ticket.organizationId,
+          userId: user?.id ?? "",
+        });
+        const isOwner = isOwnership(user, ticket);
+        console.log({
+          ticketId: ticket.id,
+          userId: user?.id,
+          organizationId: ticket.organizationId,
+          isOwner,
+          canDeleteTickets: permissions.canDeleteTickets,
+        });
+        return {
+          ...ticket,
+          isOwner,
+          canDeleteTickets: isOwner || !!permissions.canDeleteTickets,
+        };
+      }),
+    ),
     metadata: { count, hasNextPage: count > skip + take },
   };
 };

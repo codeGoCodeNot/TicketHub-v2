@@ -1,10 +1,10 @@
+import Pagination from "@/components/pagination";
+import OrganizationTicketFilter from "@/features/tickets/utils/organization-ticket-filter";
 import SearchInput from "@/features/tickets/utils/search-input";
 import SortSelect from "@/features/tickets/utils/sort-select";
 import getTickets from "../queries/get-tickets";
 import { ParsedSearchParams } from "../search-params";
 import TicketItem from "./ticket-item";
-import Pagination from "@/components/pagination";
-import OrganizationTicketFilter from "@/features/tickets/utils/organization-ticket-filter";
 
 type TicketListProps = {
   userId?: string;

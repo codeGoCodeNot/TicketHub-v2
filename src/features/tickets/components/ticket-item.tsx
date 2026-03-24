@@ -28,6 +28,8 @@ type TicketItemProps = {
 };
 
 const TicketItem = ({ ticket, isDetail, comments }: TicketItemProps) => {
+  console.log("Can delete ticekts: ", ticket.canDeleteTickets);
+
   const editButton = ticket.isOwner && (
     <ToolTip label="Edit ticket">
       <Button variant="outline" size="icon" asChild>

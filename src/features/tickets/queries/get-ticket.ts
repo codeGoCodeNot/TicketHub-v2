@@ -1,6 +1,7 @@
-import getAuth from "@/lib/get-auth";
 import isOwnership from "@/features/auth/utils/is-ownership";
+import getAuth from "@/lib/get-auth";
 import prisma from "@/lib/prisma";
+import getTicketPermission from "./get-ticket-permission";
 
 // Query to fetch a single ticket by its ID
 
@@ -23,9 +24,16 @@ const getTicket = async (id: string) => {
 
   if (!ticket) return null;
 
+  const permission = await getTicketPermission({
+    organizationId: ticket.organizationId,
+    userId: user?.id ?? "",
+  });
+
   return {
     ...ticket,
     isOwner: isOwnership(user, ticket),
+    canDeleteTickets:
+      isOwnership(user, ticket) || !!permission.canDeleteTickets,
   };
 };
 
