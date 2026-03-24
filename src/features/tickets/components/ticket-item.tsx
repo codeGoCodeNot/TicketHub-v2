@@ -53,7 +53,7 @@ const TicketItem = ({ ticket, isDetail, comments }: TicketItemProps) => {
     </ToolTip>
   );
 
-  const moreMenu = ticket.isOwner && (
+  const moreMenu = (ticket.isOwner || ticket.canDeleteTickets) && (
     <TicketMoreMenu
       ticket={ticket}
       trigger={

@@ -65,7 +65,10 @@ const getTickets = async (
     list: tickets.map((ticket) => ({
       ...ticket,
       isOwner: isOwnership(user, ticket),
-      canDeleteTickets: membership?.canDeleteTickets ?? false,
+      canDeleteTickets:
+        ticket.organizationId === activeOrganization?.id
+          ? (membership?.canDeleteTickets ?? false)
+          : false,
     })),
     metadata: { count, hasNextPage: count > skip + take },
   };

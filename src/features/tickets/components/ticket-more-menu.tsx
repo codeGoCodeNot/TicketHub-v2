@@ -48,7 +48,7 @@ const TicketMoreMenu = ({
   const [deleteDialogTrigger, deleteDialog] = useConfirmDialog({
     action: deleteTicket.bind(null, ticket.id),
     trigger: (
-      <DropdownMenuItem disabled={!canDeleteTickets}>
+      <DropdownMenuItem>
         <LucideTrash2 className="text-red-800" />
         Delete
       </DropdownMenuItem>
