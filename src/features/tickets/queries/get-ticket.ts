@@ -32,8 +32,7 @@ const getTicket = async (id: string) => {
   return {
     ...ticket,
     isOwner: isOwnership(user, ticket),
-    canDeleteTickets:
-      isOwnership(user, ticket) || !!permission.canDeleteTickets,
+    canDeleteTickets: !!permission.canDeleteTickets,
   };
 };
 

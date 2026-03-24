@@ -14,8 +14,6 @@ const getTickets = async (
 ) => {
   const user = await getAuth();
   const activeOrganization = await getActiveOrganization();
-  console.log("activeOrg:", activeOrganization?.id);
-  console.log("byOrganization:", searchParams.byOrganization);
 
   const where = {
     userId,
@@ -65,17 +63,10 @@ const getTickets = async (
           userId: user?.id ?? "",
         });
         const isOwner = isOwnership(user, ticket);
-        console.log({
-          ticketId: ticket.id,
-          userId: user?.id,
-          organizationId: ticket.organizationId,
-          isOwner,
-          canDeleteTickets: permissions.canDeleteTickets,
-        });
         return {
           ...ticket,
           isOwner,
-          canDeleteTickets: isOwner || !!permissions.canDeleteTickets,
+          canDeleteTickets: !!permissions.canDeleteTickets,
         };
       }),
     ),

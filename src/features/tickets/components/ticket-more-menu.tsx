@@ -54,10 +54,12 @@ const TicketMoreMenu = ({
       </DropdownMenuItem>
     ) : (
       <ToolTip label="You do not have permission to delete this ticket.">
-        <DropdownMenuItem disabled>
-          <LucideTrash2 className="text-red-800" />
-          Delete
-        </DropdownMenuItem>
+        <span>
+          <DropdownMenuItem disabled>
+            <LucideTrash2 className="text-red-800" />
+            Delete
+          </DropdownMenuItem>
+        </span>
       </ToolTip>
     ),
     title: "Are you sure you want to delete this ticket?",
