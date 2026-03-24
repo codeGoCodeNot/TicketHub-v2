@@ -10,6 +10,7 @@ import prisma from "@/lib/prisma";
 import { ticketsPagePath } from "@/path";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import getTicketPermission from "../queries/get-ticket-permission";
 
 const deleteTicket = async (id: string) => {
   const user = await getAuthOrRedirect();
@@ -21,14 +22,12 @@ const deleteTicket = async (id: string) => {
       },
     });
 
-    const membership = await getMembership({
-      userId: user.id,
+    const permission = await getTicketPermission({
       organizationId: ticket?.organizationId!,
+      userId: user.id,
     });
 
-    const canDelete = membership?.canDeleteTickets === true;
-
-    if (!ticket || !canDelete) {
+    if (!ticket || !permission.canDeleteTickets) {
       return toActionState(
         "ERROR",
         "You are not authorized to delete this ticket.",
