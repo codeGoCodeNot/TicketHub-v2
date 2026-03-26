@@ -32,7 +32,15 @@ const MembershipList = async ({ organizationId }: MembershipListProps) => {
       {/* Mobile - Cards */}
       <div className="flex flex-col gap-2 lg:hidden">
         {memberships.map(
-          ({ user, createdAt, id, role, organizationId, canDeleteTickets }) => {
+          ({
+            user,
+            createdAt,
+            id,
+            role,
+            organizationId,
+            canDeleteTickets,
+            canUpdateTickets,
+          }) => {
             const membershipMoreMenu = (
               <MembershipMoreMenu
                 organizationId={organizationId}
@@ -70,6 +78,18 @@ const MembershipList = async ({ organizationId }: MembershipListProps) => {
                         userId={user.id}
                         organizationId={organizationId}
                         canDeleteTickets={canDeleteTickets}
+                        canUpdateTickets={canUpdateTickets}
+                        permissionType="canDeleteTickets"
+                      />
+                    </CardDescription>
+                    <CardDescription className="flex gap-x-1 items-center">
+                      Can Update Tickets:{" "}
+                      <PermissionToggle
+                        userId={user.id}
+                        organizationId={organizationId}
+                        canDeleteTickets={canDeleteTickets}
+                        canUpdateTickets={canUpdateTickets}
+                        permissionType="canUpdateTickets"
                       />
                     </CardDescription>
                   </CardContent>
@@ -96,6 +116,7 @@ const MembershipList = async ({ organizationId }: MembershipListProps) => {
               <TableHead>Verified</TableHead>
               <TableHead>Actions</TableHead>
               <TableHead>Can Delete Tickets</TableHead>
+              <TableHead>Can Update Tickets</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -107,6 +128,7 @@ const MembershipList = async ({ organizationId }: MembershipListProps) => {
                 role,
                 organizationId,
                 canDeleteTickets,
+                canUpdateTickets,
               }) => {
                 const membershipMoreMenu = (
                   <MembershipMoreMenu
@@ -143,6 +165,17 @@ const MembershipList = async ({ organizationId }: MembershipListProps) => {
                         userId={user.id}
                         organizationId={organizationId}
                         canDeleteTickets={canDeleteTickets}
+                        canUpdateTickets={canUpdateTickets}
+                        permissionType="canDeleteTickets"
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <PermissionToggle
+                        userId={user.id}
+                        organizationId={organizationId}
+                        canDeleteTickets={canDeleteTickets}
+                        canUpdateTickets={canUpdateTickets}
+                        permissionType="canUpdateTickets"
                       />
                     </TableCell>
                   </TableRow>

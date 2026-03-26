@@ -63,10 +63,13 @@ const getTickets = async (
           userId: user?.id ?? "",
         });
         const isOwner = isOwnership(user, ticket);
+
+        console.log("in get-tickets", permissions.canUpdateTickets);
         return {
           ...ticket,
           isOwner,
           canDeleteTickets: !!permissions.canDeleteTickets,
+          canUpdateTickets: !!permissions.canUpdateTickets,
         };
       }),
     ),

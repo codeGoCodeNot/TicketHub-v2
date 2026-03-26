@@ -15,6 +15,7 @@ import { toCent } from "@/utils/currency";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import getTicketPermission from "../queries/get-ticket-permission";
 
 const upsertTicketSchema = z.object({
   title: z.string().min(1, "Title is required."),
@@ -37,13 +38,18 @@ const upsertTicket = async (
 
   try {
     if (id) {
-      const ticket = await prisma.ticket.findUnique({
-        where: {
-          id,
-        },
+      const ticket = await prisma.ticket.findUnique({ where: { id } });
+
+      if (!ticket) {
+        return toActionState("ERROR", "Ticket not found.");
+      }
+
+      const permission = await getTicketPermission({
+        organizationId: ticket?.organizationId!,
+        userId: user.id,
       });
 
-      if (!ticket || !isOwnership(user, ticket)) {
+      if (!permission.canUpdateTickets) {
         return toActionState(
           "ERROR",
           "You are not authorized to edit this ticket.",

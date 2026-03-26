@@ -9,17 +9,19 @@ const getTicketPermission = async ({
   organizationId,
   userId,
 }: GetTicketPermissionProps) => {
-  if (!organizationId || !userId) return { canDeleteTickets: false };
+  if (!organizationId || !userId)
+    return { canDeleteTickets: false, canUpdateTickets: false };
 
   const membership = await getMembership({
     organizationId,
     userId,
   });
 
-  if (!membership) return { canDeleteTickets: false };
+  if (!membership) return { canDeleteTickets: false, canUpdateTickets: false };
 
   return {
     canDeleteTickets: membership.canDeleteTickets,
+    canUpdateTickets: membership.canUpdateTickets,
   };
 };
 

@@ -1,5 +1,4 @@
 "use client";
-
 import Form from "@/components/form/form";
 import SubmitButton from "@/components/form/submit-button";
 import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
@@ -11,23 +10,36 @@ type PermissionToggleProps = {
   userId: string;
   organizationId: string;
   canDeleteTickets: boolean;
+  canUpdateTickets: boolean;
+  permissionType: "canDeleteTickets" | "canUpdateTickets";
 };
 
 const PermissionToggle = ({
   userId,
   organizationId,
   canDeleteTickets,
+  canUpdateTickets,
+  permissionType,
 }: PermissionToggleProps) => {
+  const currentValue =
+    permissionType === "canDeleteTickets" ? canDeleteTickets : canUpdateTickets;
+
   const [actionState, action] = useActionState(
-    togglePermission.bind(null, userId, organizationId, !canDeleteTickets),
+    togglePermission.bind(
+      null,
+      userId,
+      organizationId,
+      permissionType,
+      !currentValue,
+    ),
     EMPTY_ACTION_STATE,
   );
 
   return (
     <Form action={action} actionState={actionState}>
       <SubmitButton
-        icon={canDeleteTickets ? <LucideCheck /> : <LucideBan />}
-        variant={canDeleteTickets ? "outline" : "destructive"}
+        icon={currentValue ? <LucideCheck /> : <LucideBan />}
+        variant={currentValue ? "outline" : "destructive"}
         size="icon"
       />
     </Form>

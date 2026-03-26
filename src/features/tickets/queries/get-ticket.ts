@@ -33,6 +33,7 @@ const getTicket = async (id: string) => {
     ...ticket,
     isOwner: isOwnership(user, ticket),
     canDeleteTickets: !!permission.canDeleteTickets,
+    canUpdateTickets: !!permission.canUpdateTickets,
   };
 };
 

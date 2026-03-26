@@ -148,7 +148,8 @@ model Member {
   user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   role           String       @default("member")
   createdAt      DateTime
-  canDeleteTickets Boolean      @default(true)
+  canDeleteTickets Boolean      @default(false)
+  canUpdateTickets Boolean      @default(false)
 
   @@index([organizationId])
   @@index([userId])

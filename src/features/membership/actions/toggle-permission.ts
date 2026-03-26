@@ -12,7 +12,8 @@ import { revalidatePath } from "next/cache";
 const togglePermission = async (
   userId: string,
   organizationId: string,
-  canDeleteTickets: boolean,
+  permissionType: "canDeleteTickets" | "canUpdateTickets",
+  value: boolean,
   _actionState: ActionState,
 ) => {
   await getAuthOrRedirect();
@@ -31,7 +32,7 @@ const togglePermission = async (
       id: member.id,
     },
     data: {
-      canDeleteTickets,
+      [permissionType]: value,
     },
   });
 

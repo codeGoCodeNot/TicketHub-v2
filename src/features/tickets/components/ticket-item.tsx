@@ -28,15 +28,25 @@ type TicketItemProps = {
 };
 
 const TicketItem = ({ ticket, isDetail, comments }: TicketItemProps) => {
-  const editButton = ticket.isOwner && (
-    <ToolTip label="Edit ticket">
-      <Button variant="outline" size="icon" asChild>
-        <Link prefetch href={ticketEditPagePath(ticket.id)}>
-          <LucideEdit />
-        </Link>
-      </Button>
-    </ToolTip>
-  );
+  const editButton =
+    (ticket.isOwner || ticket.canUpdateTickets) &&
+    (ticket.canUpdateTickets ? (
+      <ToolTip label="Edit ticket">
+        <Button variant="outline" size="icon" asChild>
+          <Link prefetch href={ticketEditPagePath(ticket.id)}>
+            <LucideEdit />
+          </Link>
+        </Button>
+      </ToolTip>
+    ) : (
+      <ToolTip label="You do not have permission to edit this ticket.">
+        <span>
+          <Button variant="outline" size="icon" disabled>
+            <LucideEdit />
+          </Button>
+        </span>
+      </ToolTip>
+    ));
 
   const detailButton = (
     <ToolTip label="View details">
