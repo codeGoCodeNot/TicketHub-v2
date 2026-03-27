@@ -87,7 +87,7 @@ export const auth = betterAuth({
     nextCookies(),
     organization({
       sendInvitationEmail: async (data) => {
-        const inviteLink = `${process.env.NEXT_PUBLIC_BASE_URL}/accept-invite?token=${data.id}`;
+        const inviteLink = `${process.env.BETTER_AUTH_URL}/accept-invite?token=${data.id}`;
 
         await inngest.send({
           name: "app/organization.invitation",
