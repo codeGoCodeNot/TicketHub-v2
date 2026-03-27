@@ -3,6 +3,7 @@ import OrganizationBreadcrumbs from "@/components/organization-breadcrumbs";
 import Spinner from "@/components/spinner";
 import { Badge } from "@/components/ui/badge";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
+import InvitationCreateButton from "@/features/invitations/components/invitation-create-button";
 import MembershipList from "@/features/membership/components/membership-list";
 import getMembership from "@/features/membership/queries/get-membership";
 import { forbidden } from "next/navigation";
@@ -47,6 +48,7 @@ const MembershipPage = async ({ params }: MembershipPageProps) => {
         }
         description="Manage your organization memberships."
         tabs={<OrganizationBreadcrumbs organizationName="Organization Name" />}
+        actions={<InvitationCreateButton organizationId={organizationId} />}
       />
 
       <Suspense fallback={<Spinner />}>
