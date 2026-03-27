@@ -6,6 +6,8 @@ import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import InvitationCreateButton from "@/features/invitations/components/invitation-create-button";
 import MembershipList from "@/features/membership/components/membership-list";
 import getMembership from "@/features/membership/queries/get-membership";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 import { forbidden } from "next/navigation";
 import { Suspense } from "react";
 
@@ -38,6 +40,13 @@ const MembershipPage = async ({ params }: MembershipPageProps) => {
   if (membership?.role === "owner") badgeVariant = "default";
   else if (membership?.role === "admin") badgeVariant = "secondary";
 
+  const organization = await auth.api.getFullOrganization({
+    headers: await headers(),
+    query: {
+      organizationId,
+    },
+  });
+
   return (
     <div className="flex flex-1 flex-col gap-y-8">
       <Heading
@@ -47,7 +56,11 @@ const MembershipPage = async ({ params }: MembershipPageProps) => {
           </span>
         }
         description="Manage your organization memberships."
-        tabs={<OrganizationBreadcrumbs organizationName="Organization Name" />}
+        tabs={
+          <OrganizationBreadcrumbs
+            organizationName={organization?.name ?? "Organization"}
+          />
+        }
         actions={<InvitationCreateButton organizationId={organizationId} />}
       />
 
