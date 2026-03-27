@@ -6,6 +6,8 @@ import fromErrorToActionState, {
 } from "@/components/form/utils/to-action-state";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import { auth } from "@/lib/auth";
+import { organizationInvitationPagePath } from "@/path";
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import z from "zod";
 
@@ -38,6 +40,7 @@ const createInvitation = async (
     return fromErrorToActionState(error, formData);
   }
 
+  revalidatePath(organizationInvitationPagePath(organizationId));
   return toActionState("SUCCESS", "Invitation created successfully");
 };
 
