@@ -27,6 +27,9 @@ const togglePermission = async (
 
   if (!member) return toActionState("ERROR", "Member not found.");
 
+  if (member.role === "owner")
+    return toActionState("ERROR", "Cannot change permissions for an owner.");
+
   await prisma.member.update({
     where: {
       id: member.id,
