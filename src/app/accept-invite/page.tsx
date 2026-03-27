@@ -15,10 +15,10 @@ const AcceptInvitePage = async ({ searchParams }: AcceptInvitePageProps) => {
     headers: await headers(),
   });
 
+  if (!token) redirect(homePagePath());
+
   if (!session)
     redirect(`${signInPagePath()}?callbackUrl=/accept-invite?token=${token}`);
-
-  if (!token) redirect(homePagePath());
 
   const invitation = await auth.api.getInvitation({
     headers: await headers(),
