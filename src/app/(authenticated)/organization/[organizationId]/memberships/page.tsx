@@ -1,4 +1,5 @@
 import Heading from "@/components/heading";
+import OrganizationBreadcrumbs from "@/components/organization-breadcrumbs";
 import Spinner from "@/components/spinner";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import MembershipList from "@/features/membership/components/membership-list";
@@ -33,6 +34,7 @@ const MembershipPage = async ({ params }: MembershipPageProps) => {
           </span>
         }
         description="Manage your organization memberships."
+        tabs={<OrganizationBreadcrumbs />}
       />
 
       <Suspense fallback={<Spinner />}>

@@ -1,5 +1,5 @@
 import { hashPassword, verifyPassword } from "@/utils/password";
-import { betterAuth } from "better-auth";
+import { betterAuth, email } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
 import { inngest } from "./inngest";
@@ -83,5 +83,27 @@ export const auth = betterAuth({
     expiresIn: 60 * 60 * 24 * 30, // 30 days
     updateAge: 60 * 60 * 24,
   },
-  plugins: [nextCookies(), organization(), admin()],
+  plugins: [
+    nextCookies(),
+    organization({
+      sendInvitationEmail: async (data) => {
+        const inviteLink = `${process.env.NEXT_PUBLIC_BASE_URL}/accept-invite?token=${data.id}`;
+
+        await inngest.send({
+          name: "app/organization.invitation",
+          data: {
+            email: data.email,
+            inviteByUsername: data.inviter.user.name,
+            invitedByEmail: data.inviter.user.email,
+            organizationName: data.organization.name,
+            inviteLink,
+            invitationId: data.id,
+          },
+        });
+      },
+      requireEmailVerificationOnInvitation: true,
+      invitationExpiresIn: 60 * 60 * 24 * 7, // 7 days
+    }),
+    admin(),
+  ],
 });

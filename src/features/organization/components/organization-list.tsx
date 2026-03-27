@@ -17,7 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getSession } from "@/lib/get-session";
-import { organizationMembershiPagePath } from "@/path";
+import { organizationMembershipPagePath } from "@/path";
 import { format } from "date-fns";
 import { LucideArrowUpRightFromSquare, LucidePen } from "lucide-react";
 import Link from "next/link";
@@ -92,7 +92,9 @@ const OrganizationList = async ({
                 {<OrganizationLeaveButton organizationId={organization.id} />}
                 {showActions && (
                   <Button variant="outline" size="icon" asChild>
-                    <Link href={organizationMembershiPagePath(organization.id)}>
+                    <Link
+                      href={organizationMembershipPagePath(organization.id)}
+                    >
                       <LucideArrowUpRightFromSquare />
                     </Link>
                   </Button>
