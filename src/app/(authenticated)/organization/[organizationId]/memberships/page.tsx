@@ -4,7 +4,7 @@ import Spinner from "@/components/spinner";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import MembershipList from "@/features/membership/components/membership-list";
 import getMembership from "@/features/membership/queries/get-membership";
-import { LucideShield, LucideShieldCheck } from "lucide-react";
+import { LucideShieldCheck } from "lucide-react";
 import { forbidden } from "next/navigation";
 import { Suspense } from "react";
 

@@ -152,7 +152,7 @@ const OrganizationList = async ({
                     <ToolTip label="View organization memberships">
                       <Button variant="outline" size="icon" asChild>
                         <Link
-                          href={organizationMembershiPagePath(organization.id)}
+                          href={organizationMembershipPagePath(organization.id)}
                         >
                           <LucideArrowUpRightFromSquare />
                         </Link>
