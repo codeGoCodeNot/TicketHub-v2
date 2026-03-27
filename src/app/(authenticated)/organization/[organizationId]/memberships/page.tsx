@@ -1,10 +1,10 @@
 import Heading from "@/components/heading";
 import OrganizationBreadcrumbs from "@/components/organization-breadcrumbs";
 import Spinner from "@/components/spinner";
+import { Badge } from "@/components/ui/badge";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import MembershipList from "@/features/membership/components/membership-list";
 import getMembership from "@/features/membership/queries/get-membership";
-import { LucideShieldCheck } from "lucide-react";
 import { forbidden } from "next/navigation";
 import { Suspense } from "react";
 
@@ -25,12 +25,24 @@ const MembershipPage = async ({ params }: MembershipPageProps) => {
     forbidden();
   }
 
+  // Capitalize role for display
+  const displayRole =
+    membership?.role === "owner"
+      ? "Owner"
+      : membership?.role === "admin"
+        ? "Admin"
+        : "Member";
+
+  let badgeVariant: "default" | "secondary" | "outline" = "outline";
+  if (membership?.role === "owner") badgeVariant = "default";
+  else if (membership?.role === "admin") badgeVariant = "secondary";
+
   return (
     <div className="flex flex-1 flex-col gap-y-8">
       <Heading
         title={
           <span className="flex items-center gap-2">
-            Membership <LucideShieldCheck className="size-7" />
+            Membership <Badge variant={badgeVariant}>{displayRole}</Badge>
           </span>
         }
         description="Manage your organization memberships."

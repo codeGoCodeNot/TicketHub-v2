@@ -15,8 +15,8 @@ import { signInPagePath, signUpPagePath } from "@/path";
 import getActivePath from "@/utils/get-active-path";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { navItems } from "../constant";
 import { useEffect } from "react";
+import { navItems } from "../constant";
 
 const SideBar = () => {
   const pathname = usePathname();
@@ -34,8 +34,6 @@ const SideBar = () => {
     navItems.map((item) => item.href),
     [signInPagePath(), signUpPagePath()],
   );
-
-  if (!user || !isFetched) return null;
 
   return (
     <Sidebar>

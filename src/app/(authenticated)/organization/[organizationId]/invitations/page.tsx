@@ -1,5 +1,8 @@
 import Heading from "@/components/heading";
 import OrganizationBreadcrumbs from "@/components/organization-breadcrumbs";
+import Spinner from "@/components/spinner";
+import InvitationList from "@/features/invitations/components/invitation-list";
+import { Suspense } from "react";
 
 type InvitationPageProps = {
   params: Promise<{ organizationId: string }>;
@@ -14,6 +17,10 @@ const InvitationPage = async ({ params }: InvitationPageProps) => {
         description="Manage your organization invitations."
         tabs={<OrganizationBreadcrumbs />}
       />
+
+      <Suspense fallback={<Spinner />}>
+        <InvitationList organizationId={organizationId} />
+      </Suspense>
     </div>
   );
 };
