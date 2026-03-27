@@ -46,7 +46,7 @@ const MembershipPage = async ({ params }: MembershipPageProps) => {
           </span>
         }
         description="Manage your organization memberships."
-        tabs={<OrganizationBreadcrumbs />}
+        tabs={<OrganizationBreadcrumbs organizationName="Organization Name" />}
       />
 
       <Suspense fallback={<Spinner />}>

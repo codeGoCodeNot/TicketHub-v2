@@ -72,8 +72,9 @@ const MembershipList = async ({ organizationId }: MembershipListProps) => {
                       Verified:{" "}
                       {user.emailVerified ? <LucideCheck /> : <LucideBan />}
                     </CardDescription>
-                    <CardDescription className="flex gap-x-1 items-center">
-                      Can Delete Tickets:{" "}
+
+                    <CardDescription className="flex gap-x-1 items-center justify-between">
+                      <span>Can Delete Tickets:</span>
                       <PermissionToggle
                         userId={user.id}
                         organizationId={organizationId}
@@ -82,8 +83,8 @@ const MembershipList = async ({ organizationId }: MembershipListProps) => {
                         permissionType="canDeleteTickets"
                       />
                     </CardDescription>
-                    <CardDescription className="flex gap-x-1 items-center">
-                      Can Update Tickets:{" "}
+                    <CardDescription className="flex gap-x-1 items-center justify-between">
+                      <span>Can Update Tickets:</span>
                       <PermissionToggle
                         userId={user.id}
                         organizationId={organizationId}

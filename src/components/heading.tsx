@@ -6,11 +6,19 @@ type HeadingProps = {
   description?: string;
   tabs?: React.ReactNode;
   actions?: React.ReactNode;
+  breadcrumbs?: React.ReactNode;
 };
 
-const Heading = ({ title, description, tabs, actions }: HeadingProps) => {
+const Heading = ({
+  title,
+  description,
+  tabs,
+  actions,
+  breadcrumbs,
+}: HeadingProps) => {
   return (
     <>
+      {breadcrumbs && <div className="px-8">{breadcrumbs}</div>}
       {tabs}
       <div className="flex justify-between flex-col lg:flex-row gap-y-4 items-center px-8">
         <div>
