@@ -1,6 +1,6 @@
 import AcceptInviteCard from "@/features/accept-invite/components/accept-invite-card";
 import { auth } from "@/lib/auth";
-import { homePagePath } from "@/path";
+import { homePagePath, signInPagePath } from "@/path";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -10,6 +10,13 @@ type AcceptInvitePageProps = {
 
 const AcceptInvitePage = async ({ searchParams }: AcceptInvitePageProps) => {
   const { token } = await searchParams;
+
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session)
+    redirect(`${signInPagePath()}?callbackUrl=/accept-invite?token=${token}`);
 
   if (!token) redirect(homePagePath());
 
