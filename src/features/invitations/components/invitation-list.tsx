@@ -1,14 +1,3 @@
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import getInvitations from "../actions/get-invitations";
-import { format } from "date-fns/format";
 import Placeholder from "@/components/placeholder";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -18,6 +7,21 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { format } from "date-fns/format";
+import { LucideTrash, LucideX } from "lucide-react";
+import cancelInvitation from "../actions/cancel-invitation";
+import deleteInvitation from "../actions/delete-invitation";
+import getInvitations from "../actions/get-invitations";
+import InvitationActionButton from "./invitation-action-button";
 
 type InvitationListProps = {
   organizationId: string;
@@ -63,7 +67,28 @@ const InvitationList = async ({ organizationId }: InvitationListProps) => {
                   {format(invitation.createdAt, "yyyy/MM/dd, hh:mm")}
                 </CardDescription>
               </CardContent>
-            </Card>
+            </Card>{" "}
+            <div className="flex flex-col gap-y-1">
+              <InvitationActionButton
+                action={cancelInvitation.bind(null, {
+                  email: invitation.email,
+                  organizationId,
+                })}
+                title="Cancel Invitation"
+                description="Are you sure you want to cancel this invitation?"
+                icon={<LucideX />}
+                variant="outline"
+              />
+              <InvitationActionButton
+                action={deleteInvitation.bind(null, {
+                  email: invitation.email,
+                  organizationId,
+                })}
+                title="Delete Invitation"
+                description={`Delete invitation for ${invitation.email}?`}
+                icon={<LucideTrash />}
+              />
+            </div>
           </div>
         ))}
       </div>
@@ -78,6 +103,7 @@ const InvitationList = async ({ organizationId }: InvitationListProps) => {
               <TableHead>Invited At</TableHead>
               <TableHead>Invited By</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -93,6 +119,28 @@ const InvitationList = async ({ organizationId }: InvitationListProps) => {
                     {invitation.status.charAt(0).toUpperCase() +
                       invitation.status.slice(1)}
                   </Badge>
+                </TableCell>
+                <TableCell className="flex justify-end items-center gap-x-1">
+                  <InvitationActionButton
+                    action={cancelInvitation.bind(null, {
+                      email: invitation.email,
+                      organizationId,
+                    })}
+                    title="Cancel Invitation"
+                    description="Are you sure you want to cancel this invitation?"
+                    icon={<LucideX />}
+                    variant="outline"
+                  />
+
+                  <InvitationActionButton
+                    action={deleteInvitation.bind(null, {
+                      email: invitation.email,
+                      organizationId,
+                    })}
+                    title="Delete Invitation"
+                    description={`Delete invitation for ${invitation.email}?`}
+                    icon={<LucideTrash />}
+                  />
                 </TableCell>
               </TableRow>
             ))}
