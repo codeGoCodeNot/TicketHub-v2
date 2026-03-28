@@ -30,22 +30,20 @@ const OrganizationLeaveButton = ({
     pendingMessage: "Leaving organization...",
     action: handleLeave,
     trigger: (isPending) => (
-      <ToolTip label="Leave this organization">
-        <Button variant="destructive" size="icon">
-          {isPending ? (
-            <LucideLoaderCircle className="animate-spin" />
-          ) : (
-            <LucideLogOut />
-          )}
-        </Button>
-      </ToolTip>
+      <Button variant="destructive" size="icon">
+        {isPending ? (
+          <LucideLoaderCircle className="animate-spin" />
+        ) : (
+          <LucideLogOut />
+        )}
+      </Button>
     ),
     onSuccess: () => router.refresh(),
   });
 
   return (
     <>
-      {leaveButton}
+      <ToolTip label="Leave this organization">{leaveButton}</ToolTip>
       {leaveDialog}
     </>
   );

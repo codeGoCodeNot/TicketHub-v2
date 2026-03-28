@@ -25,15 +25,13 @@ const OrganizationDeleteButton = ({
   const [deleteButton, deleteDialog] = useConfirmDialog({
     action: handleDelete,
     trigger: (isPending) => (
-      <ToolTip label="Delete this organization">
-        <Button variant="destructive" size="icon">
-          {isPending ? (
-            <LucideLoaderCircle className="animate-spin" />
-          ) : (
-            <LucideTrash2 />
-          )}
-        </Button>
-      </ToolTip>
+      <Button variant="destructive" size="icon">
+        {isPending ? (
+          <LucideLoaderCircle className="animate-spin" />
+        ) : (
+          <LucideTrash2 />
+        )}
+      </Button>
     ),
     onSuccess: () => {
       router.refresh();
@@ -42,7 +40,7 @@ const OrganizationDeleteButton = ({
 
   return (
     <>
-      {deleteButton}
+      <ToolTip label="Delete this organization">{deleteButton}</ToolTip>
       {deleteDialog}
     </>
   );
