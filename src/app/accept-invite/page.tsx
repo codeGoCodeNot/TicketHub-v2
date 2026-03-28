@@ -1,4 +1,3 @@
-import AcceptInviteCard from "@/features/accept-invite/components/accept-invite-card";
 import { auth } from "@/lib/auth";
 import { homePagePath, signInPagePath } from "@/path";
 import { headers } from "next/headers";
@@ -11,27 +10,27 @@ type AcceptInvitePageProps = {
 const AcceptInvitePage = async ({ searchParams }: AcceptInvitePageProps) => {
   const { token } = await searchParams;
 
+  if (!token) redirect(homePagePath());
+
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
-  if (!token) redirect(homePagePath());
-
   if (!session)
     redirect(`${signInPagePath()}?callbackUrl=/accept-invite?token=${token}`);
 
-  const invitation = await auth.api.getInvitation({
-    headers: await headers(),
-    query: { id: token },
-  });
+  try {
+    await auth.api.acceptInvitation({
+      headers: await headers(),
+      body: {
+        invitationId: token,
+      },
+    });
+  } catch (error) {
+    redirect(`${homePagePath()}?error=Failed to accept invite`);
+  }
 
-  if (!invitation) redirect(homePagePath());
-
-  return (
-    <div className="flex min-h-screen items-center justify-center">
-      <AcceptInviteCard invitation={invitation} token={token} />
-    </div>
-  );
+  redirect(homePagePath());
 };
 
 export default AcceptInvitePage;
