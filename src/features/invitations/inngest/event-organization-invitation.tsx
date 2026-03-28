@@ -5,6 +5,7 @@ export const organizationInvitationEvent = inngest.createFunction(
   {
     id: "organization-invitation",
     triggers: { event: "app/organization.invitation" },
+    retries: 6,
   },
   async ({ event }) => {
     const {
