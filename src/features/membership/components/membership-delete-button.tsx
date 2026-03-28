@@ -40,6 +40,10 @@ const MembershipDeleteButton = ({
       </Button>
     ),
     onSuccess: () => router.refresh(),
+    title: "Remove Member",
+    description:
+      "Are you sure you want to remove this member from the organization?",
+    pendingMessage: "Removing member...",
   });
 
   return (
