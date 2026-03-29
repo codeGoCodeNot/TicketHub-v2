@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   experimental: {
     authInterrupts: true,
+    serverActions: {
+      bodySizeLimit: "4mb",
+    },
   },
   // images: {
   //   remotePatterns: [

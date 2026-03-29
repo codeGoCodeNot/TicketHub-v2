@@ -25,9 +25,15 @@ type TicketItemProps = {
   ticket: TicketWithMetada;
   isDetail?: boolean;
   comments?: React.ReactNode;
+  attachments?: React.ReactNode;
 };
 
-const TicketItem = ({ ticket, isDetail, comments }: TicketItemProps) => {
+const TicketItem = ({
+  ticket,
+  isDetail,
+  comments,
+  attachments,
+}: TicketItemProps) => {
   const editButton =
     (ticket.isOwner || ticket.canUpdateTickets) &&
     (ticket.canUpdateTickets ? (
@@ -138,6 +144,7 @@ const TicketItem = ({ ticket, isDetail, comments }: TicketItemProps) => {
           )}
         </div>
       </div>
+      {attachments}
       {comments}
     </div>
   );

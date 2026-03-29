@@ -1,5 +1,6 @@
 import BreadCrumbs from "@/components/breadcrumbs";
 import { Separator } from "@/components/ui/separator";
+import Attachments from "@/features/attachments/components/attachments";
 import Comments from "@/features/comment/components/comments";
 import getComments from "@/features/comment/queries/get-comments";
 import TicketItem from "@/features/tickets/components/ticket-item";
@@ -37,9 +38,11 @@ const TicketPage = async ({ params }: TicketPageProps) => {
           ticket={ticket}
           comments={<Comments ticketId={ticket.id} comments={comments} />}
           isDetail
+          attachments={
+            <Attachments ticketId={ticket.id} isOwner={ticket.isOwner} />
+          }
         />
       </div>
-      g
     </div>
   );
 };
