@@ -11,6 +11,7 @@ import Image from "next/image";
 import { useActionState, useRef, useState } from "react";
 import createAttachments from "../actions/create-attachments";
 import { ACCEPTED, ACCEPTED as IMAGE_TYPES } from "../constants";
+import useActionFeedback from "@/components/form/hooks/use-action-feedback";
 
 type PreviewFile = {
   file: File;
@@ -29,6 +30,13 @@ const AttachmentCreateForm = ({ ticketId }: AttachmentCreateFormProps) => {
 
   const [previews, setPreviews] = useState<PreviewFile[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useActionFeedback(actionState, {
+    onSuccess: () => {
+      setPreviews([]);
+      if (inputRef.current) inputRef.current.value = "";
+    },
+  });
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files ?? []);
