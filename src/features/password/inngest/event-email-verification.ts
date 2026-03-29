@@ -7,7 +7,7 @@ export const eventEmailVerification = inngest.createFunction(
     id: "email-verification",
     triggers: { event: "app/password.email-verification" },
   },
-  async ({ event }) => {
+  async ({ event }: { event: { data: { userId: string; url: string } } }) => {
     const { userId, url } = event.data;
 
     const user = await prisma.user.findUniqueOrThrow({

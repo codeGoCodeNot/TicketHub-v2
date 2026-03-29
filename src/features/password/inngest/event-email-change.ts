@@ -4,7 +4,11 @@ import { sendEmailChange } from "../emails/send-email-change";
 
 export const emailChangeEvent = inngest.createFunction(
   { id: "email-change", triggers: { event: "app/password.email-change" } },
-  async ({ event }) => {
+  async ({
+    event,
+  }: {
+    event: { data: { userId: string; newEmail: string; url: string } };
+  }) => {
     const { userId, newEmail, url } = event.data;
 
     const user = await prisma.user.findUniqueOrThrow({

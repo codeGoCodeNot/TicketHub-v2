@@ -6,10 +6,9 @@ export const passwordResetEvent = inngest.createFunction(
   {
     id: "password-reset",
     triggers: { event: "app/password.password-reset" },
-    retries: 6,
   },
 
-  async ({ event }) => {
+  async ({ event }: { event: { data: { userId: string; url: string } } }) => {
     const { userId, url } = event.data;
 
     const user = await prisma.user.findUniqueOrThrow({
