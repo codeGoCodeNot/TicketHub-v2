@@ -5,11 +5,11 @@ import s3 from "@/lib/aws";
 import generateS3Key from "@/features/attachments/utils/generate-s3-key";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 
-const Get = async (
+const GET = async (
   request: NextRequest,
-  { params }: { params: { attachmentId: string } },
+  { params }: { params: Promise<{ attachmentId: string }> },
 ) => {
-  const { attachmentId } = params;
+  const { attachmentId } = await params;
 
   const attachment = await prisma.attachment.findUniqueOrThrow({
     where: { id: attachmentId },
@@ -33,4 +33,4 @@ const Get = async (
   return NextResponse.redirect(presignedUrl);
 };
 
-export default Get;
+export { GET };
