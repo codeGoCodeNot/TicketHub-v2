@@ -9,7 +9,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import useAuth from "@/features/auth/hooks/use-auth";
 import { authClient } from "@/lib/auth-client";
 import { signInPagePath, signUpPagePath } from "@/path";
 import getActivePath from "@/utils/get-active-path";
@@ -20,7 +19,6 @@ import { navItems } from "../constant";
 
 const SideBar = () => {
   const pathname = usePathname();
-  const { user, isFetched } = useAuth();
 
   const { data: activeOrganization, refetch } =
     authClient.useActiveOrganization();

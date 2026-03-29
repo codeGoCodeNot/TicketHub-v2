@@ -6,8 +6,10 @@ import fromErrorToActionState, {
 } from "@/components/form/utils/to-action-state";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import { auth } from "@/lib/auth";
+import s3 from "@/lib/aws";
 import prisma from "@/lib/prisma";
 import { accountProfilePagePath } from "@/path";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import z from "zod";
@@ -15,7 +17,7 @@ import z from "zod";
 const updateProfileSchema = z.object({
   email: z.email({ message: "Please enter a valid email" }),
   name: z.string().min(1, { message: "Username is required" }),
-  image: z.string().optional().nullable(),
+  image: z.custom<File>().optional(),
 });
 
 const updateProfile = async (_actionState: ActionState, formData: FormData) => {
@@ -55,6 +57,29 @@ const updateProfile = async (_actionState: ActionState, formData: FormData) => {
       await auth.api.updateUser({
         body: {
           name: normalizedName,
+        },
+        headers: await headers(),
+      });
+    }
+
+    if (image instanceof File && image.size > 0) {
+      const buffer = Buffer.from(await image.arrayBuffer());
+      const key = `users/${sessionUser.id}/profile`;
+
+      await s3.send(
+        new PutObjectCommand({
+          Bucket: process.env.AWS_BUCKET_NAME,
+          Key: key,
+          Body: buffer,
+          ContentType: image.type,
+        }),
+      );
+
+      const imageUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}?t=${Date.now()}`;
+
+      await auth.api.updateUser({
+        body: {
+          image: imageUrl,
         },
         headers: await headers(),
       });

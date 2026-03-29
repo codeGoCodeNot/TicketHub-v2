@@ -9,18 +9,14 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "4mb",
     },
   },
-  // images: {
-  //   remotePatterns: [
-  //     {
-  //       protocol: "https",
-  //       hostname: "lh3.googleusercontent.com",
-  //     },
-  //     {
-  //       protocol: "https",
-  //       hostname: "avatars.githubusercontent.com",
-  //     },
-  //   ],
-  // },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "tickethub-v2.s3.ap-southeast-2.amazonaws.com",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

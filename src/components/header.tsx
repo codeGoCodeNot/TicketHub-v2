@@ -1,6 +1,6 @@
 "use client";
 
-import useAuth from "@/features/auth/hooks/use-auth";
+import { authClient } from "@/lib/auth-client";
 import { homePagePath, signInPagePath, signUpPagePath } from "@/path";
 import { LucideTickets } from "lucide-react";
 import Link from "next/link";
@@ -10,9 +10,10 @@ import { Button } from "./ui/button";
 import { SidebarTrigger } from "./ui/sidebar";
 
 const Header = () => {
-  const { user, isFetched } = useAuth();
+  const { data: session, isPending } = authClient.useSession();
+  const user = session?.user;
 
-  if (!isFetched) return null;
+  if (isPending) return null;
 
   const navItems = user ? (
     <>
