@@ -19,6 +19,12 @@ const OrganizationDeleteButton = ({
   const handleDelete = async () => {
     const { error } = await authClient.organization.delete({ organizationId });
     if (error) return toActionState("ERROR", "Failed to delete organization");
+
+    await fetch("/api/organization/deleted", {
+      method: "POST",
+      body: JSON.stringify({ organizationId }),
+    });
+
     return toActionState("SUCCESS", "Deleted organization successfully");
   };
 
