@@ -6,16 +6,15 @@ import fromErrorToActionState, {
 } from "@/components/form/utils/to-action-state";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import isOwnership from "@/features/auth/utils/is-ownership";
+import s3 from "@/lib/aws";
 import prisma from "@/lib/prisma";
 import { ticketPagePath } from "@/path";
+import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { revalidatePath } from "next/cache";
-import z, { file } from "zod";
-import { sizeInMB } from "../utils/size";
+import z from "zod";
 import { ACCEPTED, MAX_SIZE } from "../constants";
-import s3 from "@/lib/aws";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { organization } from "better-auth/plugins";
 import generateS3Key from "../utils/generate-s3-key";
+import { sizeInMB } from "../utils/size";
 
 const createAttachmentsSchema = z.object({
   files: z
@@ -52,13 +51,17 @@ const createAttachments = async (
       "You do not have permission to add attachments.",
     );
 
+  // track created attachments and upload keys for cleanup in case of error
+  const createdAttachments: { id: string }[] = [];
+  const uploadedKeys: string[] = [];
+
   try {
     const { files } = createAttachmentsSchema.parse({
       files: formData.getAll("files"),
     });
 
     for (const file of files) {
-      const buffer = await Buffer.from(await file.arrayBuffer());
+      const buffer = Buffer.from(await file.arrayBuffer());
 
       const attachment = await prisma.attachment.create({
         data: {
@@ -67,22 +70,51 @@ const createAttachments = async (
         },
       });
 
+      // push to track created attachment for cleanup if upload fails
+      createdAttachments.push(attachment);
+
+      // generate key once and reuse
+      const key = generateS3Key({
+        organizationId: ticket.organizationId,
+        ticketId,
+        filename: file.name,
+        attachmentId: attachment.id,
+      });
+
       await s3.send(
         new PutObjectCommand({
           Bucket: process.env.AWS_BUCKET_NAME,
-          Key: generateS3Key({
-            organizationId: ticket.organizationId,
-            ticketId,
-            filename: file.name,
-            attachmentId: attachment.id,
-          }),
+          Key: key,
           Body: buffer,
           ContentType: file.type,
         }),
       );
+
+      // push after successful upload to track for cleanup
+      uploadedKeys.push(key);
     }
   } catch (error) {
-    return fromErrorToActionState(error);
+    await Promise.all(
+      uploadedKeys.map((key) =>
+        s3
+          .send(
+            new DeleteObjectCommand({
+              Bucket: process.env.AWS_BUCKET_NAME,
+              Key: key,
+            }),
+          )
+          .catch(() => null),
+      ),
+    );
+    await Promise.all(
+      createdAttachments.map((attachment) =>
+        prisma.attachment
+          .delete({ where: { id: attachment.id } })
+          .catch(() => null),
+      ),
+    );
+
+    return fromErrorToActionState(error, formData);
   }
 
   revalidatePath(ticketPagePath(ticketId));
