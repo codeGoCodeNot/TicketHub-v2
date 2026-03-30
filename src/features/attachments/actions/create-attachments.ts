@@ -15,6 +15,8 @@ import z from "zod";
 import { ACCEPTED, MAX_SIZE } from "../constants";
 import generateS3Key from "../utils/generate-s3-key";
 import { sizeInMB } from "../utils/size";
+import { AttachmentEntity } from "@/generated/prisma/enums";
+import { isComment, isTicket } from "../types";
 
 const createAttachmentsSchema = z.object({
   files: z
@@ -32,20 +34,39 @@ const createAttachmentsSchema = z.object({
     .refine((files) => files.length > 0, "Please select at least one file."),
 });
 
+type CreateAttachmentsArgs = {
+  entityId: string;
+  entity: AttachmentEntity;
+};
+
 const createAttachments = async (
-  ticketId: string,
+  { entityId, entity }: CreateAttachmentsArgs,
   _actionState: ActionState,
   formData: FormData,
 ) => {
   const user = await getAuthOrRedirect();
 
-  const ticket = await prisma.ticket.findUnique({
-    where: { id: ticketId },
-  });
+  let subject;
 
-  if (!ticket) return toActionState("ERROR", "Ticket not found.");
+  switch (entity) {
+    case "TICKET":
+      subject = await prisma.ticket.findUnique({
+        where: { id: entityId },
+      });
+      break;
+    case "COMMENT":
+      subject = await prisma.comment.findUnique({
+        where: { id: entityId },
+        include: { ticket: true },
+      });
+      break;
+    default:
+      return toActionState("ERROR", "Subject not found.");
+  }
 
-  if (!isOwnership(user, ticket))
+  if (!subject) return toActionState("ERROR", "Subject not found.");
+
+  if (!isOwnership(user, subject))
     return toActionState(
       "ERROR",
       "You do not have permission to add attachments.",
@@ -68,19 +89,35 @@ const createAttachments = async (
           name: file.name,
           size: file.size,
           type: file.type,
-          entity: "TICKET",
           userId: user.id,
-          ticketId,
+          ...(entity === "TICKET" ? { ticketId: entityId } : {}),
+          ...(entity === "COMMENT" ? { commentId: entityId } : {}),
+          entity,
         },
       });
 
       // push to track created attachment for cleanup if upload fails
       createdAttachments.push(attachment);
 
+      let organizationId = "";
+
+      switch (entity) {
+        case "TICKET": {
+          if (isTicket(subject)) organizationId = subject.organizationId;
+          break;
+        }
+        case "COMMENT": {
+          if (isComment(subject))
+            organizationId = subject.ticket.organizationId;
+          break;
+        }
+      }
+
       // generate key once and reuse
       const key = generateS3Key({
-        organizationId: ticket.organizationId,
-        ticketId,
+        organizationId,
+        entityId,
+        entity,
         filename: file.name,
         attachmentId: attachment.id,
       });
@@ -121,7 +158,14 @@ const createAttachments = async (
     return fromErrorToActionState(error, formData);
   }
 
-  revalidatePath(ticketPagePath(ticketId));
+  switch (entity) {
+    case "TICKET":
+      if (isTicket(subject)) revalidatePath(ticketPagePath(subject.id));
+      break;
+    case "COMMENT":
+      if (isComment(subject)) revalidatePath(ticketPagePath(subject.ticket.id));
+  }
+
   return toActionState("SUCCESS", "Attachments uploaded successfully.");
 };
 

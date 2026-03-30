@@ -28,7 +28,8 @@ const GET = async (
     new GetObjectCommand({
       Bucket: process.env.AWS_BUCKET_NAME,
       Key: generateS3Key({
-        ticketId: attachment.ticketId,
+        entityId: attachment.ticketId,
+        entity: attachment.entity,
         attachmentId: attachment.id,
         filename: attachment.name,
         organizationId: attachment.ticket.organizationId,

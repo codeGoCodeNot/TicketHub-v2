@@ -13,21 +13,33 @@ const deleteAttachment = async (id: string) => {
 
   const attachment = await prisma.attachment.findUnique({
     where: { id },
-    include: { ticket: true },
+    include: { ticket: true, comment: { include: { ticket: true } } },
   });
 
   if (!attachment) return toActionState("ERROR", "Attachment not found.");
-  if (!attachment.ticket)
-    return toActionState(
-      "ERROR",
-      "Attachment is not associated with a ticket.",
-    );
 
-  if (!isOwnership(user, attachment?.ticket))
+  const subject =
+    attachment.entity === "TICKET" ? attachment.ticket : attachment.comment;
+
+  if (!subject) return toActionState("ERROR", "Associated entity not found.");
+
+  if (!isOwnership(user, subject))
     return toActionState(
       "ERROR",
       "You do not have permission to delete this attachment.",
     );
+
+  const organizationId =
+    attachment.entity === "TICKET"
+      ? attachment.ticket?.organizationId
+      : attachment.comment?.ticket.organizationId;
+
+  if (!organizationId) return toActionState("ERROR", "Organization not found.");
+
+  const entityId =
+    attachment.entity === "TICKET" ? attachment.ticketId : attachment.commentId;
+
+  if (!entityId) return toActionState("ERROR", "Entity ID not found.");
 
   try {
     await prisma.attachment.delete({
@@ -38,9 +50,10 @@ const deleteAttachment = async (id: string) => {
       name: "app/attachment.deleted",
       data: {
         attachmentId: attachment.id,
-        organizationId: attachment.ticket.organizationId,
+        organizationId,
         filename: attachment.name,
-        ticketId: attachment.ticket.id,
+        entityId,
+        entity: attachment.entity,
       },
     });
   } catch (error) {

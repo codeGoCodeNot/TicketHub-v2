@@ -2,13 +2,15 @@ import s3 from "@/lib/aws";
 import { inngest } from "@/lib/inngest";
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import generateS3Key from "../utils/generate-s3-key";
+import { AttachmentEntity } from "@/generated/prisma/enums";
 
 export type AttachmentDeletedEventArgs = {
   data: {
     attachmentId: string;
     organizationId: string;
     filename: string;
-    ticketId: string;
+    entityId: string;
+    entity: string;
   };
 };
 
@@ -22,7 +24,8 @@ export const attachmentDeletedEvent = inngest.createFunction(
   }: {
     event: { data: AttachmentDeletedEventArgs["data"] };
   }) => {
-    const { attachmentId, organizationId, filename, ticketId } = event.data;
+    const { attachmentId, organizationId, filename, entityId, entity } =
+      event.data;
 
     try {
       await s3.send(
@@ -30,9 +33,10 @@ export const attachmentDeletedEvent = inngest.createFunction(
           Bucket: process.env.AWS_BUCKET_NAME,
           Key: generateS3Key({
             organizationId,
+            entityId,
+            entity: entity as AttachmentEntity,
             attachmentId,
             filename,
-            ticketId,
           }),
         }),
       );

@@ -7,6 +7,7 @@ import SubmitButton from "@/components/form/submit-button";
 import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { AttachmentEntity } from "@/generated/prisma/enums";
 import { LucideX } from "lucide-react";
 import Image from "next/image";
 import { useActionState } from "react";
@@ -15,12 +16,16 @@ import { ACCEPTED as IMAGE_TYPES } from "../constants";
 import useFilePreview from "./hooks/use-file-preview";
 
 type AttachmentCreateFormProps = {
-  ticketId: string;
+  entityId: string;
+  entity: AttachmentEntity;
 };
 
-const AttachmentCreateForm = ({ ticketId }: AttachmentCreateFormProps) => {
+const AttachmentCreateForm = ({
+  entityId,
+  entity,
+}: AttachmentCreateFormProps) => {
   const [actionState, action] = useActionState(
-    createAttachments.bind(null, ticketId),
+    createAttachments.bind(null, { entityId, entity }),
     EMPTY_ACTION_STATE,
   );
 
