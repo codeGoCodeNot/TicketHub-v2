@@ -7,6 +7,8 @@ import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import isOwnership from "@/features/auth/utils/is-ownership";
 import { inngest } from "@/lib/inngest";
 import prisma from "@/lib/prisma";
+import { ticketPagePath } from "@/path";
+import { revalidatePath } from "next/cache";
 
 const deleteAttachment = async (id: string) => {
   const user = await getAuthOrRedirect();
@@ -60,6 +62,12 @@ const deleteAttachment = async (id: string) => {
     return fromErrorToActionState(error);
   }
 
+  const ticketId =
+    attachment.entity === "TICKET"
+      ? attachment.ticketId
+      : attachment.comment?.ticketId;
+
+  if (ticketId) revalidatePath(ticketPagePath(ticketId));
   return toActionState("SUCCESS", "Attachment deleted successfully.");
 };
 
