@@ -53,10 +53,11 @@ const UpdateProfileForm = ({
   const [zoom, setZoom] = useState(1);
   const [croppedArea, setCroppedArea] = useState<CroppedArea | null>(null);
   const [cropDialogOpen, setCropDialogOpen] = useState(false);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const router = useRouter();
 
+  const router = useRouter();
   const { refetch } = authClient.useSession();
 
   useActionFeedback(actionState, {
@@ -83,7 +84,14 @@ const UpdateProfileForm = ({
   const handleCropConfirm = async () => {
     if (!cropSrc || !croppedArea) return;
 
-    const croppedFile = await createCroppedImage(cropSrc, croppedArea);
+    const file = inputRef.current?.files?.[0];
+    const mimeType = file?.type ?? "image/jpeg";
+
+    const croppedFile = await createCroppedImage(
+      cropSrc,
+      croppedArea,
+      mimeType,
+    );
     setPreviewUrl(URL.createObjectURL(croppedFile));
 
     const dt = new DataTransfer();
@@ -104,6 +112,7 @@ const UpdateProfileForm = ({
             {previewUrl ? (
               <Image
                 src={previewUrl}
+                key={previewUrl}
                 alt="Profile Picture"
                 fill
                 className="object-cover"
@@ -118,12 +127,20 @@ const UpdateProfileForm = ({
           <input
             ref={inputRef}
             type="file"
-            name="image"
             accept="image/png,image/jpg,image/jpeg"
             className="hidden"
             onChange={handleImageChange}
           />
+
+          <input
+            type="file"
+            ref={fileInputRef}
+            name="image"
+            accept="image/png,image/jpg,image/jpeg"
+            className="hidden"
+          />
         </div>
+
         <Input
           name="email"
           placeholder="Email"

@@ -8,6 +8,7 @@ type CroppedArea = {
 const createCroppedImage = async (
   imageSrc: string,
   croppedArea: CroppedArea,
+  mimeType: string = "image/jpeg",
 ): Promise<File> => {
   const image = await new Promise<HTMLImageElement>((resolve, reject) => {
     const img = new window.Image();
@@ -35,8 +36,9 @@ const createCroppedImage = async (
 
   return new Promise((resolve) => {
     canvas.toBlob((blob) => {
-      resolve(new File([blob!], "profile.jpg", { type: "image/jpeg" }));
-    }, "image/jpeg");
+      const extension = mimeType === "image/png" ? "png" : "jpg";
+      resolve(new File([blob!], `profile.${extension}`, { type: mimeType }));
+    }, mimeType);
   });
 };
 
