@@ -165,7 +165,7 @@ export type CommentGroupByOutputType = {
   _max: CommentMaxAggregateOutputType | null
 }
 
-type GetCommentGroupByPayload<T extends CommentGroupByArgs> = Prisma.PrismaPromise<
+export type GetCommentGroupByPayload<T extends CommentGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<CommentGroupByOutputType, T['by']> &
       {
@@ -190,6 +190,7 @@ export type CommentWhereInput = {
   content?: Prisma.StringFilter<"Comment"> | string
   userId?: Prisma.StringFilter<"Comment"> | string
   ticketId?: Prisma.StringFilter<"Comment"> | string
+  attachments?: Prisma.AttachmentListRelationFilter
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   ticket?: Prisma.XOR<Prisma.TicketScalarRelationFilter, Prisma.TicketWhereInput>
 }
@@ -201,6 +202,7 @@ export type CommentOrderByWithRelationInput = {
   content?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   ticketId?: Prisma.SortOrder
+  attachments?: Prisma.AttachmentOrderByRelationAggregateInput
   user?: Prisma.UserOrderByWithRelationInput
   ticket?: Prisma.TicketOrderByWithRelationInput
 }
@@ -215,6 +217,7 @@ export type CommentWhereUniqueInput = Prisma.AtLeast<{
   content?: Prisma.StringFilter<"Comment"> | string
   userId?: Prisma.StringFilter<"Comment"> | string
   ticketId?: Prisma.StringFilter<"Comment"> | string
+  attachments?: Prisma.AttachmentListRelationFilter
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   ticket?: Prisma.XOR<Prisma.TicketScalarRelationFilter, Prisma.TicketWhereInput>
 }, "id">
@@ -248,6 +251,7 @@ export type CommentCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   content: string
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutCommentInput
   user: Prisma.UserCreateNestedOneWithoutCommentsInput
   ticket: Prisma.TicketCreateNestedOneWithoutCommentsInput
 }
@@ -259,6 +263,7 @@ export type CommentUncheckedCreateInput = {
   content: string
   userId: string
   ticketId: string
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutCommentInput
 }
 
 export type CommentUpdateInput = {
@@ -266,6 +271,7 @@ export type CommentUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  attachments?: Prisma.AttachmentUpdateManyWithoutCommentNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutCommentsNestedInput
   ticket?: Prisma.TicketUpdateOneRequiredWithoutCommentsNestedInput
 }
@@ -277,6 +283,7 @@ export type CommentUncheckedUpdateInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   ticketId?: Prisma.StringFieldUpdateOperationsInput | string
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutCommentNestedInput
 }
 
 export type CommentCreateManyInput = {
@@ -341,6 +348,11 @@ export type CommentMinOrderByAggregateInput = {
   ticketId?: Prisma.SortOrder
 }
 
+export type CommentNullableScalarRelationFilter = {
+  is?: Prisma.CommentWhereInput | null
+  isNot?: Prisma.CommentWhereInput | null
+}
+
 export type CommentCreateNestedManyWithoutTicketInput = {
   create?: Prisma.XOR<Prisma.CommentCreateWithoutTicketInput, Prisma.CommentUncheckedCreateWithoutTicketInput> | Prisma.CommentCreateWithoutTicketInput[] | Prisma.CommentUncheckedCreateWithoutTicketInput[]
   connectOrCreate?: Prisma.CommentCreateOrConnectWithoutTicketInput | Prisma.CommentCreateOrConnectWithoutTicketInput[]
@@ -381,6 +393,22 @@ export type CommentUncheckedUpdateManyWithoutTicketNestedInput = {
   update?: Prisma.CommentUpdateWithWhereUniqueWithoutTicketInput | Prisma.CommentUpdateWithWhereUniqueWithoutTicketInput[]
   updateMany?: Prisma.CommentUpdateManyWithWhereWithoutTicketInput | Prisma.CommentUpdateManyWithWhereWithoutTicketInput[]
   deleteMany?: Prisma.CommentScalarWhereInput | Prisma.CommentScalarWhereInput[]
+}
+
+export type CommentCreateNestedOneWithoutAttachmentsInput = {
+  create?: Prisma.XOR<Prisma.CommentCreateWithoutAttachmentsInput, Prisma.CommentUncheckedCreateWithoutAttachmentsInput>
+  connectOrCreate?: Prisma.CommentCreateOrConnectWithoutAttachmentsInput
+  connect?: Prisma.CommentWhereUniqueInput
+}
+
+export type CommentUpdateOneWithoutAttachmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.CommentCreateWithoutAttachmentsInput, Prisma.CommentUncheckedCreateWithoutAttachmentsInput>
+  connectOrCreate?: Prisma.CommentCreateOrConnectWithoutAttachmentsInput
+  upsert?: Prisma.CommentUpsertWithoutAttachmentsInput
+  disconnect?: Prisma.CommentWhereInput | boolean
+  delete?: Prisma.CommentWhereInput | boolean
+  connect?: Prisma.CommentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CommentUpdateToOneWithWhereWithoutAttachmentsInput, Prisma.CommentUpdateWithoutAttachmentsInput>, Prisma.CommentUncheckedUpdateWithoutAttachmentsInput>
 }
 
 export type CommentCreateNestedManyWithoutUserInput = {
@@ -430,6 +458,7 @@ export type CommentCreateWithoutTicketInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   content: string
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutCommentInput
   user: Prisma.UserCreateNestedOneWithoutCommentsInput
 }
 
@@ -439,6 +468,7 @@ export type CommentUncheckedCreateWithoutTicketInput = {
   updatedAt?: Date | string
   content: string
   userId: string
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutCommentInput
 }
 
 export type CommentCreateOrConnectWithoutTicketInput = {
@@ -479,11 +509,64 @@ export type CommentScalarWhereInput = {
   ticketId?: Prisma.StringFilter<"Comment"> | string
 }
 
+export type CommentCreateWithoutAttachmentsInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  content: string
+  user: Prisma.UserCreateNestedOneWithoutCommentsInput
+  ticket: Prisma.TicketCreateNestedOneWithoutCommentsInput
+}
+
+export type CommentUncheckedCreateWithoutAttachmentsInput = {
+  id?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  content: string
+  userId: string
+  ticketId: string
+}
+
+export type CommentCreateOrConnectWithoutAttachmentsInput = {
+  where: Prisma.CommentWhereUniqueInput
+  create: Prisma.XOR<Prisma.CommentCreateWithoutAttachmentsInput, Prisma.CommentUncheckedCreateWithoutAttachmentsInput>
+}
+
+export type CommentUpsertWithoutAttachmentsInput = {
+  update: Prisma.XOR<Prisma.CommentUpdateWithoutAttachmentsInput, Prisma.CommentUncheckedUpdateWithoutAttachmentsInput>
+  create: Prisma.XOR<Prisma.CommentCreateWithoutAttachmentsInput, Prisma.CommentUncheckedCreateWithoutAttachmentsInput>
+  where?: Prisma.CommentWhereInput
+}
+
+export type CommentUpdateToOneWithWhereWithoutAttachmentsInput = {
+  where?: Prisma.CommentWhereInput
+  data: Prisma.XOR<Prisma.CommentUpdateWithoutAttachmentsInput, Prisma.CommentUncheckedUpdateWithoutAttachmentsInput>
+}
+
+export type CommentUpdateWithoutAttachmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  user?: Prisma.UserUpdateOneRequiredWithoutCommentsNestedInput
+  ticket?: Prisma.TicketUpdateOneRequiredWithoutCommentsNestedInput
+}
+
+export type CommentUncheckedUpdateWithoutAttachmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  content?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  ticketId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
 export type CommentCreateWithoutUserInput = {
   id?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   content: string
+  attachments?: Prisma.AttachmentCreateNestedManyWithoutCommentInput
   ticket: Prisma.TicketCreateNestedOneWithoutCommentsInput
 }
 
@@ -493,6 +576,7 @@ export type CommentUncheckedCreateWithoutUserInput = {
   updatedAt?: Date | string
   content: string
   ticketId: string
+  attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutCommentInput
 }
 
 export type CommentCreateOrConnectWithoutUserInput = {
@@ -534,6 +618,7 @@ export type CommentUpdateWithoutTicketInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  attachments?: Prisma.AttachmentUpdateManyWithoutCommentNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutCommentsNestedInput
 }
 
@@ -543,6 +628,7 @@ export type CommentUncheckedUpdateWithoutTicketInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutCommentNestedInput
 }
 
 export type CommentUncheckedUpdateManyWithoutTicketInput = {
@@ -566,6 +652,7 @@ export type CommentUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
+  attachments?: Prisma.AttachmentUpdateManyWithoutCommentNestedInput
   ticket?: Prisma.TicketUpdateOneRequiredWithoutCommentsNestedInput
 }
 
@@ -575,6 +662,7 @@ export type CommentUncheckedUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   ticketId?: Prisma.StringFieldUpdateOperationsInput | string
+  attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutCommentNestedInput
 }
 
 export type CommentUncheckedUpdateManyWithoutUserInput = {
@@ -586,6 +674,35 @@ export type CommentUncheckedUpdateManyWithoutUserInput = {
 }
 
 
+/**
+ * Count Type CommentCountOutputType
+ */
+
+export type CommentCountOutputType = {
+  attachments: number
+}
+
+export type CommentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  attachments?: boolean | CommentCountOutputTypeCountAttachmentsArgs
+}
+
+/**
+ * CommentCountOutputType without action
+ */
+export type CommentCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CommentCountOutputType
+   */
+  select?: Prisma.CommentCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * CommentCountOutputType without action
+ */
+export type CommentCountOutputTypeCountAttachmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AttachmentWhereInput
+}
+
 
 export type CommentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -594,8 +711,10 @@ export type CommentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   content?: boolean
   userId?: boolean
   ticketId?: boolean
+  attachments?: boolean | Prisma.Comment$attachmentsArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   ticket?: boolean | Prisma.TicketDefaultArgs<ExtArgs>
+  _count?: boolean | Prisma.CommentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["comment"]>
 
 export type CommentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -631,8 +750,10 @@ export type CommentSelectScalar = {
 
 export type CommentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "content" | "userId" | "ticketId", ExtArgs["result"]["comment"]>
 export type CommentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  attachments?: boolean | Prisma.Comment$attachmentsArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   ticket?: boolean | Prisma.TicketDefaultArgs<ExtArgs>
+  _count?: boolean | Prisma.CommentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CommentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -646,6 +767,7 @@ export type CommentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $CommentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Comment"
   objects: {
+    attachments: Prisma.$AttachmentPayload<ExtArgs>[]
     user: Prisma.$UserPayload<ExtArgs>
     ticket: Prisma.$TicketPayload<ExtArgs>
   }
@@ -1050,6 +1172,7 @@ readonly fields: CommentFieldRefs;
  */
 export interface Prisma__CommentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  attachments<T extends Prisma.Comment$attachmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Comment$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   ticket<T extends Prisma.TicketDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TicketDefaultArgs<ExtArgs>>): Prisma.Prisma__TicketClient<runtime.Types.Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
@@ -1485,6 +1608,30 @@ export type CommentDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Comments to delete.
    */
   limit?: number
+}
+
+/**
+ * Comment.attachments
+ */
+export type Comment$attachmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Attachment
+   */
+  select?: Prisma.AttachmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Attachment
+   */
+  omit?: Prisma.AttachmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AttachmentInclude<ExtArgs> | null
+  where?: Prisma.AttachmentWhereInput
+  orderBy?: Prisma.AttachmentOrderByWithRelationInput | Prisma.AttachmentOrderByWithRelationInput[]
+  cursor?: Prisma.AttachmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AttachmentScalarFieldEnum | Prisma.AttachmentScalarFieldEnum[]
 }
 
 /**

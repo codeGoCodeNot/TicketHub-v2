@@ -20,46 +20,94 @@ export type AttachmentModel = runtime.Types.Result.DefaultSelection<Prisma.$Atta
 
 export type AggregateAttachment = {
   _count: AttachmentCountAggregateOutputType | null
+  _avg: AttachmentAvgAggregateOutputType | null
+  _sum: AttachmentSumAggregateOutputType | null
   _min: AttachmentMinAggregateOutputType | null
   _max: AttachmentMaxAggregateOutputType | null
+}
+
+export type AttachmentAvgAggregateOutputType = {
+  size: number | null
+}
+
+export type AttachmentSumAggregateOutputType = {
+  size: number | null
 }
 
 export type AttachmentMinAggregateOutputType = {
   id: string | null
   name: string | null
+  size: number | null
+  type: string | null
+  entity: $Enums.AttachmentEntity | null
   ticketId: string | null
+  commentId: string | null
+  userId: string | null
 }
 
 export type AttachmentMaxAggregateOutputType = {
   id: string | null
   name: string | null
+  size: number | null
+  type: string | null
+  entity: $Enums.AttachmentEntity | null
   ticketId: string | null
+  commentId: string | null
+  userId: string | null
 }
 
 export type AttachmentCountAggregateOutputType = {
   id: number
   name: number
+  size: number
+  type: number
+  entity: number
   ticketId: number
+  commentId: number
+  userId: number
   _all: number
 }
 
 
+export type AttachmentAvgAggregateInputType = {
+  size?: true
+}
+
+export type AttachmentSumAggregateInputType = {
+  size?: true
+}
+
 export type AttachmentMinAggregateInputType = {
   id?: true
   name?: true
+  size?: true
+  type?: true
+  entity?: true
   ticketId?: true
+  commentId?: true
+  userId?: true
 }
 
 export type AttachmentMaxAggregateInputType = {
   id?: true
   name?: true
+  size?: true
+  type?: true
+  entity?: true
   ticketId?: true
+  commentId?: true
+  userId?: true
 }
 
 export type AttachmentCountAggregateInputType = {
   id?: true
   name?: true
+  size?: true
+  type?: true
+  entity?: true
   ticketId?: true
+  commentId?: true
+  userId?: true
   _all?: true
 }
 
@@ -101,6 +149,18 @@ export type AttachmentAggregateArgs<ExtArgs extends runtime.Types.Extensions.Int
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: AttachmentAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: AttachmentSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: AttachmentMinAggregateInputType
@@ -131,6 +191,8 @@ export type AttachmentGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   _count?: AttachmentCountAggregateInputType | true
+  _avg?: AttachmentAvgAggregateInputType
+  _sum?: AttachmentSumAggregateInputType
   _min?: AttachmentMinAggregateInputType
   _max?: AttachmentMaxAggregateInputType
 }
@@ -138,13 +200,20 @@ export type AttachmentGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 export type AttachmentGroupByOutputType = {
   id: string
   name: string
-  ticketId: string
+  size: number
+  type: string
+  entity: $Enums.AttachmentEntity
+  ticketId: string | null
+  commentId: string | null
+  userId: string
   _count: AttachmentCountAggregateOutputType | null
+  _avg: AttachmentAvgAggregateOutputType | null
+  _sum: AttachmentSumAggregateOutputType | null
   _min: AttachmentMinAggregateOutputType | null
   _max: AttachmentMaxAggregateOutputType | null
 }
 
-type GetAttachmentGroupByPayload<T extends AttachmentGroupByArgs> = Prisma.PrismaPromise<
+export type GetAttachmentGroupByPayload<T extends AttachmentGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<AttachmentGroupByOutputType, T['by']> &
       {
@@ -165,15 +234,29 @@ export type AttachmentWhereInput = {
   NOT?: Prisma.AttachmentWhereInput | Prisma.AttachmentWhereInput[]
   id?: Prisma.StringFilter<"Attachment"> | string
   name?: Prisma.StringFilter<"Attachment"> | string
-  ticketId?: Prisma.StringFilter<"Attachment"> | string
-  ticket?: Prisma.XOR<Prisma.TicketScalarRelationFilter, Prisma.TicketWhereInput>
+  size?: Prisma.IntFilter<"Attachment"> | number
+  type?: Prisma.StringFilter<"Attachment"> | string
+  entity?: Prisma.EnumAttachmentEntityFilter<"Attachment"> | $Enums.AttachmentEntity
+  ticketId?: Prisma.StringNullableFilter<"Attachment"> | string | null
+  commentId?: Prisma.StringNullableFilter<"Attachment"> | string | null
+  userId?: Prisma.StringFilter<"Attachment"> | string
+  ticket?: Prisma.XOR<Prisma.TicketNullableScalarRelationFilter, Prisma.TicketWhereInput> | null
+  comment?: Prisma.XOR<Prisma.CommentNullableScalarRelationFilter, Prisma.CommentWhereInput> | null
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type AttachmentOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  ticketId?: Prisma.SortOrder
+  size?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  entity?: Prisma.SortOrder
+  ticketId?: Prisma.SortOrderInput | Prisma.SortOrder
+  commentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  userId?: Prisma.SortOrder
   ticket?: Prisma.TicketOrderByWithRelationInput
+  comment?: Prisma.CommentOrderByWithRelationInput
+  user?: Prisma.UserOrderByWithRelationInput
 }
 
 export type AttachmentWhereUniqueInput = Prisma.AtLeast<{
@@ -182,17 +265,31 @@ export type AttachmentWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.AttachmentWhereInput[]
   NOT?: Prisma.AttachmentWhereInput | Prisma.AttachmentWhereInput[]
   name?: Prisma.StringFilter<"Attachment"> | string
-  ticketId?: Prisma.StringFilter<"Attachment"> | string
-  ticket?: Prisma.XOR<Prisma.TicketScalarRelationFilter, Prisma.TicketWhereInput>
+  size?: Prisma.IntFilter<"Attachment"> | number
+  type?: Prisma.StringFilter<"Attachment"> | string
+  entity?: Prisma.EnumAttachmentEntityFilter<"Attachment"> | $Enums.AttachmentEntity
+  ticketId?: Prisma.StringNullableFilter<"Attachment"> | string | null
+  commentId?: Prisma.StringNullableFilter<"Attachment"> | string | null
+  userId?: Prisma.StringFilter<"Attachment"> | string
+  ticket?: Prisma.XOR<Prisma.TicketNullableScalarRelationFilter, Prisma.TicketWhereInput> | null
+  comment?: Prisma.XOR<Prisma.CommentNullableScalarRelationFilter, Prisma.CommentWhereInput> | null
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
 
 export type AttachmentOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  ticketId?: Prisma.SortOrder
+  size?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  entity?: Prisma.SortOrder
+  ticketId?: Prisma.SortOrderInput | Prisma.SortOrder
+  commentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  userId?: Prisma.SortOrder
   _count?: Prisma.AttachmentCountOrderByAggregateInput
+  _avg?: Prisma.AttachmentAvgOrderByAggregateInput
   _max?: Prisma.AttachmentMaxOrderByAggregateInput
   _min?: Prisma.AttachmentMinOrderByAggregateInput
+  _sum?: Prisma.AttachmentSumOrderByAggregateInput
 }
 
 export type AttachmentScalarWhereWithAggregatesInput = {
@@ -201,48 +298,86 @@ export type AttachmentScalarWhereWithAggregatesInput = {
   NOT?: Prisma.AttachmentScalarWhereWithAggregatesInput | Prisma.AttachmentScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Attachment"> | string
   name?: Prisma.StringWithAggregatesFilter<"Attachment"> | string
-  ticketId?: Prisma.StringWithAggregatesFilter<"Attachment"> | string
+  size?: Prisma.IntWithAggregatesFilter<"Attachment"> | number
+  type?: Prisma.StringWithAggregatesFilter<"Attachment"> | string
+  entity?: Prisma.EnumAttachmentEntityWithAggregatesFilter<"Attachment"> | $Enums.AttachmentEntity
+  ticketId?: Prisma.StringNullableWithAggregatesFilter<"Attachment"> | string | null
+  commentId?: Prisma.StringNullableWithAggregatesFilter<"Attachment"> | string | null
+  userId?: Prisma.StringWithAggregatesFilter<"Attachment"> | string
 }
 
 export type AttachmentCreateInput = {
   id?: string
   name: string
-  ticket: Prisma.TicketCreateNestedOneWithoutAttachmentsInput
+  size: number
+  type: string
+  entity: $Enums.AttachmentEntity
+  ticket?: Prisma.TicketCreateNestedOneWithoutAttachmentsInput
+  comment?: Prisma.CommentCreateNestedOneWithoutAttachmentsInput
+  user: Prisma.UserCreateNestedOneWithoutAttachmentsInput
 }
 
 export type AttachmentUncheckedCreateInput = {
   id?: string
   name: string
-  ticketId: string
+  size: number
+  type: string
+  entity: $Enums.AttachmentEntity
+  ticketId?: string | null
+  commentId?: string | null
+  userId: string
 }
 
 export type AttachmentUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ticket?: Prisma.TicketUpdateOneRequiredWithoutAttachmentsNestedInput
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  entity?: Prisma.EnumAttachmentEntityFieldUpdateOperationsInput | $Enums.AttachmentEntity
+  ticket?: Prisma.TicketUpdateOneWithoutAttachmentsNestedInput
+  comment?: Prisma.CommentUpdateOneWithoutAttachmentsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutAttachmentsNestedInput
 }
 
 export type AttachmentUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ticketId?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  entity?: Prisma.EnumAttachmentEntityFieldUpdateOperationsInput | $Enums.AttachmentEntity
+  ticketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type AttachmentCreateManyInput = {
   id?: string
   name: string
-  ticketId: string
+  size: number
+  type: string
+  entity: $Enums.AttachmentEntity
+  ticketId?: string | null
+  commentId?: string | null
+  userId: string
 }
 
 export type AttachmentUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  entity?: Prisma.EnumAttachmentEntityFieldUpdateOperationsInput | $Enums.AttachmentEntity
 }
 
 export type AttachmentUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  ticketId?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  entity?: Prisma.EnumAttachmentEntityFieldUpdateOperationsInput | $Enums.AttachmentEntity
+  ticketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type AttachmentListRelationFilter = {
@@ -258,19 +393,42 @@ export type AttachmentOrderByRelationAggregateInput = {
 export type AttachmentCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  size?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  entity?: Prisma.SortOrder
   ticketId?: Prisma.SortOrder
+  commentId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
+}
+
+export type AttachmentAvgOrderByAggregateInput = {
+  size?: Prisma.SortOrder
 }
 
 export type AttachmentMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  size?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  entity?: Prisma.SortOrder
   ticketId?: Prisma.SortOrder
+  commentId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
 }
 
 export type AttachmentMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  size?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  entity?: Prisma.SortOrder
   ticketId?: Prisma.SortOrder
+  commentId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
+}
+
+export type AttachmentSumOrderByAggregateInput = {
+  size?: Prisma.SortOrder
 }
 
 export type AttachmentCreateNestedManyWithoutTicketInput = {
@@ -315,14 +473,116 @@ export type AttachmentUncheckedUpdateManyWithoutTicketNestedInput = {
   deleteMany?: Prisma.AttachmentScalarWhereInput | Prisma.AttachmentScalarWhereInput[]
 }
 
+export type AttachmentCreateNestedManyWithoutCommentInput = {
+  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutCommentInput, Prisma.AttachmentUncheckedCreateWithoutCommentInput> | Prisma.AttachmentCreateWithoutCommentInput[] | Prisma.AttachmentUncheckedCreateWithoutCommentInput[]
+  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutCommentInput | Prisma.AttachmentCreateOrConnectWithoutCommentInput[]
+  createMany?: Prisma.AttachmentCreateManyCommentInputEnvelope
+  connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+}
+
+export type AttachmentUncheckedCreateNestedManyWithoutCommentInput = {
+  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutCommentInput, Prisma.AttachmentUncheckedCreateWithoutCommentInput> | Prisma.AttachmentCreateWithoutCommentInput[] | Prisma.AttachmentUncheckedCreateWithoutCommentInput[]
+  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutCommentInput | Prisma.AttachmentCreateOrConnectWithoutCommentInput[]
+  createMany?: Prisma.AttachmentCreateManyCommentInputEnvelope
+  connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+}
+
+export type AttachmentUpdateManyWithoutCommentNestedInput = {
+  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutCommentInput, Prisma.AttachmentUncheckedCreateWithoutCommentInput> | Prisma.AttachmentCreateWithoutCommentInput[] | Prisma.AttachmentUncheckedCreateWithoutCommentInput[]
+  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutCommentInput | Prisma.AttachmentCreateOrConnectWithoutCommentInput[]
+  upsert?: Prisma.AttachmentUpsertWithWhereUniqueWithoutCommentInput | Prisma.AttachmentUpsertWithWhereUniqueWithoutCommentInput[]
+  createMany?: Prisma.AttachmentCreateManyCommentInputEnvelope
+  set?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  disconnect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  delete?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  update?: Prisma.AttachmentUpdateWithWhereUniqueWithoutCommentInput | Prisma.AttachmentUpdateWithWhereUniqueWithoutCommentInput[]
+  updateMany?: Prisma.AttachmentUpdateManyWithWhereWithoutCommentInput | Prisma.AttachmentUpdateManyWithWhereWithoutCommentInput[]
+  deleteMany?: Prisma.AttachmentScalarWhereInput | Prisma.AttachmentScalarWhereInput[]
+}
+
+export type AttachmentUncheckedUpdateManyWithoutCommentNestedInput = {
+  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutCommentInput, Prisma.AttachmentUncheckedCreateWithoutCommentInput> | Prisma.AttachmentCreateWithoutCommentInput[] | Prisma.AttachmentUncheckedCreateWithoutCommentInput[]
+  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutCommentInput | Prisma.AttachmentCreateOrConnectWithoutCommentInput[]
+  upsert?: Prisma.AttachmentUpsertWithWhereUniqueWithoutCommentInput | Prisma.AttachmentUpsertWithWhereUniqueWithoutCommentInput[]
+  createMany?: Prisma.AttachmentCreateManyCommentInputEnvelope
+  set?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  disconnect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  delete?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  update?: Prisma.AttachmentUpdateWithWhereUniqueWithoutCommentInput | Prisma.AttachmentUpdateWithWhereUniqueWithoutCommentInput[]
+  updateMany?: Prisma.AttachmentUpdateManyWithWhereWithoutCommentInput | Prisma.AttachmentUpdateManyWithWhereWithoutCommentInput[]
+  deleteMany?: Prisma.AttachmentScalarWhereInput | Prisma.AttachmentScalarWhereInput[]
+}
+
+export type EnumAttachmentEntityFieldUpdateOperationsInput = {
+  set?: $Enums.AttachmentEntity
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
+export type AttachmentCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutUserInput, Prisma.AttachmentUncheckedCreateWithoutUserInput> | Prisma.AttachmentCreateWithoutUserInput[] | Prisma.AttachmentUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutUserInput | Prisma.AttachmentCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.AttachmentCreateManyUserInputEnvelope
+  connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+}
+
+export type AttachmentUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutUserInput, Prisma.AttachmentUncheckedCreateWithoutUserInput> | Prisma.AttachmentCreateWithoutUserInput[] | Prisma.AttachmentUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutUserInput | Prisma.AttachmentCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.AttachmentCreateManyUserInputEnvelope
+  connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+}
+
+export type AttachmentUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutUserInput, Prisma.AttachmentUncheckedCreateWithoutUserInput> | Prisma.AttachmentCreateWithoutUserInput[] | Prisma.AttachmentUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutUserInput | Prisma.AttachmentCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.AttachmentUpsertWithWhereUniqueWithoutUserInput | Prisma.AttachmentUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.AttachmentCreateManyUserInputEnvelope
+  set?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  disconnect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  delete?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  update?: Prisma.AttachmentUpdateWithWhereUniqueWithoutUserInput | Prisma.AttachmentUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.AttachmentUpdateManyWithWhereWithoutUserInput | Prisma.AttachmentUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.AttachmentScalarWhereInput | Prisma.AttachmentScalarWhereInput[]
+}
+
+export type AttachmentUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.AttachmentCreateWithoutUserInput, Prisma.AttachmentUncheckedCreateWithoutUserInput> | Prisma.AttachmentCreateWithoutUserInput[] | Prisma.AttachmentUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutUserInput | Prisma.AttachmentCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.AttachmentUpsertWithWhereUniqueWithoutUserInput | Prisma.AttachmentUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.AttachmentCreateManyUserInputEnvelope
+  set?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  disconnect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  delete?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  connect?: Prisma.AttachmentWhereUniqueInput | Prisma.AttachmentWhereUniqueInput[]
+  update?: Prisma.AttachmentUpdateWithWhereUniqueWithoutUserInput | Prisma.AttachmentUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.AttachmentUpdateManyWithWhereWithoutUserInput | Prisma.AttachmentUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.AttachmentScalarWhereInput | Prisma.AttachmentScalarWhereInput[]
+}
+
 export type AttachmentCreateWithoutTicketInput = {
   id?: string
   name: string
+  size: number
+  type: string
+  entity: $Enums.AttachmentEntity
+  comment?: Prisma.CommentCreateNestedOneWithoutAttachmentsInput
+  user: Prisma.UserCreateNestedOneWithoutAttachmentsInput
 }
 
 export type AttachmentUncheckedCreateWithoutTicketInput = {
   id?: string
   name: string
+  size: number
+  type: string
+  entity: $Enums.AttachmentEntity
+  commentId?: string | null
+  userId: string
 }
 
 export type AttachmentCreateOrConnectWithoutTicketInput = {
@@ -357,27 +617,224 @@ export type AttachmentScalarWhereInput = {
   NOT?: Prisma.AttachmentScalarWhereInput | Prisma.AttachmentScalarWhereInput[]
   id?: Prisma.StringFilter<"Attachment"> | string
   name?: Prisma.StringFilter<"Attachment"> | string
-  ticketId?: Prisma.StringFilter<"Attachment"> | string
+  size?: Prisma.IntFilter<"Attachment"> | number
+  type?: Prisma.StringFilter<"Attachment"> | string
+  entity?: Prisma.EnumAttachmentEntityFilter<"Attachment"> | $Enums.AttachmentEntity
+  ticketId?: Prisma.StringNullableFilter<"Attachment"> | string | null
+  commentId?: Prisma.StringNullableFilter<"Attachment"> | string | null
+  userId?: Prisma.StringFilter<"Attachment"> | string
+}
+
+export type AttachmentCreateWithoutCommentInput = {
+  id?: string
+  name: string
+  size: number
+  type: string
+  entity: $Enums.AttachmentEntity
+  ticket?: Prisma.TicketCreateNestedOneWithoutAttachmentsInput
+  user: Prisma.UserCreateNestedOneWithoutAttachmentsInput
+}
+
+export type AttachmentUncheckedCreateWithoutCommentInput = {
+  id?: string
+  name: string
+  size: number
+  type: string
+  entity: $Enums.AttachmentEntity
+  ticketId?: string | null
+  userId: string
+}
+
+export type AttachmentCreateOrConnectWithoutCommentInput = {
+  where: Prisma.AttachmentWhereUniqueInput
+  create: Prisma.XOR<Prisma.AttachmentCreateWithoutCommentInput, Prisma.AttachmentUncheckedCreateWithoutCommentInput>
+}
+
+export type AttachmentCreateManyCommentInputEnvelope = {
+  data: Prisma.AttachmentCreateManyCommentInput | Prisma.AttachmentCreateManyCommentInput[]
+  skipDuplicates?: boolean
+}
+
+export type AttachmentUpsertWithWhereUniqueWithoutCommentInput = {
+  where: Prisma.AttachmentWhereUniqueInput
+  update: Prisma.XOR<Prisma.AttachmentUpdateWithoutCommentInput, Prisma.AttachmentUncheckedUpdateWithoutCommentInput>
+  create: Prisma.XOR<Prisma.AttachmentCreateWithoutCommentInput, Prisma.AttachmentUncheckedCreateWithoutCommentInput>
+}
+
+export type AttachmentUpdateWithWhereUniqueWithoutCommentInput = {
+  where: Prisma.AttachmentWhereUniqueInput
+  data: Prisma.XOR<Prisma.AttachmentUpdateWithoutCommentInput, Prisma.AttachmentUncheckedUpdateWithoutCommentInput>
+}
+
+export type AttachmentUpdateManyWithWhereWithoutCommentInput = {
+  where: Prisma.AttachmentScalarWhereInput
+  data: Prisma.XOR<Prisma.AttachmentUpdateManyMutationInput, Prisma.AttachmentUncheckedUpdateManyWithoutCommentInput>
+}
+
+export type AttachmentCreateWithoutUserInput = {
+  id?: string
+  name: string
+  size: number
+  type: string
+  entity: $Enums.AttachmentEntity
+  ticket?: Prisma.TicketCreateNestedOneWithoutAttachmentsInput
+  comment?: Prisma.CommentCreateNestedOneWithoutAttachmentsInput
+}
+
+export type AttachmentUncheckedCreateWithoutUserInput = {
+  id?: string
+  name: string
+  size: number
+  type: string
+  entity: $Enums.AttachmentEntity
+  ticketId?: string | null
+  commentId?: string | null
+}
+
+export type AttachmentCreateOrConnectWithoutUserInput = {
+  where: Prisma.AttachmentWhereUniqueInput
+  create: Prisma.XOR<Prisma.AttachmentCreateWithoutUserInput, Prisma.AttachmentUncheckedCreateWithoutUserInput>
+}
+
+export type AttachmentCreateManyUserInputEnvelope = {
+  data: Prisma.AttachmentCreateManyUserInput | Prisma.AttachmentCreateManyUserInput[]
+  skipDuplicates?: boolean
+}
+
+export type AttachmentUpsertWithWhereUniqueWithoutUserInput = {
+  where: Prisma.AttachmentWhereUniqueInput
+  update: Prisma.XOR<Prisma.AttachmentUpdateWithoutUserInput, Prisma.AttachmentUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.AttachmentCreateWithoutUserInput, Prisma.AttachmentUncheckedCreateWithoutUserInput>
+}
+
+export type AttachmentUpdateWithWhereUniqueWithoutUserInput = {
+  where: Prisma.AttachmentWhereUniqueInput
+  data: Prisma.XOR<Prisma.AttachmentUpdateWithoutUserInput, Prisma.AttachmentUncheckedUpdateWithoutUserInput>
+}
+
+export type AttachmentUpdateManyWithWhereWithoutUserInput = {
+  where: Prisma.AttachmentScalarWhereInput
+  data: Prisma.XOR<Prisma.AttachmentUpdateManyMutationInput, Prisma.AttachmentUncheckedUpdateManyWithoutUserInput>
 }
 
 export type AttachmentCreateManyTicketInput = {
   id?: string
   name: string
+  size: number
+  type: string
+  entity: $Enums.AttachmentEntity
+  commentId?: string | null
+  userId: string
 }
 
 export type AttachmentUpdateWithoutTicketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  entity?: Prisma.EnumAttachmentEntityFieldUpdateOperationsInput | $Enums.AttachmentEntity
+  comment?: Prisma.CommentUpdateOneWithoutAttachmentsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutAttachmentsNestedInput
 }
 
 export type AttachmentUncheckedUpdateWithoutTicketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  entity?: Prisma.EnumAttachmentEntityFieldUpdateOperationsInput | $Enums.AttachmentEntity
+  commentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type AttachmentUncheckedUpdateManyWithoutTicketInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  entity?: Prisma.EnumAttachmentEntityFieldUpdateOperationsInput | $Enums.AttachmentEntity
+  commentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type AttachmentCreateManyCommentInput = {
+  id?: string
+  name: string
+  size: number
+  type: string
+  entity: $Enums.AttachmentEntity
+  ticketId?: string | null
+  userId: string
+}
+
+export type AttachmentUpdateWithoutCommentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  entity?: Prisma.EnumAttachmentEntityFieldUpdateOperationsInput | $Enums.AttachmentEntity
+  ticket?: Prisma.TicketUpdateOneWithoutAttachmentsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutAttachmentsNestedInput
+}
+
+export type AttachmentUncheckedUpdateWithoutCommentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  entity?: Prisma.EnumAttachmentEntityFieldUpdateOperationsInput | $Enums.AttachmentEntity
+  ticketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type AttachmentUncheckedUpdateManyWithoutCommentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  entity?: Prisma.EnumAttachmentEntityFieldUpdateOperationsInput | $Enums.AttachmentEntity
+  ticketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type AttachmentCreateManyUserInput = {
+  id?: string
+  name: string
+  size: number
+  type: string
+  entity: $Enums.AttachmentEntity
+  ticketId?: string | null
+  commentId?: string | null
+}
+
+export type AttachmentUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  entity?: Prisma.EnumAttachmentEntityFieldUpdateOperationsInput | $Enums.AttachmentEntity
+  ticket?: Prisma.TicketUpdateOneWithoutAttachmentsNestedInput
+  comment?: Prisma.CommentUpdateOneWithoutAttachmentsNestedInput
+}
+
+export type AttachmentUncheckedUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  entity?: Prisma.EnumAttachmentEntityFieldUpdateOperationsInput | $Enums.AttachmentEntity
+  ticketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type AttachmentUncheckedUpdateManyWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  entity?: Prisma.EnumAttachmentEntityFieldUpdateOperationsInput | $Enums.AttachmentEntity
+  ticketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -385,50 +842,89 @@ export type AttachmentUncheckedUpdateManyWithoutTicketInput = {
 export type AttachmentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  size?: boolean
+  type?: boolean
+  entity?: boolean
   ticketId?: boolean
-  ticket?: boolean | Prisma.TicketDefaultArgs<ExtArgs>
+  commentId?: boolean
+  userId?: boolean
+  ticket?: boolean | Prisma.Attachment$ticketArgs<ExtArgs>
+  comment?: boolean | Prisma.Attachment$commentArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["attachment"]>
 
 export type AttachmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  size?: boolean
+  type?: boolean
+  entity?: boolean
   ticketId?: boolean
-  ticket?: boolean | Prisma.TicketDefaultArgs<ExtArgs>
+  commentId?: boolean
+  userId?: boolean
+  ticket?: boolean | Prisma.Attachment$ticketArgs<ExtArgs>
+  comment?: boolean | Prisma.Attachment$commentArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["attachment"]>
 
 export type AttachmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
+  size?: boolean
+  type?: boolean
+  entity?: boolean
   ticketId?: boolean
-  ticket?: boolean | Prisma.TicketDefaultArgs<ExtArgs>
+  commentId?: boolean
+  userId?: boolean
+  ticket?: boolean | Prisma.Attachment$ticketArgs<ExtArgs>
+  comment?: boolean | Prisma.Attachment$commentArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["attachment"]>
 
 export type AttachmentSelectScalar = {
   id?: boolean
   name?: boolean
+  size?: boolean
+  type?: boolean
+  entity?: boolean
   ticketId?: boolean
+  commentId?: boolean
+  userId?: boolean
 }
 
-export type AttachmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "ticketId", ExtArgs["result"]["attachment"]>
+export type AttachmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "size" | "type" | "entity" | "ticketId" | "commentId" | "userId", ExtArgs["result"]["attachment"]>
 export type AttachmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  ticket?: boolean | Prisma.TicketDefaultArgs<ExtArgs>
+  ticket?: boolean | Prisma.Attachment$ticketArgs<ExtArgs>
+  comment?: boolean | Prisma.Attachment$commentArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type AttachmentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  ticket?: boolean | Prisma.TicketDefaultArgs<ExtArgs>
+  ticket?: boolean | Prisma.Attachment$ticketArgs<ExtArgs>
+  comment?: boolean | Prisma.Attachment$commentArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type AttachmentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  ticket?: boolean | Prisma.TicketDefaultArgs<ExtArgs>
+  ticket?: boolean | Prisma.Attachment$ticketArgs<ExtArgs>
+  comment?: boolean | Prisma.Attachment$commentArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $AttachmentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Attachment"
   objects: {
-    ticket: Prisma.$TicketPayload<ExtArgs>
+    ticket: Prisma.$TicketPayload<ExtArgs> | null
+    comment: Prisma.$CommentPayload<ExtArgs> | null
+    user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
-    ticketId: string
+    size: number
+    type: string
+    entity: $Enums.AttachmentEntity
+    ticketId: string | null
+    commentId: string | null
+    userId: string
   }, ExtArgs["result"]["attachment"]>
   composites: {}
 }
@@ -823,7 +1319,9 @@ readonly fields: AttachmentFieldRefs;
  */
 export interface Prisma__AttachmentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  ticket<T extends Prisma.TicketDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TicketDefaultArgs<ExtArgs>>): Prisma.Prisma__TicketClient<runtime.Types.Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  ticket<T extends Prisma.Attachment$ticketArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Attachment$ticketArgs<ExtArgs>>): Prisma.Prisma__TicketClient<runtime.Types.Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  comment<T extends Prisma.Attachment$commentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Attachment$commentArgs<ExtArgs>>): Prisma.Prisma__CommentClient<runtime.Types.Result.GetResult<Prisma.$CommentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -855,7 +1353,12 @@ export interface Prisma__AttachmentClient<T, Null = never, ExtArgs extends runti
 export interface AttachmentFieldRefs {
   readonly id: Prisma.FieldRef<"Attachment", 'String'>
   readonly name: Prisma.FieldRef<"Attachment", 'String'>
+  readonly size: Prisma.FieldRef<"Attachment", 'Int'>
+  readonly type: Prisma.FieldRef<"Attachment", 'String'>
+  readonly entity: Prisma.FieldRef<"Attachment", 'AttachmentEntity'>
   readonly ticketId: Prisma.FieldRef<"Attachment", 'String'>
+  readonly commentId: Prisma.FieldRef<"Attachment", 'String'>
+  readonly userId: Prisma.FieldRef<"Attachment", 'String'>
 }
     
 
@@ -1254,6 +1757,44 @@ export type AttachmentDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Limit how many Attachments to delete.
    */
   limit?: number
+}
+
+/**
+ * Attachment.ticket
+ */
+export type Attachment$ticketArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Ticket
+   */
+  select?: Prisma.TicketSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Ticket
+   */
+  omit?: Prisma.TicketOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TicketInclude<ExtArgs> | null
+  where?: Prisma.TicketWhereInput
+}
+
+/**
+ * Attachment.comment
+ */
+export type Attachment$commentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Comment
+   */
+  select?: Prisma.CommentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Comment
+   */
+  omit?: Prisma.CommentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CommentInclude<ExtArgs> | null
+  where?: Prisma.CommentWhereInput
 }
 
 /**

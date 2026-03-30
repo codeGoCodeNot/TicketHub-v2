@@ -66,6 +66,10 @@ const createAttachments = async (
       const attachment = await prisma.attachment.create({
         data: {
           name: file.name,
+          size: file.size,
+          type: file.type,
+          entity: "TICKET",
+          userId: user.id,
           ticketId,
         },
       });

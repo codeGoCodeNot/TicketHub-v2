@@ -24,7 +24,6 @@ model Ticket {
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String
   comments  Comment[]
-
   attachments Attachment[]
 
   @@index([userId])
@@ -37,12 +36,6 @@ enum TicketStatus {
   DONE
 }
 
-model Attachment {
-  id String @id @default(uuid())
-  name String
-  ticketId String
-  ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
-}
 
 model Comment {
   id        String   @id @default(uuid())
@@ -51,11 +44,35 @@ model Comment {
   content   String   @db.VarChar(1024)
   userId    String
   ticketId  String
+  attachments Attachment[]
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([ticketId])
+}
+model Attachment {
+  id String @id @default(uuid())
+  name String
+  size      Int
+  type      String
+
+  entity AttachmentEntity
+  ticketId String?
+  ticket Ticket? @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  commentId String?
+  comment Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([ticketId])
+  @@index([commentId])
+  @@index([userId])
+}
+
+enum AttachmentEntity {
+  TICKET
+  COMMENT
 }
 
 model User {
@@ -70,7 +87,7 @@ model User {
   accounts      Account[]
   tickets       Ticket[]
   comments      Comment[]
-
+  attachments   Attachment[]
   members     Member[]
   invitations Invitation[]
 

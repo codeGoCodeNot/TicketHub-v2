@@ -16,6 +16,13 @@ const GET = async (
     include: { ticket: true },
   });
 
+  if (!attachment.ticket || !attachment.ticketId) {
+    return NextResponse.json(
+      { error: "Attachment is not associated with a ticket." },
+      { status: 400 },
+    );
+  }
+
   const presignedUrl = await getSignedUrl(
     s3,
     new GetObjectCommand({

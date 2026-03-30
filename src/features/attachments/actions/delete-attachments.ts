@@ -17,6 +17,11 @@ const deleteAttachment = async (id: string) => {
   });
 
   if (!attachment) return toActionState("ERROR", "Attachment not found.");
+  if (!attachment.ticket)
+    return toActionState(
+      "ERROR",
+      "Attachment is not associated with a ticket.",
+    );
 
   if (!isOwnership(user, attachment?.ticket))
     return toActionState(
