@@ -1,7 +1,8 @@
 import BreadCrumbs from "@/components/breadcrumbs";
 import { Separator } from "@/components/ui/separator";
 import Attachments from "@/features/attachments/components/attachments";
-import Comments from "@/features/comment/components/comments";
+import Comments from "@/features/comment/components/comments/comments";
+
 import getComments from "@/features/comment/queries/get-comments";
 import TicketItem from "@/features/tickets/components/ticket-item";
 import getTicket from "@/features/tickets/queries/get-ticket";

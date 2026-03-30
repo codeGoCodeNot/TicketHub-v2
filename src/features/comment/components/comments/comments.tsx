@@ -3,12 +3,13 @@
 import CardCompact from "@/components/card-compact";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
-import getComments from "../queries/get-comments";
-import { CommentWithMetadata } from "../type";
-import CommentCreateForm from "./comment-create-form";
-import CommentEditStateProvider from "./comment-edit-state";
-import CommentItem from "./comment-item";
+import getComments from "../../queries/get-comments";
+import { CommentWithMetadata } from "../../type";
+import CommentCreateForm from "../comment-create-form";
+import CommentEditStateProvider from "../comment-edit-state";
+import CommentItem from "../comment-item";
 import { useEffect } from "react";
+import usePaginatedComments from "./use-paginated-comments";
 
 type CommentsProps = {
   ticketId: string;
@@ -23,34 +24,14 @@ type CommentsProps = {
 };
 
 const Comments = ({ ticketId, comments }: CommentsProps) => {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ["comments", ticketId],
-      queryFn: ({ pageParam }) => getComments(ticketId, pageParam),
-      initialPageParam: undefined as
-        | { id: string; createdAt: number }
-        | undefined,
-      getNextPageParam: (lastpage) =>
-        lastpage.metadata.hasNextPage ? lastpage.metadata.cursor : undefined,
-      initialData: {
-        pages: [
-          {
-            list: comments.list,
-            metadata: comments.metadata,
-          },
-        ],
-        pageParams: [undefined],
-      },
-    });
-
-  const paginatedComments = data.pages.flatMap((page) => page.list);
-  const queryClient = useQueryClient();
-
-  const handleDelete = () =>
-    queryClient.invalidateQueries({ queryKey: ["comments", ticketId] });
-
-  const handleCreateComment = () =>
-    queryClient.invalidateQueries({ queryKey: ["comments", ticketId] });
+  const {
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    paginatedComments,
+    onHandleDelete,
+    onHandleCreateComment,
+  } = usePaginatedComments(ticketId, comments);
 
   const { ref, inView } = useInView();
 
@@ -69,7 +50,7 @@ const Comments = ({ ticketId, comments }: CommentsProps) => {
         content={
           <CommentCreateForm
             ticketId={ticketId}
-            onCreateComment={handleCreateComment}
+            onCreateComment={onHandleCreateComment}
           />
         }
       />
@@ -79,7 +60,7 @@ const Comments = ({ ticketId, comments }: CommentsProps) => {
             <CommentItem
               key={comment.id}
               comment={comment}
-              onHandleDelete={handleDelete}
+              onHandleDelete={onHandleDelete}
             />
           ))}
         </div>

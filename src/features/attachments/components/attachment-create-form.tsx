@@ -2,21 +2,17 @@
 
 import FieldError from "@/components/form/field-error";
 import Form from "@/components/form/form";
+import useActionFeedback from "@/components/form/hooks/use-action-feedback";
 import SubmitButton from "@/components/form/submit-button";
 import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { LucideX } from "lucide-react";
 import Image from "next/image";
-import { useActionState, useRef, useState } from "react";
+import { useActionState } from "react";
 import createAttachments from "../actions/create-attachments";
-import { ACCEPTED, ACCEPTED as IMAGE_TYPES } from "../constants";
-import useActionFeedback from "@/components/form/hooks/use-action-feedback";
-
-type PreviewFile = {
-  file: File;
-  previewURL: string | null;
-};
+import { ACCEPTED as IMAGE_TYPES } from "../constants";
+import useFilePreview from "./hooks/use-file-preview";
 
 type AttachmentCreateFormProps = {
   ticketId: string;
@@ -28,39 +24,12 @@ const AttachmentCreateForm = ({ ticketId }: AttachmentCreateFormProps) => {
     EMPTY_ACTION_STATE,
   );
 
-  const [previews, setPreviews] = useState<PreviewFile[]>([]);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const { previews, inputRef, handleFileChange, handleRemove, reset } =
+    useFilePreview();
 
   useActionFeedback(actionState, {
-    onSuccess: () => {
-      setPreviews([]);
-      if (inputRef.current) inputRef.current.value = "";
-    },
+    onSuccess: reset,
   });
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files ?? []);
-    const IMAGE_TYPES = ACCEPTED.filter((type) => type.startsWith("image/"));
-    const newPreviews = files.map((file) => ({
-      file,
-      previewURL: IMAGE_TYPES.includes(file.type)
-        ? URL.createObjectURL(file)
-        : null,
-    }));
-
-    setPreviews(newPreviews);
-  };
-
-  const handleRemove = (index: number) => {
-    setPreviews((prev) => {
-      const updated = prev.filter((_, i) => i !== index);
-
-      const dt = new DataTransfer();
-      updated.forEach((preview) => dt.items.add(preview.file));
-      if (inputRef.current) inputRef.current.files = dt.files;
-      return updated;
-    });
-  };
 
   return (
     <Form action={action} actionState={actionState}>
