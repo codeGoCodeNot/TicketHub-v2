@@ -2,21 +2,39 @@
 
 import FieldError from "@/components/form/field-error";
 import Form from "@/components/form/form";
+import useActionFeedback from "@/components/form/hooks/use-action-feedback";
 import SubmitButton from "@/components/form/submit-button";
 import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
 import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
 import { LucideUserCircle } from "lucide-react";
 import Image from "next/image";
-import { useActionState, useRef, useState } from "react";
-import updateProfile from "../actions/update-profile";
-import { authClient } from "@/lib/auth-client";
-import useActionFeedback from "@/components/form/hooks/use-action-feedback";
 import { useRouter } from "next/navigation";
+import { useActionState, useCallback, useRef, useState } from "react";
+import updateProfile from "../actions/update-profile";
+import createCroppedImage from "../utils/create-cropped-image";
+import Cropper from "react-easy-crop";
+import { Slider } from "@/components/ui/slider";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 type UpdateProfileFormProps = {
   username: string;
   email: string;
   image?: string | null;
+};
+
+type CroppedArea = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 };
 
 const UpdateProfileForm = ({
@@ -30,6 +48,12 @@ const UpdateProfileForm = ({
   );
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(image ?? null);
+  const [cropSrc, setCropSrc] = useState<string | null>(null);
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
+  const [croppedArea, setCroppedArea] = useState<CroppedArea | null>(null);
+  const [cropDialogOpen, setCropDialogOpen] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
@@ -45,7 +69,28 @@ const UpdateProfileForm = ({
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setPreviewUrl(URL.createObjectURL(file));
+    setCropSrc(URL.createObjectURL(file));
+    setCropDialogOpen(true);
+  };
+
+  const onCropComplete = useCallback(
+    (_: unknown, croppedAreaPixels: CroppedArea) => {
+      setCroppedArea(croppedAreaPixels);
+    },
+    [],
+  );
+
+  const handleCropConfirm = async () => {
+    if (!cropSrc || !croppedArea) return;
+
+    const croppedFile = await createCroppedImage(cropSrc, croppedArea);
+    setPreviewUrl(URL.createObjectURL(croppedFile));
+
+    const dt = new DataTransfer();
+    dt.items.add(croppedFile);
+    if (fileInputRef.current) fileInputRef.current.files = dt.files;
+
+    setCropDialogOpen(false);
   };
 
   return (
@@ -97,6 +142,43 @@ const UpdateProfileForm = ({
 
         <SubmitButton label="Save Changes" />
       </Form>
+      <Dialog open={cropDialogOpen} onOpenChange={setCropDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Crop Profile Picture</DialogTitle>
+          </DialogHeader>
+          <div className="relative w-full h-72 bg-black rounded-md overflow-hidden">
+            {cropSrc && (
+              <Cropper
+                image={cropSrc}
+                crop={crop}
+                zoom={zoom}
+                aspect={1}
+                cropShape="round"
+                onCropChange={setCrop}
+                onZoomChange={setZoom}
+                onCropComplete={onCropComplete}
+              />
+            )}
+          </div>
+          <div className="flex flex-col gap-y-2">
+            <p className="text-xs text-muted-foreground">Zoom</p>
+            <Slider
+              min={1}
+              max={3}
+              step={0.1}
+              value={[zoom]}
+              onValueChange={([value]) => setZoom(value)}
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCropDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleCropConfirm}>Confirm</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
