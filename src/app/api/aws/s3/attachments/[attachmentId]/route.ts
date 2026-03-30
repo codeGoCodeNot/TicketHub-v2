@@ -1,9 +1,10 @@
-import prisma from "@/lib/prisma";
-import { NextRequest, NextResponse } from "next/server";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import s3 from "@/lib/aws";
+import { getOrganizationIdByAttachment } from "@/features/attachments/utils/attachment-helper";
 import generateS3Key from "@/features/attachments/utils/generate-s3-key";
+import s3 from "@/lib/aws";
+import prisma from "@/lib/prisma";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { NextRequest, NextResponse } from "next/server";
 
 const GET = async (
   request: NextRequest,
@@ -13,26 +14,36 @@ const GET = async (
 
   const attachment = await prisma.attachment.findUniqueOrThrow({
     where: { id: attachmentId },
-    include: { ticket: true },
+    include: {
+      ticket: true,
+      comment: {
+        include: {
+          ticket: true,
+        },
+      },
+    },
   });
 
-  if (!attachment.ticket || !attachment.ticketId) {
-    return NextResponse.json(
-      { error: "Attachment is not associated with a ticket." },
-      { status: 400 },
-    );
-  }
+  const subject = attachment.ticket ?? attachment.comment;
+
+  if (!subject)
+    throw new Error("Attachment is not associated with a ticket or comment");
+
+  const organizationId = getOrganizationIdByAttachment(
+    attachment.entity,
+    subject,
+  );
 
   const presignedUrl = await getSignedUrl(
     s3,
     new GetObjectCommand({
       Bucket: process.env.AWS_BUCKET_NAME,
       Key: generateS3Key({
-        entityId: attachment.ticketId,
+        entityId: subject.id,
         entity: attachment.entity,
         attachmentId: attachment.id,
         filename: attachment.name,
-        organizationId: attachment.ticket.organizationId,
+        organizationId,
       }),
     }),
     { expiresIn: 5 * 60 },
