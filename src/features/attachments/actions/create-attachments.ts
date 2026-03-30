@@ -6,6 +6,7 @@ import fromErrorToActionState, {
 } from "@/components/form/utils/to-action-state";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import isOwnership from "@/features/auth/utils/is-ownership";
+import { AttachmentEntity } from "@/generated/prisma/enums";
 import s3 from "@/lib/aws";
 import prisma from "@/lib/prisma";
 import { ticketPagePath } from "@/path";
@@ -13,10 +14,10 @@ import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { revalidatePath } from "next/cache";
 import z from "zod";
 import { ACCEPTED, MAX_SIZE } from "../constants";
+import { isComment, isTicket } from "../types";
+import { getOrganizationIdByAttachment } from "../utils/attachment-helper";
 import generateS3Key from "../utils/generate-s3-key";
 import { sizeInMB } from "../utils/size";
-import { AttachmentEntity } from "@/generated/prisma/enums";
-import { isComment, isTicket } from "../types";
 
 const createAttachmentsSchema = z.object({
   files: z
@@ -99,19 +100,7 @@ const createAttachments = async (
       // push to track created attachment for cleanup if upload fails
       createdAttachments.push(attachment);
 
-      let organizationId = "";
-
-      switch (entity) {
-        case "TICKET": {
-          if (isTicket(subject)) organizationId = subject.organizationId;
-          break;
-        }
-        case "COMMENT": {
-          if (isComment(subject))
-            organizationId = subject.ticket.organizationId;
-          break;
-        }
-      }
+      const organizationId = getOrganizationIdByAttachment(entity, subject);
 
       // generate key once and reuse
       const key = generateS3Key({
