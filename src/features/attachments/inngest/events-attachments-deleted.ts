@@ -10,7 +10,7 @@ export type AttachmentDeletedEventArgs = {
     organizationId: string;
     filename: string;
     entityId: string;
-    entity: string;
+    entity: AttachmentEntity;
   };
 };
 
@@ -34,7 +34,7 @@ export const attachmentDeletedEvent = inngest.createFunction(
           Key: generateS3Key({
             organizationId,
             entityId,
-            entity: entity as AttachmentEntity,
+            entity,
             attachmentId,
             filename,
           }),
