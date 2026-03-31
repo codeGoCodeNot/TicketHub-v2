@@ -16,16 +16,19 @@ import AttachmentCreateForm from "./attachment-create-form";
 type AttachmentCreateButtonProps = {
   enitityId: string;
   entity: "COMMENT" | "TICKET";
+  onSuccess?: () => void;
 };
 
 const AttachmentCreateButton = ({
   enitityId,
   entity,
+  onSuccess,
 }: AttachmentCreateButtonProps) => {
   const [open, setOpen] = useState(false);
 
   const handleSuccess = () => {
     setOpen((prev) => !prev);
+    onSuccess?.();
   };
 
   const handleCancel = () => {

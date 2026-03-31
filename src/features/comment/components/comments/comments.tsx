@@ -1,14 +1,12 @@
 "use client";
 
 import CardCompact from "@/components/card-compact";
-import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
-import getComments from "../../queries/get-comments";
 import { CommentWithMetadata } from "../../type";
 import CommentCreateForm from "../comment-create-form";
 import CommentEditStateProvider from "../comment-edit-state";
 import CommentItem from "../comment-item";
-import { useEffect } from "react";
 import usePaginatedComments from "./use-paginated-comments";
 
 type CommentsProps = {
@@ -31,6 +29,7 @@ const Comments = ({ ticketId, comments }: CommentsProps) => {
     paginatedComments,
     onHandleDelete,
     onHandleCreateComment,
+    onHandleRefetchComments,
   } = usePaginatedComments(ticketId, comments);
 
   const { ref, inView } = useInView();
@@ -61,6 +60,7 @@ const Comments = ({ ticketId, comments }: CommentsProps) => {
               key={comment.id}
               comment={comment}
               onHandleDelete={onHandleDelete}
+              onHandleRefetchComments={onHandleRefetchComments}
             />
           ))}
         </div>

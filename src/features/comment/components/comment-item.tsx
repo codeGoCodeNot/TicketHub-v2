@@ -5,13 +5,20 @@ import CommentDeleteButton from "./comment-delete-button";
 import CommentEditInline from "./comment-edit-inline";
 import CommentEditTriggerButton from "./comment-edit-trigger-button";
 import AttachmentCreateButton from "@/features/attachments/components/attachment-create-button";
+import AttachmentList from "@/features/attachments/components/attachment-list";
+import { Separator } from "@/components/ui/separator";
 
 type CommentItemProps = {
   comment: CommentWithMetadata;
   onHandleDelete?: (id: string) => void;
+  onHandleRefetchComments?: () => void;
 };
 
-const CommentItem = ({ comment, onHandleDelete }: CommentItemProps) => {
+const CommentItem = ({
+  comment,
+  onHandleDelete,
+  onHandleRefetchComments,
+}: CommentItemProps) => {
   // Show "(edited)" when the comment has been updated after creation.
   const isEdited =
     new Date(comment.updatedAt).getTime() >
@@ -44,6 +51,13 @@ const CommentItem = ({ comment, onHandleDelete }: CommentItemProps) => {
           content={comment.content}
           isOwner={comment.isOwner}
         />
+        <Separator />
+        {comment.attachments.length > 0 && (
+          <AttachmentList
+            attachments={comment.attachments}
+            isOwner={comment.isOwner}
+          />
+        )}
       </Card>
 
       <div className="flex flex-col gap-y-1">
@@ -51,7 +65,11 @@ const CommentItem = ({ comment, onHandleDelete }: CommentItemProps) => {
         {comment.isOwner && (
           <>
             <CommentEditTriggerButton commentId={comment.id} />
-            <AttachmentCreateButton enitityId={comment.id} entity="COMMENT" />
+            <AttachmentCreateButton
+              enitityId={comment.id}
+              entity="COMMENT"
+              onSuccess={onHandleRefetchComments}
+            />
             <CommentDeleteButton
               id={comment.id}
               onHandleDelete={onHandleDelete}

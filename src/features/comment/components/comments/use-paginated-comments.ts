@@ -49,6 +49,8 @@ const usePaginatedComments = (
       queryClient.invalidateQueries({ queryKey: ["comments", ticketId] }),
     onHandleCreateComment: () =>
       queryClient.invalidateQueries({ queryKey: ["comments", ticketId] }),
+    onHandleRefetchComments: () =>
+      queryClient.invalidateQueries({ queryKey: ["comments", ticketId] }),
   };
 };
 

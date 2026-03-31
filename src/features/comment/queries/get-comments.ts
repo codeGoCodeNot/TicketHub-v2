@@ -1,7 +1,7 @@
 "use server";
 
-import getAuth from "@/lib/get-auth";
 import isOwnership from "@/features/auth/utils/is-ownership";
+import getAuth from "@/lib/get-auth";
 import prisma from "@/lib/prisma";
 
 const getComments = async (
@@ -34,6 +34,8 @@ const getComments = async (
             image: true,
           },
         },
+
+        attachments: true,
       },
       orderBy: [{ createdAt: "desc" }, { id: "desc" }],
     }),
