@@ -66,7 +66,7 @@ const CommentItem = ({
           <>
             <CommentEditTriggerButton commentId={comment.id} />
             <AttachmentCreateButton
-              enitityId={comment.id}
+              entityId={comment.id}
               entity="COMMENT"
               onSuccess={onHandleRefetchComments}
             />

@@ -3,6 +3,7 @@
 import isOwnership from "@/features/auth/utils/is-ownership";
 import getAuth from "@/lib/get-auth";
 import prisma from "@/lib/prisma";
+import { unstable_noStore as noStore } from "next/cache";
 
 const getComments = async (
   ticketId: string,
@@ -11,6 +12,10 @@ const getComments = async (
     createdAt: number;
   },
 ) => {
+  // This function is only used in the ticket details page, which is already server-side rendered.
+  // We can safely use noStore here to prevent caching and ensure fresh data on each request.
+  noStore();
+
   const user = await getAuth();
 
   const where = {

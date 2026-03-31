@@ -14,13 +14,13 @@ import { useState } from "react";
 import AttachmentCreateForm from "./attachment-create-form";
 
 type AttachmentCreateButtonProps = {
-  enitityId: string;
+  entityId: string;
   entity: "COMMENT" | "TICKET";
   onSuccess?: () => void;
 };
 
 const AttachmentCreateButton = ({
-  enitityId,
+  entityId,
   entity,
   onSuccess,
 }: AttachmentCreateButtonProps) => {
@@ -49,7 +49,7 @@ const AttachmentCreateButton = ({
         </DialogHeader>
         <AttachmentCreateForm
           entity={entity}
-          entityId={enitityId}
+          entityId={entityId}
           buttons={
             <DialogFooter>
               <Button variant="outline" type="button" onClick={handleCancel}>
