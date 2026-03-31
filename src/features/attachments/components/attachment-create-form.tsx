@@ -18,11 +18,15 @@ import useFilePreview from "./hooks/use-file-preview";
 type AttachmentCreateFormProps = {
   entityId: string;
   entity: AttachmentEntity;
+  buttons?: React.ReactNode;
+  onSuccess?: () => void;
 };
 
 const AttachmentCreateForm = ({
   entityId,
   entity,
+  buttons,
+  onSuccess,
 }: AttachmentCreateFormProps) => {
   const [actionState, action] = useActionState(
     createAttachments.bind(null, { entityId, entity }),
@@ -37,7 +41,7 @@ const AttachmentCreateForm = ({
   });
 
   return (
-    <Form action={action} actionState={actionState}>
+    <Form action={action} actionState={actionState} onSuccess={onSuccess}>
       <Input
         ref={inputRef}
         name="files"
@@ -80,7 +84,7 @@ const AttachmentCreateForm = ({
         </div>
       )}
 
-      <SubmitButton label="Upload" />
+      {buttons}
     </Form>
   );
 };

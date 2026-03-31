@@ -4,6 +4,7 @@ import { CommentWithMetadata } from "../type";
 import CommentDeleteButton from "./comment-delete-button";
 import CommentEditInline from "./comment-edit-inline";
 import CommentEditTriggerButton from "./comment-edit-trigger-button";
+import AttachmentCreateButton from "@/features/attachments/components/attachment-create-button";
 
 type CommentItemProps = {
   comment: CommentWithMetadata;
@@ -50,6 +51,7 @@ const CommentItem = ({ comment, onHandleDelete }: CommentItemProps) => {
         {comment.isOwner && (
           <>
             <CommentEditTriggerButton commentId={comment.id} />
+            <AttachmentCreateButton enitityId={comment.id} entity="COMMENT" />
             <CommentDeleteButton
               id={comment.id}
               onHandleDelete={onHandleDelete}

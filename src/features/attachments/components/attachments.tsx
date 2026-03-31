@@ -4,6 +4,7 @@ import getAttachments from "../queries/get-attachments";
 import AttachmentItem from "./attachment-item";
 import AttachmentDeleteButton from "./attachment-delete-button";
 import { AttachmentEntity } from "@/generated/prisma/enums";
+import SubmitButton from "@/components/form/submit-button";
 
 type AttachmentsProps = {
   entityId: string;
@@ -34,7 +35,11 @@ const Attachments = async ({ entityId, isOwner, entity }: AttachmentsProps) => {
             ))}
           </div>
           {isOwner && (
-            <AttachmentCreateForm entityId={entityId} entity={entity} />
+            <AttachmentCreateForm
+              entityId={entityId}
+              entity={entity}
+              buttons={<SubmitButton label="Upload" />}
+            />
           )}
         </>
       }
