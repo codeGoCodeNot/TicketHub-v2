@@ -1,6 +1,7 @@
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import getComments from "../../queries/get-comments";
 import { CommentWithMetadata } from "../../type";
+import removeAttachmentFromCache from "./remove-attachment-from-cache";
 
 type UsePaginatedCommentsProps = {
   comments: {
@@ -17,9 +18,11 @@ const usePaginatedComments = (
   ticketId: string,
   comments: UsePaginatedCommentsProps["comments"],
 ) => {
+  const queryKey = ["comments", ticketId];
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: ["comments", ticketId],
+      queryKey,
       queryFn: ({ pageParam }) => getComments(ticketId, pageParam),
       initialPageParam: undefined as
         | { id: string; createdAt: number }
@@ -40,19 +43,23 @@ const usePaginatedComments = (
   const paginatedComments = data.pages.flatMap((page) => page.list);
   const queryClient = useQueryClient();
 
+  const handleDeleteAttachment = (commentId: string, attachmentId: string) => {
+    removeAttachmentFromCache(
+      { queryClient, queryKey },
+      { commentId, attachmentId },
+    );
+    queryClient.invalidateQueries({ queryKey });
+  };
+
   return {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
     paginatedComments,
-    onHandleDelete: () =>
-      queryClient.invalidateQueries({ queryKey: ["comments", ticketId] }),
-    onHandleCreateComment: () =>
-      queryClient.invalidateQueries({ queryKey: ["comments", ticketId] }),
-    onHandleRefetchComments: () =>
-      queryClient.invalidateQueries({ queryKey: ["comments", ticketId] }),
-    onHandleDeleteCommentAttachment: () =>
-      queryClient.invalidateQueries({ queryKey: ["comments", ticketId] }),
+    onHandleDelete: () => queryClient.invalidateQueries({ queryKey }),
+    onHandleCreateComment: () => queryClient.invalidateQueries({ queryKey }),
+    onHandleRefetchComments: () => queryClient.invalidateQueries({ queryKey }),
+    onHandleDeleteCommentAttachment: handleDeleteAttachment,
   };
 };
 

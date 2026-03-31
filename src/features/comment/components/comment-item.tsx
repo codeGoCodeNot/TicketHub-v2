@@ -12,7 +12,10 @@ type CommentItemProps = {
   comment: CommentWithMetadata;
   onHandleDelete?: (id: string) => void;
   onHandleRefetchComments?: () => void;
-  onHandleDeleteCommentAttachment?: () => void;
+  onHandleDeleteCommentAttachment?: (
+    commentId: string,
+    attachmentId: string,
+  ) => void;
 };
 
 const CommentItem = ({
@@ -61,7 +64,10 @@ const CommentItem = ({
             <AttachmentList
               attachments={comment.attachments}
               isOwner={comment.isOwner}
-              onDeleteAttachment={onHandleDeleteCommentAttachment}
+              onDeleteAttachment={
+                (attachmentId) =>
+                  onHandleDeleteCommentAttachment?.(comment.id, attachmentId) // ← pass both ids
+              }
             />
           </>
         )}
