@@ -12,12 +12,14 @@ type CommentItemProps = {
   comment: CommentWithMetadata;
   onHandleDelete?: (id: string) => void;
   onHandleRefetchComments?: () => void;
+  onHandleDeleteCommentAttachment?: () => void;
 };
 
 const CommentItem = ({
   comment,
   onHandleDelete,
   onHandleRefetchComments,
+  onHandleDeleteCommentAttachment,
 }: CommentItemProps) => {
   // Show "(edited)" when the comment has been updated after creation.
   const isEdited =
@@ -59,6 +61,7 @@ const CommentItem = ({
             <AttachmentList
               attachments={comment.attachments}
               isOwner={comment.isOwner}
+              onDeleteAttachment={onHandleDeleteCommentAttachment}
             />
           </>
         )}

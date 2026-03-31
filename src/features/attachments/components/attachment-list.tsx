@@ -7,13 +7,19 @@ import AttachmentDeleteButton from "./attachment-delete-button";
 type AttachmentListProps = {
   attachments: Attachment[];
   isOwner: boolean;
+  onDeleteAttachment?: () => void;
 };
 
-const AttachmentList = ({ attachments, isOwner }: AttachmentListProps) => {
+const AttachmentList = ({
+  attachments,
+  isOwner,
+  onDeleteAttachment,
+}: AttachmentListProps) => {
   const [items, setItems] = useState(attachments);
 
   const handleDelete = (id: string) => {
     setItems((prev) => prev.filter((a) => a.id !== id));
+    onDeleteAttachment?.();
   };
 
   return (

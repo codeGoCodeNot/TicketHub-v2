@@ -49,16 +49,18 @@ const deleteAttachment = async (id: string) => {
       where: { id },
     });
 
-    await inngest.send({
-      name: "app/attachment.deleted",
-      data: {
-        attachmentId: attachment.id,
-        organizationId,
-        filename: attachment.name,
-        entityId: subject.id,
-        entity: attachment.entity,
-      },
-    });
+    if (process.env.NODE_ENV === "production") {
+      await inngest.send({
+        name: "app/attachment.deleted",
+        data: {
+          attachmentId: attachment.id,
+          organizationId,
+          filename: attachment.name,
+          entityId: subject.id,
+          entity: attachment.entity,
+        },
+      });
+    }
   } catch (error) {
     return fromErrorToActionState(error);
   }

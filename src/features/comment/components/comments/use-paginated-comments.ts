@@ -51,6 +51,8 @@ const usePaginatedComments = (
       queryClient.invalidateQueries({ queryKey: ["comments", ticketId] }),
     onHandleRefetchComments: () =>
       queryClient.invalidateQueries({ queryKey: ["comments", ticketId] }),
+    onHandleDeleteCommentAttachment: () =>
+      queryClient.invalidateQueries({ queryKey: ["comments", ticketId] }),
   };
 };
 
