@@ -22,7 +22,7 @@ const AttachmentItem = ({ attachment, buttons }: AttachmentItemProps) => {
       >
         <LucideArrowUpRightFromSquare className="shrink-0" />
         <FileIcon className={cn("size-4 shrink-0", className)} />
-        <p className="text-sm">{attachment.name}</p>
+        <p className="text-sm truncate">{attachment.name}</p>
       </Link>
       {buttons}
     </div>

@@ -1,8 +1,7 @@
 import CardCompact from "@/components/card-compact";
 import AttachmentCreateForm from "./attachment-create-form";
 import getAttachments from "../queries/get-attachments";
-import AttachmentItem from "./attachment-item";
-import AttachmentDeleteButton from "./attachment-delete-button";
+import AttachmentList from "./attachment-list";
 import { AttachmentEntity } from "@/generated/prisma/enums";
 import SubmitButton from "@/components/form/submit-button";
 
@@ -14,26 +13,13 @@ type AttachmentsProps = {
 
 const Attachments = async ({ entityId, isOwner, entity }: AttachmentsProps) => {
   const attachments = await getAttachments(entityId, entity);
-
   return (
     <CardCompact
       title="Attachments"
       description="Attached images or PDF"
       content={
         <>
-          <div className="mx-2 flex flex-col gap-y-2 mb-4">
-            {attachments.map((attachment) => (
-              <AttachmentItem
-                key={attachment.id}
-                attachment={attachment}
-                buttons={[
-                  ...(isOwner
-                    ? [<AttachmentDeleteButton id={attachment.id} key="0" />]
-                    : []),
-                ]}
-              />
-            ))}
-          </div>
+          <AttachmentList attachments={attachments} isOwner={isOwner} />
           {isOwner && (
             <AttachmentCreateForm
               entityId={entityId}
