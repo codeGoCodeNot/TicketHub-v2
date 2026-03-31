@@ -51,12 +51,16 @@ const CommentItem = ({
           content={comment.content}
           isOwner={comment.isOwner}
         />
-        <Separator />
+
         {comment.attachments.length > 0 && (
-          <AttachmentList
-            attachments={comment.attachments}
-            isOwner={comment.isOwner}
-          />
+          <>
+            <Separator />
+            <p className="text-xs text-muted-foreground">Attachments</p>
+            <AttachmentList
+              attachments={comment.attachments}
+              isOwner={comment.isOwner}
+            />
+          </>
         )}
       </Card>
 
