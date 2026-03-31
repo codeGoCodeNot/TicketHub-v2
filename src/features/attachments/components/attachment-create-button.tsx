@@ -27,8 +27,8 @@ const AttachmentCreateButton = ({
   const [open, setOpen] = useState(false);
 
   const handleSuccess = () => {
-    setOpen((prev) => !prev);
     onSuccess?.();
+    setOpen(false);
   };
 
   const handleCancel = () => {
