@@ -11,6 +11,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import * as ticketData from "../data";
 import getTicketPermission from "../queries/get-ticket-permission";
+import { inngest } from "@/lib/inngest";
 
 const deleteTicket = async (id: string) => {
   const user = await getAuthOrRedirect();
@@ -30,7 +31,28 @@ const deleteTicket = async (id: string) => {
       );
     }
 
+    const attachments = await prisma.attachment.findMany({
+      where: {
+        OR: [{ ticketId: id }, { comment: { ticketId: id } }],
+      },
+    });
+
     await ticketData.deleteTicket(id);
+
+    if (process.env.NODE_ENV === "production" && attachments.length > 0) {
+      await inngest.send(
+        attachments.map((attachment) => ({
+          name: "app/attachment.deleted" as const,
+          data: {
+            attachmentId: attachment.id,
+            organizationId: ticket.organizationId,
+            filename: attachment.name,
+            entityId: attachment.ticketId ?? attachment.commentId ?? id,
+            entity: attachment.entity,
+          },
+        })),
+      );
+    }
   } catch (error) {
     return fromErrorToActionState(error);
   }
