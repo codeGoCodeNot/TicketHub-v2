@@ -58,7 +58,7 @@ const usePaginatedComments = (
     paginatedComments,
     onHandleDelete: () => queryClient.invalidateQueries({ queryKey }),
     onHandleCreateComment: () => queryClient.invalidateQueries({ queryKey }),
-    onHandleRefetchComments: () => queryClient.invalidateQueries({ queryKey }),
+    // onHandleRefetchComments: () => queryClient.invalidateQueries({ queryKey }),
     onHandleDeleteCommentAttachment: handleDeleteAttachment,
   };
 };

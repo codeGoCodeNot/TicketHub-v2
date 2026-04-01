@@ -1,17 +1,15 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import AttachmentList from "@/features/attachments/components/attachment-list";
 import { CommentWithMetadata } from "../type";
 import CommentDeleteButton from "./comment-delete-button";
 import CommentEditInline from "./comment-edit-inline";
 import CommentEditTriggerButton from "./comment-edit-trigger-button";
-import AttachmentCreateButton from "@/features/attachments/components/attachment-create-button";
-import AttachmentList from "@/features/attachments/components/attachment-list";
-import { Separator } from "@/components/ui/separator";
 
 type CommentItemProps = {
   comment: CommentWithMetadata;
   onHandleDelete?: (id: string) => void;
-  onHandleRefetchComments?: () => void;
   onHandleDeleteCommentAttachment?: (
     commentId: string,
     attachmentId: string,
@@ -21,7 +19,6 @@ type CommentItemProps = {
 const CommentItem = ({
   comment,
   onHandleDelete,
-  onHandleRefetchComments,
   onHandleDeleteCommentAttachment,
 }: CommentItemProps) => {
   // Show "(edited)" when the comment has been updated after creation.
@@ -78,11 +75,7 @@ const CommentItem = ({
         {comment.isOwner && (
           <>
             <CommentEditTriggerButton commentId={comment.id} />
-            <AttachmentCreateButton
-              entityId={comment.id}
-              entity="COMMENT"
-              onSuccess={onHandleRefetchComments}
-            />
+
             <CommentDeleteButton
               id={comment.id}
               onHandleDelete={onHandleDelete}

@@ -13,16 +13,7 @@ import { useRouter } from "next/navigation";
 import { useActionState, useCallback, useRef, useState } from "react";
 import updateProfile from "../actions/update-profile";
 import createCroppedImage from "../utils/create-cropped-image";
-import Cropper from "react-easy-crop";
-import { Slider } from "@/components/ui/slider";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import CropImageDialog from "./crop-image-dialog";
 
 type UpdateProfileFormProps = {
   username: string;
@@ -159,43 +150,17 @@ const UpdateProfileForm = ({
 
         <SubmitButton label="Save Changes" />
       </Form>
-      <Dialog open={cropDialogOpen} onOpenChange={setCropDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Crop Profile Picture</DialogTitle>
-          </DialogHeader>
-          <div className="relative w-full h-72 bg-black rounded-md overflow-hidden">
-            {cropSrc && (
-              <Cropper
-                image={cropSrc}
-                crop={crop}
-                zoom={zoom}
-                aspect={1}
-                cropShape="round"
-                onCropChange={setCrop}
-                onZoomChange={setZoom}
-                onCropComplete={onCropComplete}
-              />
-            )}
-          </div>
-          <div className="flex flex-col gap-y-2">
-            <p className="text-xs text-muted-foreground">Zoom</p>
-            <Slider
-              min={1}
-              max={3}
-              step={0.1}
-              value={[zoom]}
-              onValueChange={([value]) => setZoom(value)}
-            />
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setCropDialogOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleCropConfirm}>Confirm</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <CropImageDialog
+        open={cropDialogOpen}
+        onOpenChange={setCropDialogOpen}
+        cropSrc={cropSrc}
+        crop={crop}
+        zoom={zoom}
+        onCropChange={setCrop}
+        onZoomChange={setZoom}
+        onCropComplete={onCropComplete}
+        onConfirm={handleCropConfirm}
+      />
     </>
   );
 };

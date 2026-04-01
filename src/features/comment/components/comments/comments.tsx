@@ -29,7 +29,6 @@ const Comments = ({ ticketId, comments }: CommentsProps) => {
     paginatedComments,
     onHandleDelete,
     onHandleCreateComment,
-    onHandleRefetchComments,
     onHandleDeleteCommentAttachment,
   } = usePaginatedComments(ticketId, comments);
 
@@ -61,7 +60,6 @@ const Comments = ({ ticketId, comments }: CommentsProps) => {
               key={comment.id}
               comment={comment}
               onHandleDelete={onHandleDelete}
-              onHandleRefetchComments={onHandleRefetchComments}
               onHandleDeleteCommentAttachment={onHandleDeleteCommentAttachment}
             />
           ))}
