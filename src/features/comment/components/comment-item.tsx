@@ -14,12 +14,14 @@ type CommentItemProps = {
     attachmentId: string,
   ) => void;
   onHandleDeleteComment?: (commentId: string) => void;
+  onHandleUpdateComment?: () => void;
 };
 
 const CommentItem = ({
   comment,
   onHandleDeleteCommentAttachment,
   onHandleDeleteComment,
+  onHandleUpdateComment,
 }: CommentItemProps) => {
   // Show "(edited)" when the comment has been updated after creation.
   const isEdited =
@@ -29,8 +31,12 @@ const CommentItem = ({
   return (
     <div className="flex gap-x-1">
       <Card className="flex flex-col flex-1 p-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-end">
           <div className="flex flex-col items-center">
+            <p className="text-muted-foreground text-[10px] mb-4">
+              {new Date(comment.createdAt).toLocaleString()}
+              {isEdited && " (edited)"}
+            </p>
             <Avatar>
               <AvatarImage
                 src={comment.user.image ?? undefined}
@@ -40,18 +46,17 @@ const CommentItem = ({
                 {comment.user.name?.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            <p className="text-muted-foreground text-xs">{comment.user.name}</p>
+            <p className="text-shadow-amber-100 text-[11px] mb-2">
+              {comment.user.name}
+            </p>
           </div>
-          <p className="text-muted-foreground text-xs">
-            {new Date(comment.createdAt).toLocaleString()}
-            {isEdited && " (edited)"}
-          </p>
         </div>
 
         <CommentEditInline
           commentId={comment.id}
           content={comment.content}
           isOwner={comment.isOwner}
+          onUpdate={onHandleUpdateComment}
         />
 
         {comment.attachments.length > 0 && (

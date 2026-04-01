@@ -13,5 +13,4 @@ export const fileSchema = z
   .refine(
     (files) => files.every((file) => ACCEPTED.includes(file.type)),
     `Only the following file types are allowed: ${ACCEPTED.join(", ")}.`,
-  )
-  .refine((files) => files.length > 0, "Please select at least one file.");
+  );

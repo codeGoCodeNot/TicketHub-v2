@@ -20,7 +20,9 @@ type CreateAttachmentsArgs = {
 };
 
 const createAttachmentsSchema = z.object({
-  files: fileSchema.refine((files) => files.length !== 0, "File is required."),
+  files: fileSchema
+    .refine((files) => files.length !== 0, "File is required.")
+    .refine((files) => files.length > 0, "Please select at least one file."),
 });
 
 const createAttachments = async (

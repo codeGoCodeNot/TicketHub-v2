@@ -9,17 +9,21 @@ import { Textarea } from "@/components/ui/textarea";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { updateComment } from "../actions/update-comment";
 import { useCommentEditState } from "./comment-edit-state";
+import { Input } from "@/components/ui/input";
+import { LucidePaperclip } from "lucide-react";
 
 type CommentEditInlineProps = {
   commentId: string;
   content: string;
   isOwner: boolean;
+  onUpdate?: () => void;
 };
 
 const CommentEditInline = ({
   commentId,
   content,
   isOwner,
+  onUpdate,
 }: CommentEditInlineProps) => {
   const { isEditing, stopEditing } = useCommentEditState();
   const isCurrentCommentEditing = isEditing(commentId);
@@ -48,15 +52,12 @@ const CommentEditInline = ({
   const handleSuccess = () => {
     setDraft((currentDraft) => currentDraft.trim());
     stopEditing(commentId);
+    onUpdate?.();
   };
 
   if (!isOwner || !isCurrentCommentEditing) {
     // Read-only view when not editing.
-    return (
-      <p className="text-muted-foreground whitespace-pre-wrap break-words">
-        {content}
-      </p>
-    );
+    return <p className="whitespace-pre-wrap break-words text-sm">{content}</p>;
   }
 
   return (
@@ -71,6 +72,14 @@ const CommentEditInline = ({
       <FieldError actionState={actionState} name="content" />
 
       <div className="flex items-center justify-end gap-x-2">
+        <LucidePaperclip className="text-muted-foreground" />
+        <Input
+          type="file"
+          name="files"
+          multiple
+          accept="image/*,.pdf,.doc,.docx"
+          className="text-sm"
+        />
         <Button type="button" variant="ghost" size="sm" onClick={handleCancel}>
           Cancel
         </Button>

@@ -4,6 +4,8 @@ import fromErrorToActionState, {
   ActionState,
   toActionState,
 } from "@/components/form/utils/to-action-state";
+import { fileSchema } from "@/features/attachments/schema/schema";
+import * as attachmentService from "@/features/attachments/service";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import isOwnership from "@/features/auth/utils/is-ownership";
 import prisma from "@/lib/prisma";
@@ -13,6 +15,7 @@ import z from "zod";
 
 const updateCommentSchema = z.object({
   content: z.string().trim().min(1, "Content is required").max(1024),
+  files: fileSchema,
 });
 
 export const updateComment = async (
@@ -26,6 +29,9 @@ export const updateComment = async (
     where: {
       id,
     },
+    include: {
+      ticket: true,
+    },
   });
 
   if (!comment || !isOwnership(user, comment)) {
@@ -36,16 +42,29 @@ export const updateComment = async (
   }
 
   try {
-    const data = updateCommentSchema.parse(
-      Object.fromEntries(formData.entries()),
-    );
+    const { content, files } = updateCommentSchema.parse({
+      content: formData.get("content"),
+      files: formData.getAll("files"),
+    });
 
     await prisma.comment.update({
       where: {
         id,
       },
-      data,
+      data: {
+        content,
+      },
     });
+
+    if (files.length > 0) {
+      await attachmentService.createAttachments({
+        entity: "COMMENT",
+        subject: comment,
+        entityId: comment.id,
+        files,
+        userId: user.id,
+      });
+    }
   } catch (error) {
     return fromErrorToActionState(error, formData);
   }

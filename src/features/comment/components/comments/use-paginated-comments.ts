@@ -64,6 +64,7 @@ const usePaginatedComments = (
     onHandleCreateComment: () => queryClient.invalidateQueries({ queryKey }),
     onHandleDeleteCommentAttachment: handleDeleteAttachment,
     onHandleDeleteComment: handleDeleteComment,
+    onHandleUpdateComment: () => queryClient.invalidateQueries({ queryKey }),
   };
 };
 

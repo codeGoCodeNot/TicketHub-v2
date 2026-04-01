@@ -30,6 +30,7 @@ const Comments = ({ ticketId, comments }: CommentsProps) => {
     onHandleCreateComment,
     onHandleDeleteCommentAttachment,
     onHandleDeleteComment,
+    onHandleUpdateComment,
   } = usePaginatedComments(ticketId, comments);
 
   const { ref, inView } = useInView();
@@ -61,6 +62,7 @@ const Comments = ({ ticketId, comments }: CommentsProps) => {
               comment={comment}
               onHandleDeleteCommentAttachment={onHandleDeleteCommentAttachment}
               onHandleDeleteComment={onHandleDeleteComment}
+              onHandleUpdateComment={onHandleUpdateComment}
             />
           ))}
         </div>
