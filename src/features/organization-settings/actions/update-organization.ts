@@ -5,9 +5,8 @@ import fromErrorToActionState, {
 } from "@/components/form/utils/to-action-state";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import { auth } from "@/lib/auth";
-import s3 from "@/lib/aws";
+import uploadFile from "@/lib/upload-file";
 import { organizationSettingsPagePath } from "@/path";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import z from "zod";
@@ -48,14 +47,11 @@ const updateOrganization = async (
       const buffer = Buffer.from(await logo.arrayBuffer());
       const key = `organizations/${organizationId}/logo`;
 
-      await s3.send(
-        new PutObjectCommand({
-          Bucket: process.env.AWS_BUCKET_NAME,
-          Key: key,
-          Body: buffer,
-          ContentType: logo.type,
-        }),
-      );
+      await uploadFile({
+        key,
+        buffer,
+        contentType: logo.type,
+      });
 
       const logoUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}?t=${Date.now()}`;
 

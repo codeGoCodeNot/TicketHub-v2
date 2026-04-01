@@ -1,9 +1,9 @@
-import s3 from "@/lib/aws";
 import prisma from "@/lib/prisma";
 
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import { AttachmentEntity } from "@/generated/prisma/enums";
-import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import deleteFile from "@/lib/delete-file";
+import uploadFile from "@/lib/upload-file";
 import * as attachmentData from "../data";
 import { AttachmentSubject } from "../types";
 import { getOrganizationIdByAttachment } from "../utils/attachment-helper";
@@ -61,30 +61,14 @@ export const createAttachments = async ({
         attachmentId: attachment.id,
       });
 
-      await s3.send(
-        new PutObjectCommand({
-          Bucket: process.env.AWS_BUCKET_NAME,
-          Key: key,
-          Body: buffer,
-          ContentType: file.type,
-        }),
-      );
+      await uploadFile({ key, buffer, contentType: file.type });
 
       // push after successful upload to track for cleanup
       uploadedKeys.push(key);
     }
   } catch (error) {
     await Promise.all(
-      uploadedKeys.map((key) =>
-        s3
-          .send(
-            new DeleteObjectCommand({
-              Bucket: process.env.AWS_BUCKET_NAME,
-              Key: key,
-            }),
-          )
-          .catch(() => null),
-      ),
+      uploadedKeys.map((key) => deleteFile(key).catch(() => null)),
     );
     await Promise.all(
       createdAttachments.map((attachment) =>
