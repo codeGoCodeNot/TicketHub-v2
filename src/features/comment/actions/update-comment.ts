@@ -8,10 +8,10 @@ import { fileSchema } from "@/features/attachments/schema/schema";
 import * as attachmentService from "@/features/attachments/service";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import isOwnership from "@/features/auth/utils/is-ownership";
-import prisma from "@/lib/prisma";
 import { ticketPagePath } from "@/path";
 import { revalidatePath } from "next/cache";
 import z from "zod";
+import * as commentData from "../data";
 
 const updateCommentSchema = z.object({
   content: z.string().trim().min(1, "Content is required").max(1024),
@@ -25,14 +25,7 @@ export const updateComment = async (
 ) => {
   const user = await getAuthOrRedirect();
 
-  const comment = await prisma.comment.findUnique({
-    where: {
-      id,
-    },
-    include: {
-      ticket: true,
-    },
-  });
+  const comment = await commentData.findCommentWithTicket(id);
 
   if (!comment || !isOwnership(user, comment)) {
     return toActionState(
@@ -47,14 +40,7 @@ export const updateComment = async (
       files: formData.getAll("files"),
     });
 
-    await prisma.comment.update({
-      where: {
-        id,
-      },
-      data: {
-        content,
-      },
-    });
+    await commentData.updateComment(id, content);
 
     if (files.length > 0) {
       await attachmentService.createAttachments({
