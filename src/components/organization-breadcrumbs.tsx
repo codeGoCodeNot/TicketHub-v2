@@ -1,9 +1,9 @@
 "use client";
-
 import {
   organizationInvitationPagePath,
   organizationMembershipPagePath,
   organizationPagePath,
+  organizationSettingsPagePath,
 } from "@/path";
 import { useParams, usePathname } from "next/navigation";
 import BreadCrumbs from "./breadcrumbs";
@@ -19,24 +19,31 @@ const OrganizationBreadcrumbs = ({
 }: OrganizationBreadcrumbsProps) => {
   const params = useParams<{ organizationId: string }>();
   const pathName = usePathname();
-  const isInvitations = pathName.endsWith("invitations");
 
-  const title = {
-    memberships: "Memberships",
-    invitations: "Invitations",
-  }[pathName.split("/").at(-1) as "memberships" | "invitations"];
+  const lastSegment = pathName.split("/").at(-1);
+  const activeTab =
+    lastSegment === "invitations"
+      ? "invitations"
+      : lastSegment === "settings"
+        ? "settings"
+        : "memberships";
 
   return (
     <div className="flex flex-col gap-y-4">
       <BreadCrumbs
         breadcrumbs={[
           { title: "Organizations", href: organizationPagePath() },
-          {
-            title: organizationName,
-          },
+          { title: organizationName },
+          ...(activeTab !== "memberships"
+            ? [
+                {
+                  title: activeTab.charAt(0).toUpperCase() + activeTab.slice(1),
+                },
+              ]
+            : []),
         ]}
       />
-      <Tabs value={isInvitations ? "invitations" : "memberships"}>
+      <Tabs value={activeTab}>
         <TabsList>
           <TabsTrigger value="memberships" asChild>
             <Link href={organizationMembershipPagePath(params.organizationId)}>
@@ -46,6 +53,11 @@ const OrganizationBreadcrumbs = ({
           <TabsTrigger value="invitations" asChild>
             <Link href={organizationInvitationPagePath(params.organizationId)}>
               Invitations
+            </Link>
+          </TabsTrigger>
+          <TabsTrigger value="settings" asChild>
+            <Link href={organizationSettingsPagePath(params.organizationId)}>
+              Settings
             </Link>
           </TabsTrigger>
         </TabsList>
