@@ -2,8 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import useConfirmDialog from "@/features/tickets/hooks/use-confirm-dialog";
-import { LucideCircleX, LucideLoader } from "lucide-react";
-import deleteInvitation from "../actions/cancel-invitation";
+import { LucideLoader } from "lucide-react";
 
 type InvitationDeleteButtonProps = {
   action: () => Promise<any>;

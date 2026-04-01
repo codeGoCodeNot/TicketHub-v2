@@ -7,10 +7,10 @@ import fromErrorToActionState, {
 import { fileSchema } from "@/features/attachments/schema/schema";
 import * as attachmentService from "@/features/attachments/service";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
-import prisma from "@/lib/prisma";
 import { ticketPagePath } from "@/path";
 import { revalidatePath } from "next/cache";
 import z from "zod";
+import * as commentData from "../data";
 
 const createSchema = z.object({
   content: z.string().min(1, "Content is required").max(1024),
@@ -31,21 +31,10 @@ export const createComment = async (
       content: formData.get("content"),
       files: formData.getAll("files"),
     });
-    comment = await prisma.comment.create({
-      data: {
-        userId: user.id,
-        ticketId,
-        content,
-      },
-      include: {
-        user: {
-          select: {
-            name: true,
-            image: true,
-          },
-        },
-        ticket: true,
-      },
+    comment = await commentData.createComment({
+      content,
+      userId: user.id,
+      ticketId,
     });
 
     await attachmentService.createAttachments({

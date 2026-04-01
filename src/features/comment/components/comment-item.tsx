@@ -33,10 +33,6 @@ const CommentItem = ({
       <Card className="flex flex-col flex-1 p-4">
         <div className="flex items-center justify-end">
           <div className="flex flex-col items-center">
-            <p className="text-muted-foreground text-[10px] mb-4">
-              {new Date(comment.createdAt).toLocaleString()}
-              {isEdited && " (edited)"}
-            </p>
             <Avatar>
               <AvatarImage
                 src={comment.user.image ?? undefined}
@@ -57,6 +53,12 @@ const CommentItem = ({
           content={comment.content}
           isOwner={comment.isOwner}
           onUpdate={onHandleUpdateComment}
+          date={
+            <p className="text-muted-foreground text-[10px] mb-4">
+              {new Date(comment.createdAt).toLocaleString()}
+              {isEdited && " (edited)"}
+            </p>
+          }
         />
 
         {comment.attachments.length > 0 && (

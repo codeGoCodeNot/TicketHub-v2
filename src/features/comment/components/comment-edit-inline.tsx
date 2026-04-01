@@ -17,6 +17,7 @@ type CommentEditInlineProps = {
   content: string;
   isOwner: boolean;
   onUpdate?: () => void;
+  date?: React.ReactNode;
 };
 
 const CommentEditInline = ({
@@ -24,6 +25,7 @@ const CommentEditInline = ({
   content,
   isOwner,
   onUpdate,
+  date,
 }: CommentEditInlineProps) => {
   const { isEditing, stopEditing } = useCommentEditState();
   const isCurrentCommentEditing = isEditing(commentId);
@@ -57,7 +59,14 @@ const CommentEditInline = ({
 
   if (!isOwner || !isCurrentCommentEditing) {
     // Read-only view when not editing.
-    return <p className="whitespace-pre-wrap break-words text-sm">{content}</p>;
+    return (
+      <div className="flex-flex-col">
+        <p className="whitespace-pre-wrap break-words text-sm mb-2">
+          {content}
+        </p>
+        {date}
+      </div>
+    );
   }
 
   return (
