@@ -86,6 +86,18 @@ export const auth = betterAuth({
   plugins: [
     nextCookies(),
     organization({
+      organizationHooks: {
+        afterCreateOrganization: async ({ member }) => {
+          if (!member) return;
+          await prisma.member.update({
+            where: { id: member.id },
+            data: {
+              canDeleteTickets: true,
+              canUpdateTickets: true,
+            },
+          });
+        },
+      },
       sendInvitationEmail: async (data) => {
         const inviteLink = `${process.env.BETTER_AUTH_URL}/accept-invite?token=${data.id}`;
 
