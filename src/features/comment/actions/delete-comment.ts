@@ -1,6 +1,7 @@
 "use server";
 
 import { toActionState } from "@/components/form/utils/to-action-state";
+import deleteAttachment from "@/features/attachments/actions/delete-attachments";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import isOwnership from "@/features/auth/utils/is-ownership";
 import prisma from "@/lib/prisma";
@@ -14,6 +15,9 @@ export const deleteComment = async (id: string) => {
     where: {
       id,
     },
+    include: {
+      attachments: true,
+    },
   });
 
   if (!comment || !isOwnership(user, comment)) {
@@ -22,6 +26,10 @@ export const deleteComment = async (id: string) => {
       "You are not authorized to delete this comment.",
     );
   }
+
+  await Promise.all(
+    comment.attachments.map((attachment) => deleteAttachment(attachment.id)),
+  );
 
   await prisma.comment.delete({
     where: {
