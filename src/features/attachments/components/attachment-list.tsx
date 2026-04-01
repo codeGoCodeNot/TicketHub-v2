@@ -1,6 +1,6 @@
 "use client";
 import { Attachment } from "@/generated/prisma/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AttachmentItem from "./attachment-item";
 import AttachmentDeleteButton from "./attachment-delete-button";
 
@@ -16,6 +16,10 @@ const AttachmentList = ({
   onDeleteAttachment,
 }: AttachmentListProps) => {
   const [items, setItems] = useState(attachments);
+
+  useEffect(() => {
+    setItems(attachments);
+  }, [attachments]);
 
   const handleDelete = (id: string) => {
     setItems((prev) => prev.filter((a) => a.id !== id));
