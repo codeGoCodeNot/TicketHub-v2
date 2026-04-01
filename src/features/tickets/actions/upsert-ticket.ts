@@ -6,7 +6,6 @@ import fromErrorToActionState, {
   toActionState,
 } from "@/components/form/utils/to-action-state";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
-import isOwnership from "@/features/auth/utils/is-ownership";
 import { getSession } from "@/lib/get-session";
 import prisma from "@/lib/prisma";
 import { ticketPagePath, ticketsPagePath } from "@/path";
@@ -15,6 +14,7 @@ import { toCent } from "@/utils/currency";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import * as ticketData from "../data";
 import getTicketPermission from "../queries/get-ticket-permission";
 
 const upsertTicketSchema = z.object({
@@ -38,7 +38,7 @@ const upsertTicket = async (
 
   try {
     if (id) {
-      const ticket = await prisma.ticket.findUnique({ where: { id } });
+      const ticket = await ticketData.findTicket(id);
 
       if (!ticket) {
         return toActionState("ERROR", "Ticket not found.");
@@ -68,12 +68,9 @@ const upsertTicket = async (
       bounty: toCent(data.bounty),
     };
 
-    await prisma.ticket.upsert({
-      where: {
-        id: id || "",
-      },
-      create: dbData,
-      update: dbData,
+    await ticketData.upsertTicket({
+      id,
+      data: dbData,
     });
   } catch (error) {
     // extract validation errors and return them as action state

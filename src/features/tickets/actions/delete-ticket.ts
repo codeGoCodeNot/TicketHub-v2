@@ -9,17 +9,14 @@ import prisma from "@/lib/prisma";
 import { ticketsPagePath } from "@/path";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import * as ticketData from "../data";
 import getTicketPermission from "../queries/get-ticket-permission";
 
 const deleteTicket = async (id: string) => {
   const user = await getAuthOrRedirect();
 
   try {
-    const ticket = await prisma.ticket.findUnique({
-      where: {
-        id,
-      },
-    });
+    const ticket = await ticketData.findTicket(id);
 
     const permission = await getTicketPermission({
       organizationId: ticket?.organizationId!,
@@ -33,11 +30,7 @@ const deleteTicket = async (id: string) => {
       );
     }
 
-    await prisma.ticket.delete({
-      where: {
-        id,
-      },
-    });
+    await ticketData.deleteTicket(id);
   } catch (error) {
     return fromErrorToActionState(error);
   }
