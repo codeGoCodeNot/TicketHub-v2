@@ -2,6 +2,7 @@ import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import getComments from "../../queries/get-comments";
 import { CommentWithMetadata } from "../../type";
 import removeAttachmentFromCache from "./remove-attachment-from-cache";
+import removeCommentFromCache from "./remove-comment-from-cache";
 
 type UsePaginatedCommentsProps = {
   comments: {
@@ -51,15 +52,18 @@ const usePaginatedComments = (
     queryClient.invalidateQueries({ queryKey });
   };
 
+  const handleDeleteComment = (commentId: string) => {
+    removeCommentFromCache({ queryClient, queryKey }, { commentId });
+  };
+
   return {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
     paginatedComments,
-    onHandleDelete: () => queryClient.invalidateQueries({ queryKey }),
     onHandleCreateComment: () => queryClient.invalidateQueries({ queryKey }),
-    // onHandleRefetchComments: () => queryClient.invalidateQueries({ queryKey }),
     onHandleDeleteCommentAttachment: handleDeleteAttachment,
+    onHandleDeleteComment: handleDeleteComment,
   };
 };
 

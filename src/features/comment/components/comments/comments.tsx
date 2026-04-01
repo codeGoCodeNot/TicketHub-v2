@@ -27,9 +27,9 @@ const Comments = ({ ticketId, comments }: CommentsProps) => {
     hasNextPage,
     isFetchingNextPage,
     paginatedComments,
-    onHandleDelete,
     onHandleCreateComment,
     onHandleDeleteCommentAttachment,
+    onHandleDeleteComment,
   } = usePaginatedComments(ticketId, comments);
 
   const { ref, inView } = useInView();
@@ -59,8 +59,8 @@ const Comments = ({ ticketId, comments }: CommentsProps) => {
             <CommentItem
               key={comment.id}
               comment={comment}
-              onHandleDelete={onHandleDelete}
               onHandleDeleteCommentAttachment={onHandleDeleteCommentAttachment}
+              onHandleDeleteComment={onHandleDeleteComment}
             />
           ))}
         </div>

@@ -9,17 +9,17 @@ import CommentEditTriggerButton from "./comment-edit-trigger-button";
 
 type CommentItemProps = {
   comment: CommentWithMetadata;
-  onHandleDelete?: (id: string) => void;
   onHandleDeleteCommentAttachment?: (
     commentId: string,
     attachmentId: string,
   ) => void;
+  onHandleDeleteComment?: (commentId: string) => void;
 };
 
 const CommentItem = ({
   comment,
-  onHandleDelete,
   onHandleDeleteCommentAttachment,
+  onHandleDeleteComment,
 }: CommentItemProps) => {
   // Show "(edited)" when the comment has been updated after creation.
   const isEdited =
@@ -78,7 +78,7 @@ const CommentItem = ({
 
             <CommentDeleteButton
               id={comment.id}
-              onHandleDelete={onHandleDelete}
+              onHandleDelete={onHandleDeleteComment}
             />
           </>
         )}

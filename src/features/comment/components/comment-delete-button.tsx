@@ -7,7 +7,7 @@ import { deleteComment } from "../actions/delete-comment";
 
 type CommentDeleteButtonProps = {
   id: string;
-  onHandleDelete?: (id: string) => void;
+  onHandleDelete?: (commentId: string) => void;
 };
 
 const CommentDeleteButton = ({
