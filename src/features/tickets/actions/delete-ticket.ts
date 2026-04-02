@@ -31,7 +31,7 @@ const deleteTicket = async (id: string) => {
       );
     }
 
-    await ticketData.findTicketAttachments(id);
+    const attachments = await ticketData.findTicketAttachments(id);
 
     await ticketData.deleteTicket(id);
 
