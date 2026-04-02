@@ -31,11 +31,7 @@ const deleteTicket = async (id: string) => {
       );
     }
 
-    const attachments = await prisma.attachment.findMany({
-      where: {
-        OR: [{ ticketId: id }, { comment: { ticketId: id } }],
-      },
-    });
+    await ticketData.findTicketAttachments(id);
 
     await ticketData.deleteTicket(id);
 
