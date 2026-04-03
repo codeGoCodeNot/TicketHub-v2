@@ -4,11 +4,27 @@ const getReferencedTickets = async (ticketId: string) => {
   const ticket = await prisma.ticket.findUnique({
     where: { id: ticketId },
     include: {
-      referencedTickets: true,
+      referencedTicket: {
+        select: {
+          id: true,
+          title: true,
+          status: true,
+        },
+      },
+      referencedTickets: {
+        select: {
+          id: true,
+          title: true,
+          status: true,
+        },
+      },
     },
   });
 
-  return ticket?.referencedTickets ?? [];
+  return {
+    referencedTicket: ticket?.referencedTicket ?? null,
+    referencingTickets: ticket?.referencedTickets ?? [],
+  };
 };
 
 export default getReferencedTickets;

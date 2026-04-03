@@ -3,3 +3,4 @@ export * from "./delete-ticket";
 export * from "./update-ticket-status";
 export * from "./upsert-ticket";
 export * from "./find-ticket-attachments";
+export * from "./connect-referenced-tickets";

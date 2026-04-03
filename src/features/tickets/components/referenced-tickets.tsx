@@ -8,9 +8,10 @@ type ReferencedTicketsProps = {
 };
 
 const ReferencedTickets = async ({ ticketId }: ReferencedTicketsProps) => {
-  const referencedTickets = await getReferencedTickets(ticketId);
+  const { referencedTicket, referencingTickets } =
+    await getReferencedTickets(ticketId);
 
-  if (!referencedTickets.length) return null;
+  if (!referencedTicket && !referencingTickets.length) return null;
 
   return (
     <CardCompact
@@ -18,13 +19,29 @@ const ReferencedTickets = async ({ ticketId }: ReferencedTicketsProps) => {
       description="Tickets that have been referenced in Comments"
       content={
         <div className="mx-2 mb-4">
-          {referencedTickets.map((referencedTicket) => (
-            <div key={referencedTicket.id}>
+          {referencedTicket && (
+            <div className="flex flex-col gap-y-1">
+              <p className="text-xs text-muted-foreground font-semibold uppercase">
+                References →
+              </p>
               <Link href={ticketPagePath(referencedTicket.id)}>
                 {referencedTicket.title}
               </Link>
             </div>
-          ))}
+          )}
+
+          {referencingTickets.length > 0 && (
+            <div className="flex flex-col gap-y-1">
+              <p className="text-xs text-muted-foreground font-semibold uppercase">
+                Referenced by →
+              </p>
+              {referencingTickets.map((ticket) => (
+                <div key={ticket.id}>
+                  <Link href={ticketPagePath(ticket.id)}>{ticket.title}</Link>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       }
     />

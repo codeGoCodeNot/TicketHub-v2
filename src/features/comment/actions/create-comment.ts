@@ -11,6 +11,8 @@ import { ticketPagePath } from "@/path";
 import { revalidatePath } from "next/cache";
 import z from "zod";
 import * as commentData from "../data";
+import * as ticketData from "@/features/tickets/data";
+import { findTicketIdsFromText } from "../utils/find-ticket-id-from-text";
 
 const createSchema = z.object({
   content: z.string().min(1, "Content is required").max(1024),
@@ -53,6 +55,11 @@ export const createComment = async (
       files,
       userId: user.id,
     });
+
+    await ticketData.connnectReferencedTickets(
+      ticketId,
+      findTicketIdsFromText("tickets", content),
+    );
   } catch (error) {
     return fromErrorToActionState(error);
   }
