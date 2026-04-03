@@ -11,7 +11,7 @@ import { ticketPagePath } from "@/path";
 import { revalidatePath } from "next/cache";
 import z from "zod";
 import * as commentData from "../data";
-import * as ticketData from "@/features/tickets/data";
+import * as ticketService from "../../tickets/service";
 import { findTicketIdsFromText } from "../utils/find-ticket-id-from-text";
 
 const createSchema = z.object({
@@ -56,7 +56,7 @@ export const createComment = async (
       userId: user.id,
     });
 
-    await ticketData.connnectReferencedTickets(
+    await ticketService.connectReferencedTicketsService(
       ticketId,
       findTicketIdsFromText("tickets", content),
     );

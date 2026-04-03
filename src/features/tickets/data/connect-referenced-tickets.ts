@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 
-export const connnectReferencedTickets = async (
+export const connectReferencedTickets = async (
   ticketId: string,
   ticketIds: string[],
 ) => {
