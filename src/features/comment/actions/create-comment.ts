@@ -59,18 +59,10 @@ export const createComment = async (
     const referencedTicketIds = findTicketIdsFromText("tickets", content);
 
     if (referencedTicketIds.length > 0) {
-      await Promise.all([
-        ticketService.connectReferencedTicketsService(
-          ticketId,
-          referencedTicketIds,
-        ),
-        ticketService.createInverseReferenceComment(
-          ticketId,
-          referencedTicketIds,
-          user.id,
-        ),
-      ]);
-      referencedTicketIds.forEach((id) => revalidatePath(ticketPagePath(id)));
+      await ticketService.connectReferencedTicketsService(
+        ticketId,
+        referencedTicketIds,
+      );
     }
   } catch (error) {
     return fromErrorToActionState(error);
