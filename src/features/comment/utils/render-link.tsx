@@ -1,11 +1,10 @@
-import { getBaseURL } from "better-auth";
 import Link from "next/link";
 
 const renderLink = ({ attributes, content }: any) => {
   const { href, ...props } = attributes;
 
-  const isInternal = href.includes(getBaseURL());
-  const url = isInternal ? href.replace(getBaseURL(), "") : href;
+  const isInternal = href.includes(window.location.origin);
+  const url = isInternal ? href.replace(window.location.origin, "") : href;
 
   let maybeParsedContent = content;
   if (url.startsWith("/tickets/"))
