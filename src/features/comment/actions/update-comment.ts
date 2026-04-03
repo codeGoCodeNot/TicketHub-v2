@@ -12,6 +12,7 @@ import { ticketPagePath } from "@/path";
 import { revalidatePath } from "next/cache";
 import z from "zod";
 import * as commentData from "../data";
+import * as ticketService from "@/features/tickets/service";
 
 const updateCommentSchema = z.object({
   content: z.string().trim().min(1, "Content is required").max(1024),
@@ -41,6 +42,12 @@ export const updateComment = async (
     });
 
     await commentData.updateComment(id, content);
+
+    await ticketService.syncReferenceTicketsViaCommentDiff(
+      comment.ticketId,
+      comment.content,
+      content,
+    );
 
     if (files.length > 0) {
       await attachmentService.createAttachments({

@@ -12,7 +12,7 @@ import { revalidatePath } from "next/cache";
 import z from "zod";
 import * as commentData from "../data";
 import * as ticketService from "../../tickets/service";
-import { findTicketIdsFromText } from "../utils/find-ticket-id-from-text";
+import { findTicketIdsFromText } from "../../tickets/utils/find-ticket-id-from-text";
 
 const createSchema = z.object({
   content: z.string().min(1, "Content is required").max(1024),

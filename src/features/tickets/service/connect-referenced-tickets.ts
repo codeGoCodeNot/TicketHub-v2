@@ -9,7 +9,6 @@ export const connectReferencedTicketsService = async (
   ticketId: string,
   referencedTicketIds: string[],
 ) => {
-  console.log("[connectReferencedTicketsService] ticketId:", ticketId);
-  console.log("[connectReferencedTicketsService] referencedTicketIds:", referencedTicketIds);
+  // Add any business logic here if needed (e.g., validation, logging)
   await connectReferencedTickets(ticketId, referencedTicketIds);
 };

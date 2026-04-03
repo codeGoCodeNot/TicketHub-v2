@@ -11,6 +11,8 @@ import { updateComment } from "../actions/update-comment";
 import { useCommentEditState } from "./comment-edit-state";
 import { Input } from "@/components/ui/input";
 import { LucidePaperclip } from "lucide-react";
+import Linkify from "linkify-react";
+import renderLink from "../utils/render-link";
 
 type CommentEditInlineProps = {
   commentId: string;
@@ -61,9 +63,15 @@ const CommentEditInline = ({
     // Read-only view when not editing.
     return (
       <div className="flex-flex-col">
-        <p className="whitespace-pre-wrap break-words text-sm mb-2">
+        <Linkify
+          as="p"
+          className="whitespace-pre-wrap break-words text-sm mb-2"
+          options={{
+            render: renderLink,
+          }}
+        >
           {content}
-        </p>
+        </Linkify>
         {date}
       </div>
     );

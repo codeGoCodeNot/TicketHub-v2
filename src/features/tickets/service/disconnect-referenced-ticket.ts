@@ -1,4 +1,4 @@
-import { findTicketIdsFromText } from "@/features/comment/utils/find-ticket-id-from-text";
+import { findTicketIdsFromText } from "@/features/tickets/utils/find-ticket-id-from-text";
 import { Comment } from "@/generated/prisma/client";
 import prisma from "@/lib/prisma";
 
