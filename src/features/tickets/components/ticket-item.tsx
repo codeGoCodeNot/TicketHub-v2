@@ -24,15 +24,17 @@ import TicketMoreMenu from "./ticket-more-menu";
 type TicketItemProps = {
   ticket: TicketWithMetada;
   isDetail?: boolean;
-  comments?: React.ReactNode;
   attachments?: React.ReactNode;
+  referencedTicket?: React.ReactNode;
+  comments?: React.ReactNode;
 };
 
 const TicketItem = ({
   ticket,
   isDetail,
-  comments,
   attachments,
+  referencedTicket,
+  comments,
 }: TicketItemProps) => {
   const editButton =
     (ticket.isOwner || ticket.canUpdateTickets) &&
@@ -145,6 +147,7 @@ const TicketItem = ({
         </div>
       </div>
       {attachments}
+      {referencedTicket}
       {comments}
     </div>
   );

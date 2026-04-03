@@ -4,6 +4,7 @@ import Attachments from "@/features/attachments/components/attachments";
 import Comments from "@/features/comment/components/comments/comments";
 
 import getComments from "@/features/comment/queries/get-comments";
+import ReferencedTickets from "@/features/tickets/components/referenced-tickets";
 import TicketItem from "@/features/tickets/components/ticket-item";
 import getTicket from "@/features/tickets/queries/get-ticket";
 import { ticketsPagePath } from "@/path";
@@ -46,6 +47,7 @@ const TicketPage = async ({ params }: TicketPageProps) => {
               entity="TICKET"
             />
           }
+          referencedTicket={<ReferencedTickets ticketId={ticket.id} />}
         />
       </div>
     </div>

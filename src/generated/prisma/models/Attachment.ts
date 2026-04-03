@@ -519,10 +519,6 @@ export type EnumAttachmentEntityFieldUpdateOperationsInput = {
   set?: $Enums.AttachmentEntity
 }
 
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type AttachmentCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.AttachmentCreateWithoutUserInput, Prisma.AttachmentUncheckedCreateWithoutUserInput> | Prisma.AttachmentCreateWithoutUserInput[] | Prisma.AttachmentUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.AttachmentCreateOrConnectWithoutUserInput | Prisma.AttachmentCreateOrConnectWithoutUserInput[]
