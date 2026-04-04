@@ -1,8 +1,11 @@
 import Heading from "@/components/heading";
 import OrganizationBreadcrumbs from "@/components/organization-breadcrumbs";
+import Spinner from "@/components/spinner";
 import CredentialCreateButton from "@/features/credential/components/credential-create-button";
+import CredentialList from "@/features/credential/components/credential-list";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { Suspense } from "react";
 
 type CrendentialsPageProps = {
   params: Promise<{ organizationId: string }>;
@@ -30,6 +33,10 @@ const CredentialsPage = async ({ params }: CrendentialsPageProps) => {
         }
         actions={<CredentialCreateButton organizationId={organizationId} />}
       />
+
+      <Suspense fallback={<Spinner />}>
+        <CredentialList organizationId={organizationId} />
+      </Suspense>
     </div>
   );
 };
