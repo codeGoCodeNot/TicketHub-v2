@@ -17,8 +17,11 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { LucidePlus } from "lucide-react";
 import { useActionState, useState } from "react";
-import createCredential from "./actions/create-credential";
+import createCredential from "../actions/create-credential";
 import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
+import { toast } from "sonner";
+import CopyButton from "./copy-button";
+import SecretDisplay from "./secret-display";
 
 type CredentialCreateButtonProps = {
   organizationId: string;
@@ -58,12 +61,18 @@ const CredentialCreateButton = ({
           actionState={actionState}
           onSuccess={(actionState) => {
             const secret = actionState.message.split(": ")[1];
-            if (secret) navigator.clipboard.writeText(secret);
+            if (secret) {
+              toast.success(
+                <div className="flex items-center gap-x-2">
+                  <SecretDisplay value={secret} />
+                </div>,
+                {
+                  duration: Infinity,
+                  closeButton: true,
+                },
+              );
+            }
             handleClose();
-          }}
-          toastOptions={{
-            duration: Infinity,
-            closeButton: true,
           }}
         >
           <div className="grid gap-4 py-4">

@@ -1,6 +1,6 @@
 import Heading from "@/components/heading";
 import OrganizationBreadcrumbs from "@/components/organization-breadcrumbs";
-import CredentialCreateButton from "@/features/credential/credential-create-button";
+import CredentialCreateButton from "@/features/credential/components/credential-create-button";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 

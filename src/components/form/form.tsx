@@ -10,7 +10,6 @@ type FormProps = {
   children: React.ReactNode;
   onSuccess?: (actionState: ActionState) => void;
   onError?: (actionState: ActionState) => void;
-  toastOptions?: Omit<ToastT, "id"> | undefined;
 };
 
 const Form = ({
@@ -19,15 +18,14 @@ const Form = ({
   children,
   onSuccess,
   onError,
-  toastOptions,
 }: FormProps) => {
   useActionFeedback(actionState, {
     onSuccess: ({ actionState }) => {
-      if (actionState.message) toast.success(actionState.message, toastOptions);
+      if (actionState.message && !onSuccess) toast.success(actionState.message);
       onSuccess?.(actionState);
     },
     onError: ({ actionState }) => {
-      if (actionState.message) toast.error(actionState.message, toastOptions);
+      if (actionState.message && !onError) toast.error(actionState.message);
       onError?.(actionState);
     },
   });
