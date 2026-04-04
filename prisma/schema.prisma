@@ -95,6 +95,7 @@ model User {
   attachments   Attachment[]
   members     Member[]
   invitations Invitation[]
+  credentials Credential[]
 
   role       String?
   banned     Boolean?  @default(false)
@@ -182,6 +183,8 @@ model Credential {
   revokedAt DateTime?
   organizationId String
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdById String?
+  createdBy User? @relation(fields: [createdById], references: [id], onDelete: SetNull)
 
   @@index([organizationId])
 }

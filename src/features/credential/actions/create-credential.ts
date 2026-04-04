@@ -24,7 +24,7 @@ const createCredential = async (
   _actionState: ActionState,
   formData: FormData,
 ) => {
-  await getAuthOrRedirect();
+  const user = await getAuthOrRedirect();
 
   let secret;
 
@@ -39,6 +39,7 @@ const createCredential = async (
         name,
         secretHash,
         organizationId,
+        createdById: user.id,
       },
     });
   } catch (error) {

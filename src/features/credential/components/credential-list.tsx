@@ -24,6 +24,7 @@ const CredentialList = async ({ organizationId }: CredentialListProps) => {
       <TableHeader>
         <TableRow>
           <TableHead>Name</TableHead>
+          <TableHead>Created By</TableHead>
           <TableHead>Created At</TableHead>
           <TableHead>Last Used</TableHead>
           <TableHead>Status</TableHead>
@@ -31,34 +32,37 @@ const CredentialList = async ({ organizationId }: CredentialListProps) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {credentials.map(({ id, name, createdAt, lastUsed, revokedAt }) => (
-          <TableRow key={id}>
-            <TableCell>{name}</TableCell>
-            <TableCell>{format(createdAt, "yyyy/MM/dd, hh:mm")}</TableCell>
-            <TableCell>
-              {lastUsed ? format(lastUsed, "yyyy/MM/dd, hh:mm") : "Never"}
-            </TableCell>
-            <TableCell>
-              {revokedAt ? (
-                <span className="text-xs bg-destructive/20 text-destructive px-2 py-1 rounded-full">
-                  Revoked
-                </span>
-              ) : (
-                <span className="text-xs bg-green-500/20 text-green-500 px-2 py-1 rounded-full">
-                  Active
-                </span>
-              )}
-            </TableCell>
-            <TableCell>
-              {!revokedAt && (
-                <CredentialRevokeButton
-                  id={id}
-                  organizationId={organizationId}
-                />
-              )}
-            </TableCell>
-          </TableRow>
-        ))}
+        {credentials.map(
+          ({ id, name, createdAt, lastUsed, revokedAt, createdBy }) => (
+            <TableRow key={id}>
+              <TableCell>{name}</TableCell>
+              <TableCell>{createdBy?.name ?? "Deleted User"}</TableCell>
+              <TableCell>{format(createdAt, "yyyy/MM/dd, hh:mm")}</TableCell>
+              <TableCell>
+                {lastUsed ? format(lastUsed, "yyyy/MM/dd, hh:mm") : "Never"}
+              </TableCell>
+              <TableCell>
+                {revokedAt ? (
+                  <span className="text-xs bg-destructive/20 text-destructive px-2 py-1 rounded-full">
+                    Revoked
+                  </span>
+                ) : (
+                  <span className="text-xs bg-green-500/20 text-green-500 px-2 py-1 rounded-full">
+                    Active
+                  </span>
+                )}
+              </TableCell>
+              <TableCell>
+                {!revokedAt && (
+                  <CredentialRevokeButton
+                    id={id}
+                    organizationId={organizationId}
+                  />
+                )}
+              </TableCell>
+            </TableRow>
+          ),
+        )}
       </TableBody>
     </Table>
   );
