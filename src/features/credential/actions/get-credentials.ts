@@ -10,6 +10,7 @@ const getCredentials = async (organizationId: string) => {
       createdAt: true,
       name: true,
       lastUsed: true,
+      revokedAt: true,
     },
   });
 };

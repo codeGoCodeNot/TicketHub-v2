@@ -3,7 +3,6 @@ import OrganizationBreadcrumbs from "@/components/organization-breadcrumbs";
 import Spinner from "@/components/spinner";
 import InvitationList from "@/features/invitations/components/invitation-list";
 import { auth } from "@/lib/auth";
-import { organization } from "better-auth/plugins";
 import { headers } from "next/headers";
 import { Suspense } from "react";
 

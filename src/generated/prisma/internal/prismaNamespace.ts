@@ -1392,6 +1392,7 @@ export const CredentialScalarFieldEnum = {
   secretHash: 'secretHash',
   name: 'name',
   lastUsed: 'lastUsed',
+  revokedAt: 'revokedAt',
   organizationId: 'organizationId'
 } as const
 
