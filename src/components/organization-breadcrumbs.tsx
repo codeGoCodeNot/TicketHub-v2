@@ -1,5 +1,6 @@
 "use client";
 import {
+  organizationCredentialsPagePath,
   organizationInvitationPagePath,
   organizationMembershipPagePath,
   organizationPagePath,
@@ -24,9 +25,11 @@ const OrganizationBreadcrumbs = ({
   const activeTab =
     lastSegment === "invitations"
       ? "invitations"
-      : lastSegment === "settings"
-        ? "settings"
-        : "memberships";
+      : lastSegment === "credentials"
+        ? "credentials"
+        : lastSegment === "settings"
+          ? "settings"
+          : "memberships";
 
   return (
     <div className="flex flex-col gap-y-4">
@@ -53,6 +56,12 @@ const OrganizationBreadcrumbs = ({
           <TabsTrigger value="invitations" asChild>
             <Link href={organizationInvitationPagePath(params.organizationId)}>
               Invitations
+            </Link>
+          </TabsTrigger>
+
+          <TabsTrigger value="credentials" asChild>
+            <Link href={organizationCredentialsPagePath(params.organizationId)}>
+              Credentials
             </Link>
           </TabsTrigger>
           <TabsTrigger value="settings" asChild>

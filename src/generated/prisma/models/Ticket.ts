@@ -234,7 +234,7 @@ export type TicketGroupByOutputType = {
   _max: TicketMaxAggregateOutputType | null
 }
 
-export type GetTicketGroupByPayload<T extends TicketGroupByArgs> = Prisma.PrismaPromise<
+type GetTicketGroupByPayload<T extends TicketGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<TicketGroupByOutputType, T['by']> &
       {

@@ -82,6 +82,11 @@ export type Verification = Prisma.VerificationModel
  */
 export type Organization = Prisma.OrganizationModel
 /**
+ * Model Credential
+ * 
+ */
+export type Credential = Prisma.CredentialModel
+/**
  * Model Member
  * 
  */

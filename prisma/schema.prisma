@@ -167,9 +167,22 @@ model Organization {
   members     Member[]
   invitations Invitation[]
   tickets     Ticket[]
+  credentials Credential[]
 
   @@unique([slug])
   @@map("organization")
+}
+
+model Credential {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  secretHash String @unique
+  name String
+  lastUsed DateTime?
+  organizationId String
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
 }
 
 model Member {
