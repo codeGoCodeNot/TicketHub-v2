@@ -49,7 +49,7 @@ const createCredential = async (
 
   return toActionState(
     "SUCCESS",
-    `Copy the secret, we will not show it again: ${secret}`,
+    `Secret created! Copied to clipboard: ${secret}`,
   );
 };
 
