@@ -17,6 +17,7 @@ import {
 import { format } from "date-fns/format";
 import getCredentials from "../actions/get-credentials";
 import CredentialRevokeButton from "./credential-revoke-button";
+import { stringToScopes } from "../constants";
 
 type CredentialListProps = {
   organizationId: string;
@@ -30,7 +31,7 @@ const CredentialList = async ({ organizationId }: CredentialListProps) => {
       {/* Mobile - Cards */}
       <div className="flex flex-col gap-2 lg:hidden">
         {credentials.map(
-          ({ id, name, createdAt, lastUsed, revokedAt, createdBy }) => (
+          ({ id, name, createdAt, lastUsed, revokedAt, createdBy, scopes }) => (
             <div key={id} className="flex gap-x-1 w-full justify-center">
               <Card className="max-w-[420px] w-full" size="sm">
                 <CardHeader className="flex flex-row items-center justify-between gap-2 pb-1">
@@ -64,6 +65,18 @@ const CredentialList = async ({ organizationId }: CredentialListProps) => {
                       />
                     </CardDescription>
                   )}
+                  <CardDescription>
+                    <div className="flex gap-x-1 flex-wrap">
+                      {stringToScopes(scopes).map((scope) => (
+                        <span
+                          key={scope}
+                          className="text-xs bg-muted px-2 py-1 rounded-full"
+                        >
+                          Scopes: {scope}
+                        </span>
+                      ))}
+                    </div>
+                  </CardDescription>
                 </CardContent>
               </Card>
             </div>
@@ -83,11 +96,20 @@ const CredentialList = async ({ organizationId }: CredentialListProps) => {
               <TableHead>Last Used</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Actions</TableHead>
+              <TableHead>Scopes</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {credentials.map(
-              ({ id, name, createdAt, lastUsed, revokedAt, createdBy }) => (
+              ({
+                id,
+                name,
+                createdAt,
+                lastUsed,
+                revokedAt,
+                createdBy,
+                scopes,
+              }) => (
                 <TableRow key={id}>
                   <TableCell>{name}</TableCell>
                   <TableCell>{createdBy?.name ?? "Deleted User"}</TableCell>
@@ -115,6 +137,18 @@ const CredentialList = async ({ organizationId }: CredentialListProps) => {
                         organizationId={organizationId}
                       />
                     )}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex gap-x-1 flex-wrap">
+                      {stringToScopes(scopes).map((scope) => (
+                        <span
+                          key={scope}
+                          className="text-xs bg-muted px-2 py-1 rounded-full"
+                        >
+                          {scope}
+                        </span>
+                      ))}
+                    </div>
                   </TableCell>
                 </TableRow>
               ),

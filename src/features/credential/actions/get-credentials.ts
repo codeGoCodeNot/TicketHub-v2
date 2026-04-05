@@ -16,6 +16,7 @@ const getCredentials = async (organizationId: string) => {
           name: true,
         },
       },
+      scopes: true,
     },
   });
 };

@@ -1,3 +1,4 @@
+import { CREDENTIAL_SCOPES, hasScope } from "@/features/credential/constants";
 import getTicket from "@/features/tickets/queries/get-ticket";
 import prisma from "@/lib/prisma";
 import { verifyPassword } from "@/utils/password";
@@ -52,6 +53,9 @@ export const DELETE = async (
   }
 
   if (!isValid)
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+
+  if (!hasScope(matchCredential!.scopes, CREDENTIAL_SCOPES.DELETE_TICKET))
     return Response.json({ error: "Unauthorized" }, { status: 401 });
 
   await prisma.credential.update({

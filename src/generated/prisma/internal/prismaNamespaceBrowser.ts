@@ -206,6 +206,7 @@ export const CredentialScalarFieldEnum = {
   name: 'name',
   lastUsed: 'lastUsed',
   revokedAt: 'revokedAt',
+  scopes: 'scopes',
   organizationId: 'organizationId',
   createdById: 'createdById'
 } as const

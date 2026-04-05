@@ -181,12 +181,14 @@ model Credential {
   name String
   lastUsed DateTime?
   revokedAt DateTime?
+  scopes String @default("delete:ticket")
   organizationId String
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   createdById String?
   createdBy User? @relation(fields: [createdById], references: [id], onDelete: SetNull)
 
   @@index([organizationId])
+  @@index([createdById])
 }
 
 model Member {

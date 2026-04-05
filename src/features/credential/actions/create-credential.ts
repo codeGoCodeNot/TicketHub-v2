@@ -11,6 +11,7 @@ import z from "zod";
 import crypto from "node:crypto";
 import { hashPassword } from "@/utils/password";
 import prisma from "@/lib/prisma";
+import { DEFAULT_CREDENTIAL_SCOPES, scopesToString } from "../constants";
 
 const createCredentialSchema = z.object({
   name: z
@@ -40,6 +41,7 @@ const createCredential = async (
         secretHash,
         organizationId,
         createdById: user.id,
+        scopes: scopesToString(DEFAULT_CREDENTIAL_SCOPES),
       },
     });
   } catch (error) {
