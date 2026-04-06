@@ -37,7 +37,7 @@ const Products = async ({ organizationId }: ProductsProps) => {
             ))}
           </CardContent>
           <CardFooter>
-            <Prices productId={product.id} />
+            <Prices productId={product.id} organizationId={organizationId} />
           </CardFooter>
         </Card>
       ))}
