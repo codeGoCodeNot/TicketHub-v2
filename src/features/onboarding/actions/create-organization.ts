@@ -6,6 +6,7 @@ import fromErrorToActionState, {
 } from "@/components/form/utils/to-action-state";
 import { auth } from "@/lib/auth";
 import getAuth from "@/lib/get-auth";
+import { inngest } from "@/lib/inngest";
 import { organizationPagePath, signInPagePath } from "@/path";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
@@ -33,6 +34,14 @@ const createOrganization = async (
       body: {
         name: data.name,
         slug: data.name.toLowerCase().replace(/\s+/g, "-"),
+      },
+    });
+
+    await inngest.send({
+      name: "app/organization-created",
+      data: {
+        organizationId: createdOrg.id,
+        byEmail: user.email,
       },
     });
 

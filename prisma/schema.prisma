@@ -169,9 +169,19 @@ model Organization {
   invitations Invitation[]
   tickets     Ticket[]
   credentials Credential[]
+  stripeCustomerId String?
+  stripeCustomer StripeCustomer?
 
   @@unique([slug])
   @@map("organization")
+}
+
+model StripeCustomer {
+  customerId String @unique
+  organizationId String @unique
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
 }
 
 model CredentialUsage {

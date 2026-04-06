@@ -392,6 +392,7 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   Organization: 'Organization',
+  StripeCustomer: 'StripeCustomer',
   CredentialUsage: 'CredentialUsage',
   Credential: 'Credential',
   Member: 'Member',
@@ -411,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "ticket" | "comment" | "attachment" | "user" | "session" | "account" | "verification" | "organization" | "credentialUsage" | "credential" | "member" | "invitation"
+    modelProps: "ticket" | "comment" | "attachment" | "user" | "session" | "account" | "verification" | "organization" | "stripeCustomer" | "credentialUsage" | "credential" | "member" | "invitation"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1007,6 +1008,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    StripeCustomer: {
+      payload: Prisma.$StripeCustomerPayload<ExtArgs>
+      fields: Prisma.StripeCustomerFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.StripeCustomerFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.StripeCustomerFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
+        }
+        findFirst: {
+          args: Prisma.StripeCustomerFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.StripeCustomerFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
+        }
+        findMany: {
+          args: Prisma.StripeCustomerFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>[]
+        }
+        create: {
+          args: Prisma.StripeCustomerCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
+        }
+        createMany: {
+          args: Prisma.StripeCustomerCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.StripeCustomerCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>[]
+        }
+        delete: {
+          args: Prisma.StripeCustomerDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
+        }
+        update: {
+          args: Prisma.StripeCustomerUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
+        }
+        deleteMany: {
+          args: Prisma.StripeCustomerDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.StripeCustomerUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.StripeCustomerUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>[]
+        }
+        upsert: {
+          args: Prisma.StripeCustomerUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
+        }
+        aggregate: {
+          args: Prisma.StripeCustomerAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateStripeCustomer>
+        }
+        groupBy: {
+          args: Prisma.StripeCustomerGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StripeCustomerGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.StripeCustomerCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StripeCustomerCountAggregateOutputType> | number
+        }
+      }
+    }
     CredentialUsage: {
       payload: Prisma.$CredentialUsagePayload<ExtArgs>
       fields: Prisma.CredentialUsageFieldRefs
@@ -1455,10 +1530,19 @@ export const OrganizationScalarFieldEnum = {
   slug: 'slug',
   logo: 'logo',
   createdAt: 'createdAt',
-  metadata: 'metadata'
+  metadata: 'metadata',
+  stripeCustomerId: 'stripeCustomerId'
 } as const
 
 export type OrganizationScalarFieldEnum = (typeof OrganizationScalarFieldEnum)[keyof typeof OrganizationScalarFieldEnum]
+
+
+export const StripeCustomerScalarFieldEnum = {
+  customerId: 'customerId',
+  organizationId: 'organizationId'
+} as const
+
+export type StripeCustomerScalarFieldEnum = (typeof StripeCustomerScalarFieldEnum)[keyof typeof StripeCustomerScalarFieldEnum]
 
 
 export const CredentialUsageScalarFieldEnum = {
@@ -1738,6 +1822,7 @@ export type GlobalOmitConfig = {
   account?: Prisma.AccountOmit
   verification?: Prisma.VerificationOmit
   organization?: Prisma.OrganizationOmit
+  stripeCustomer?: Prisma.StripeCustomerOmit
   credentialUsage?: Prisma.CredentialUsageOmit
   credential?: Prisma.CredentialOmit
   member?: Prisma.MemberOmit

@@ -82,6 +82,11 @@ export type Verification = Prisma.VerificationModel
  */
 export type Organization = Prisma.OrganizationModel
 /**
+ * Model StripeCustomer
+ * 
+ */
+export type StripeCustomer = Prisma.StripeCustomerModel
+/**
  * Model CredentialUsage
  * 
  */

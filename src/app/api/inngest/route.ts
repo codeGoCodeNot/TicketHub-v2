@@ -7,6 +7,7 @@ import { eventEmailVerification } from "@/features/password/inngest/event-email-
 import { organizationInvitationEvent } from "@/features/invitations/inngest/event-organization-invitation";
 import { attachmentDeletedEvent } from "@/features/attachments/inngest/events-attachments-deleted";
 import { eventOrganizationDeleted } from "@/features/attachments/inngest/event-organization-deleted";
+import organizationCreatedEvent from "@/features/onboarding/inngest/event-organization-created";
 
 export const { GET, POST, PUT } = serve({
   client: inngest,
@@ -18,5 +19,6 @@ export const { GET, POST, PUT } = serve({
     organizationInvitationEvent,
     attachmentDeletedEvent,
     eventOrganizationDeleted,
+    organizationCreatedEvent,
   ],
 });
