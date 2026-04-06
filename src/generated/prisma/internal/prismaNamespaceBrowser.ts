@@ -59,6 +59,7 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   Organization: 'Organization',
+  CredentialUsage: 'CredentialUsage',
   Credential: 'Credential',
   Member: 'Member',
   Invitation: 'Invitation'
@@ -197,6 +198,18 @@ export const OrganizationScalarFieldEnum = {
 } as const
 
 export type OrganizationScalarFieldEnum = (typeof OrganizationScalarFieldEnum)[keyof typeof OrganizationScalarFieldEnum]
+
+
+export const CredentialUsageScalarFieldEnum = {
+  id: 'id',
+  usedAt: 'usedAt',
+  route: 'route',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  credentialId: 'credentialId'
+} as const
+
+export type CredentialUsageScalarFieldEnum = (typeof CredentialUsageScalarFieldEnum)[keyof typeof CredentialUsageScalarFieldEnum]
 
 
 export const CredentialScalarFieldEnum = {

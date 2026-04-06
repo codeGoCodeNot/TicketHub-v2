@@ -58,14 +58,23 @@ export const DELETE = async (
   if (!hasScope(matchCredential!.scopes, CREDENTIAL_SCOPES.DELETE_TICKET))
     return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-  await prisma.credential.update({
-    where: { id: matchCredential!.id },
-    data: { lastUsed: new Date() },
-  });
-
-  await prisma.ticket.delete({
-    where: { id: ticketId },
-  });
+  await prisma.$transaction([
+    prisma.credential.update({
+      where: { id: matchCredential!.id },
+      data: { lastUsed: new Date() },
+    }),
+    prisma.credentialUsage.create({
+      data: {
+        credentialId: matchCredential!.id,
+        route: `DELETE /api/tickets/${ticketId}`,
+        ipAddress: request.headers.get("x-forwarded-for") ?? null,
+        userAgent: request.headers.get("user-agent") ?? null,
+      },
+    }),
+    prisma.ticket.delete({
+      where: { id: ticketId },
+    }),
+  ]);
 
   return Response.json({ ticketId });
 };
