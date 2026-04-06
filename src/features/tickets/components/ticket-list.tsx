@@ -1,4 +1,4 @@
-import Pagination from "@/components/pagination";
+import Pagination from "@/components/pagination/pagination";
 import OrganizationTicketFilter from "@/features/tickets/utils/organization-ticket-filter";
 import SearchInput from "@/features/tickets/utils/search-input";
 import SortSelect from "@/features/tickets/utils/sort-select";

@@ -5,6 +5,7 @@ import isOwnership from "@/features/auth/utils/is-ownership";
 import getActiveOrganization from "@/features/organization/queries/get-active-organization";
 import getMembership from "@/features/membership/queries/get-membership";
 import getTicketPermission from "./get-ticket-permission";
+import { PAGE_SIZE_OPTIONS } from "@/components/pagination/constant";
 
 // Query to fetch all tickets
 
@@ -14,6 +15,10 @@ const getTickets = async (
 ) => {
   const user = await getAuth();
   const activeOrganization = await getActiveOrganization();
+
+  if (!PAGE_SIZE_OPTIONS.includes(searchParams.size)) {
+    throw new Error("Invalid page size");
+  }
 
   const where = {
     userId,

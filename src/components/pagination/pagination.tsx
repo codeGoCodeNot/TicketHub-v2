@@ -16,7 +16,8 @@ import {
 import { LucideLoader2 } from "lucide-react";
 import { useQueryState, useQueryStates } from "nuqs";
 import { useEffect, useRef, useState, useTransition } from "react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
+import { PAGE_SIZE_OPTIONS } from "./constant";
 
 type PaginationProps = {
   paginatedMetadata: {
@@ -80,11 +81,11 @@ const Pagination = ({ paginatedMetadata }: PaginationProps) => {
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectItem value="2">2</SelectItem>
-          <SelectItem value="5">5</SelectItem>
-          <SelectItem value="10">10</SelectItem>
-          <SelectItem value="20">20</SelectItem>
-          <SelectItem value="50">50</SelectItem>
+          {PAGE_SIZE_OPTIONS.map((size) => (
+            <SelectItem key={size} value={size.toString()}>
+              {size}
+            </SelectItem>
+          ))}
         </SelectGroup>
       </SelectContent>
     </Select>
