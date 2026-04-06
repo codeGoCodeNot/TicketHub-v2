@@ -11,7 +11,7 @@ import SignOutItem from "@/features/auth/components/sign-out-item";
 import {
   accountPasswordPagePath,
   accountProfilePagePath,
-  pricePagePath,
+  pricingPagePath,
 } from "@/path";
 import { User } from "better-auth/types";
 import Link from "next/link";
@@ -63,7 +63,7 @@ const AccountDropdown = ({ user }: AccountDropdownProps) => {
         <DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link href={pricePagePath()}>
+            <Link href={pricingPagePath()}>
               <LucideGem />
               <span>Pricing</span>
             </Link>

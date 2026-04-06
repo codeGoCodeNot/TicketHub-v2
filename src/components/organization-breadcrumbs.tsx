@@ -6,6 +6,7 @@ import {
   organizationMembershipPagePath,
   organizationPagePath,
   organizationSettingsPagePath,
+  subscriptionPagePath,
 } from "@/path";
 import { useParams, usePathname } from "next/navigation";
 import BreadCrumbs from "./breadcrumbs";
@@ -30,9 +31,11 @@ const OrganizationBreadcrumbs = ({
         ? "credentials"
         : lastSegment === "usage"
           ? "usage"
-          : lastSegment === "settings"
-            ? "settings"
-            : "memberships";
+          : lastSegment === "subscription"
+            ? "subscription"
+            : lastSegment === "settings"
+              ? "settings"
+              : "memberships";
 
   return (
     <div className="flex flex-col gap-y-4">
@@ -75,6 +78,13 @@ const OrganizationBreadcrumbs = ({
               Usage
             </Link>
           </TabsTrigger>
+
+          <TabsTrigger value="subscription" asChild>
+            <Link href={subscriptionPagePath(params.organizationId)}>
+              Subscription
+            </Link>
+          </TabsTrigger>
+
           <TabsTrigger value="settings" asChild>
             <Link href={organizationSettingsPagePath(params.organizationId)}>
               Settings

@@ -45,4 +45,6 @@ export const attachmentDownloadPagePath = (attachmentId: string) =>
   `/api/aws/s3/attachments/${attachmentId}`;
 
 // stripe
-export const pricePagePath = () => "/pricing";
+export const pricingPagePath = () => "/pricing";
+export const subscriptionPagePath = (organizationId: string) =>
+  `/organization/${organizationId}/subscription`;
