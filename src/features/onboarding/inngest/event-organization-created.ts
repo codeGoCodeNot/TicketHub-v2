@@ -1,6 +1,6 @@
 import { inngest } from "@/lib/inngest";
 import prisma from "@/lib/prisma";
-import { stripe } from "@/lib/stripe";
+import { stripe } from "@/lib/stripe/stripe";
 
 const organizationCreatedEvent = inngest.createFunction(
   {
