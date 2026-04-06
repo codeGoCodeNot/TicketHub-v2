@@ -1,9 +1,9 @@
 import { MyBig } from "@/lib/big";
 
-export const toCurrencyFromCents = (amounts: number) => {
+export const toCurrencyFromCents = (amounts: number, currency?: string) => {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "PHP",
+    currency: currency ?? "USD",
   }).format(fromCent(amounts));
 };
 

@@ -41,8 +41,14 @@ const seed = async () => {
     email: organization.members[0].user.email,
   });
 
-  await prisma.stripeCustomer.create({
-    data: {
+  await prisma.stripeCustomer.upsert({
+    where: {
+      organizationId: organization.id,
+    },
+    update: {
+      customerId: customer.id,
+    },
+    create: {
       customerId: customer.id,
       organizationId: organization.id,
     },
@@ -78,11 +84,29 @@ const seed = async () => {
   });
 
   await stripe.prices.create({
+    product: productTwo.id,
+    unit_amount: 199,
+    currency: "usd",
+    recurring: {
+      interval: "month",
+    },
+  });
+
+  await stripe.prices.create({
     product: productOne.id,
     unit_amount: 4999,
     currency: "usd",
     recurring: {
       interval: "year",
+    },
+  });
+
+  await stripe.prices.create({
+    product: productOne.id,
+    unit_amount: 499,
+    currency: "usd",
+    recurring: {
+      interval: "month",
     },
   });
 

@@ -43,3 +43,6 @@ export const selectActiveOrganizationPath = () =>
 // aws
 export const attachmentDownloadPagePath = (attachmentId: string) =>
   `/api/aws/s3/attachments/${attachmentId}`;
+
+// stripe
+export const pricePagePath = () => "/pricing";

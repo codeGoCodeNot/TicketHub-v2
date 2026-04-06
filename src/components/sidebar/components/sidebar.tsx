@@ -12,6 +12,7 @@ import {
 import { authClient } from "@/lib/auth-client";
 import {
   organizationSettingsPagePath,
+  pricePagePath,
   signInPagePath,
   signUpPagePath,
 } from "@/path";
@@ -36,7 +37,7 @@ const SideBar = () => {
   const { activeIndex } = getActivePath(
     pathname,
     navItems.map((item) => item.href),
-    [signInPagePath(), signUpPagePath()],
+    [signInPagePath(), signUpPagePath(), pricePagePath()],
   );
 
   return (

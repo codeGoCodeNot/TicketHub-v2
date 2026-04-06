@@ -8,10 +8,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import SignOutItem from "@/features/auth/components/sign-out-item";
-import { accountPasswordPagePath, accountProfilePagePath } from "@/path";
+import {
+  accountPasswordPagePath,
+  accountProfilePagePath,
+  pricePagePath,
+} from "@/path";
 import { User } from "better-auth/types";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { LucideGem, LucideLock, LucideUser } from "lucide-react";
 
 type AccountDropdownProps = {
   user: User;
@@ -41,12 +46,31 @@ const AccountDropdown = ({ user }: AccountDropdownProps) => {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link href={accountProfilePagePath()}>Profile</Link>
+            <Link href={accountProfilePagePath()}>
+              <LucideUser />
+              <span>Profile</span>
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href={accountPasswordPagePath()}>Password</Link>
+            <Link href={accountPasswordPagePath()}>
+              <LucideLock />
+              <span>Password</span>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
+
+        {/* Pricing */}
+        <DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem asChild>
+            <Link href={pricePagePath()}>
+              <LucideGem />
+              <span>Pricing</span>
+            </Link>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+
+        {/* Sign out */}
         <DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
