@@ -11,13 +11,13 @@ const getCredentials = async (organizationId: string) => {
       name: true,
       lastUsed: true,
       revokedAt: true,
-      createdBy: {
-        select: {
-          name: true,
-        },
-      },
       scopes: true,
+      createdBy: {
+        select: { name: true },
+      },
     },
+    orderBy: { createdAt: "desc" },
+    take: 10,
   });
 };
 
