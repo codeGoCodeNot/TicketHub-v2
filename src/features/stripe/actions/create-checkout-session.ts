@@ -4,14 +4,14 @@ import { toActionState } from "@/components/form/utils/to-action-state";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import prisma from "@/lib/prisma";
 import { stripe } from "@/lib/stripe/stripe";
-import { signInPagePath, subscriptionPagePath } from "@/path";
+import { selectActiveOrganizationPath, subscriptionPagePath } from "@/path";
 import { redirect } from "next/navigation";
 
 const createCheckoutSession = async (
   organizationId: string | null | undefined,
   priceId: string,
 ) => {
-  if (!organizationId) redirect(signInPagePath());
+  if (!organizationId) redirect(selectActiveOrganizationPath());
 
   await getAuthOrRedirect();
 

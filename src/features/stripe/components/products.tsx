@@ -21,7 +21,7 @@ const Products = async ({ organizationId }: ProductsProps) => {
   });
 
   return (
-    <div className="flex-1 flex justify-center items-center gap-x-4">
+    <div className="flex-1 flex flex-col lg:flex-row justify-center items-center gap-4">
       {products.data.map((product) => (
         <Card key={product.id} className="w-72">
           <CardHeader>
