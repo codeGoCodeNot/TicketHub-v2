@@ -5,9 +5,14 @@ import CheckoutSessionForm from "./checkout-session-form";
 type PricesProps = {
   productId: string;
   organizationId: string | null | undefined;
+  activePriceId?: string | null | undefined;
 };
 
-const Prices = async ({ productId, organizationId }: PricesProps) => {
+const Prices = async ({
+  productId,
+  organizationId,
+  activePriceId,
+}: PricesProps) => {
   const prices = await stripe.prices.list({
     active: true,
     product: productId,
@@ -20,6 +25,7 @@ const Prices = async ({ productId, organizationId }: PricesProps) => {
           key={price.id}
           organizationId={organizationId}
           priceId={price.id}
+          activePriceId={activePriceId}
         >
           <span className="font-bold text-lg">
             {toCurrencyFromCents(price.unit_amount || 0, price.currency)}

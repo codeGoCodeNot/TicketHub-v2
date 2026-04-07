@@ -7,8 +7,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { stripe } from "@/lib/stripe/stripe";
-import { LucideCheck } from "lucide-react";
+import { LucideBadgeCheck, LucideCheck } from "lucide-react";
 import Prices from "./prices";
+import getStripeCustomer from "../queries/get-stripe-customer";
 
 type ProductsProps = {
   organizationId: string | null | undefined;
@@ -16,16 +17,30 @@ type ProductsProps = {
 };
 
 const Products = async ({ organizationId }: ProductsProps) => {
+  if (!organizationId) return null;
+
   const products = await stripe.products.list({
     active: true,
   });
+
+  const stripeCustomer = await getStripeCustomer(organizationId);
+  const subscriptionStatus = stripeCustomer?.subscriptionStatus;
+
+  const activeSubscription = subscriptionStatus === "active";
+  const activeProductId = activeSubscription ? stripeCustomer?.productId : null;
+  const activePriceId = activeSubscription ? stripeCustomer?.priceId : null;
 
   return (
     <div className="flex-1 flex flex-col lg:flex-row justify-center items-center gap-4">
       {products.data.map((product) => (
         <Card key={product.id} className="w-72">
           <CardHeader>
-            <CardTitle>{product.name}</CardTitle>
+            <CardTitle>
+              <span className="flex justify-between">
+                {product.name}
+                {activeProductId === product.id && <LucideBadgeCheck />}
+              </span>
+            </CardTitle>
             <CardDescription>{product.description}</CardDescription>
           </CardHeader>
           <CardContent>
@@ -37,7 +52,11 @@ const Products = async ({ organizationId }: ProductsProps) => {
             ))}
           </CardContent>
           <CardFooter>
-            <Prices productId={product.id} organizationId={organizationId} />
+            <Prices
+              productId={product.id}
+              organizationId={organizationId}
+              activePriceId={activePriceId}
+            />
           </CardFooter>
         </Card>
       ))}
