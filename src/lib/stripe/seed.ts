@@ -26,7 +26,7 @@ const seed = async () => {
     await stripe.customers.del(customer.id);
   }
 
-  const organization = await prisma.organization.findFirstOrThrow({
+  const organization = await prisma.organization.findMany({
     include: {
       members: {
         include: {
@@ -36,23 +36,28 @@ const seed = async () => {
     },
   });
 
-  const customer = await stripe.customers.create({
-    name: organization.name,
-    email: organization.members[0].user.email,
-  });
+  for (const org of organization) {
+    const customer = await stripe.customers.create({
+      name: org.name,
+      email: org.members[0].user.email,
+      metadata: {
+        organizationId: org.id,
+      },
+    });
 
-  await prisma.stripeCustomer.upsert({
-    where: {
-      organizationId: organization.id,
-    },
-    update: {
-      customerId: customer.id,
-    },
-    create: {
-      customerId: customer.id,
-      organizationId: organization.id,
-    },
-  });
+    await prisma.stripeCustomer.upsert({
+      where: {
+        organizationId: org.id,
+      },
+      update: {
+        customerId: customer.id,
+      },
+      create: {
+        customerId: customer.id,
+        organizationId: org.id,
+      },
+    });
+  }
 
   const productOne = await stripe.products.create({
     name: "Business Plan",

@@ -222,6 +222,23 @@ export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
 }
 
+export type EnumStripeSubscriptionStatusNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.StripeSubscriptionStatus | Prisma.EnumStripeSubscriptionStatusFieldRefInput<$PrismaModel> | null
+  in?: $Enums.StripeSubscriptionStatus[] | Prisma.ListEnumStripeSubscriptionStatusFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.StripeSubscriptionStatus[] | Prisma.ListEnumStripeSubscriptionStatusFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumStripeSubscriptionStatusNullableFilter<$PrismaModel> | $Enums.StripeSubscriptionStatus | null
+}
+
+export type EnumStripeSubscriptionStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.StripeSubscriptionStatus | Prisma.EnumStripeSubscriptionStatusFieldRefInput<$PrismaModel> | null
+  in?: $Enums.StripeSubscriptionStatus[] | Prisma.ListEnumStripeSubscriptionStatusFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.StripeSubscriptionStatus[] | Prisma.ListEnumStripeSubscriptionStatusFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumStripeSubscriptionStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.StripeSubscriptionStatus | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumStripeSubscriptionStatusNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumStripeSubscriptionStatusNullableFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -441,6 +458,23 @@ export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
   _max?: Prisma.NestedDateTimeNullableFilter<$PrismaModel>
+}
+
+export type NestedEnumStripeSubscriptionStatusNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.StripeSubscriptionStatus | Prisma.EnumStripeSubscriptionStatusFieldRefInput<$PrismaModel> | null
+  in?: $Enums.StripeSubscriptionStatus[] | Prisma.ListEnumStripeSubscriptionStatusFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.StripeSubscriptionStatus[] | Prisma.ListEnumStripeSubscriptionStatusFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumStripeSubscriptionStatusNullableFilter<$PrismaModel> | $Enums.StripeSubscriptionStatus | null
+}
+
+export type NestedEnumStripeSubscriptionStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.StripeSubscriptionStatus | Prisma.EnumStripeSubscriptionStatusFieldRefInput<$PrismaModel> | null
+  in?: $Enums.StripeSubscriptionStatus[] | Prisma.ListEnumStripeSubscriptionStatusFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.StripeSubscriptionStatus[] | Prisma.ListEnumStripeSubscriptionStatusFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumStripeSubscriptionStatusNullableWithAggregatesFilter<$PrismaModel> | $Enums.StripeSubscriptionStatus | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumStripeSubscriptionStatusNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumStripeSubscriptionStatusNullableFilter<$PrismaModel>
 }
 
 

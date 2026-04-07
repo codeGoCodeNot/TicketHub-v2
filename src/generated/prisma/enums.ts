@@ -24,3 +24,17 @@ export const AttachmentEntity = {
 } as const
 
 export type AttachmentEntity = (typeof AttachmentEntity)[keyof typeof AttachmentEntity]
+
+
+export const StripeSubscriptionStatus = {
+  active: 'active',
+  incomplete: 'incomplete',
+  incomplete_expired: 'incomplete_expired',
+  past_due: 'past_due',
+  canceled: 'canceled',
+  unpaid: 'unpaid',
+  trialing: 'trialing',
+  paused: 'paused'
+} as const
+
+export type StripeSubscriptionStatus = (typeof StripeSubscriptionStatus)[keyof typeof StripeSubscriptionStatus]

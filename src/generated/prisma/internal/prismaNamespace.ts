@@ -1539,7 +1539,11 @@ export type OrganizationScalarFieldEnum = (typeof OrganizationScalarFieldEnum)[k
 
 export const StripeCustomerScalarFieldEnum = {
   customerId: 'customerId',
-  organizationId: 'organizationId'
+  organizationId: 'organizationId',
+  subscriptionId: 'subscriptionId',
+  subscriptionStatus: 'subscriptionStatus',
+  productId: 'productId',
+  priceId: 'priceId'
 } as const
 
 export type StripeCustomerScalarFieldEnum = (typeof StripeCustomerScalarFieldEnum)[keyof typeof StripeCustomerScalarFieldEnum]
@@ -1703,6 +1707,20 @@ export type ListEnumAttachmentEntityFieldRefInput<$PrismaModel> = FieldRefInputT
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'StripeSubscriptionStatus'
+ */
+export type EnumStripeSubscriptionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StripeSubscriptionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'StripeSubscriptionStatus[]'
+ */
+export type ListEnumStripeSubscriptionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StripeSubscriptionStatus[]'>
     
 
 
