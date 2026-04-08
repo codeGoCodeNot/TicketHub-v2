@@ -38,8 +38,6 @@ const getAuthOrRedirect = async () => {
     } else {
       redirect(selectActiveOrganizationPath());
     }
-  } else {
-    redirect(selectActiveOrganizationPath());
   }
 
   return user;
