@@ -10,19 +10,13 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth-client";
-import {
-  organizationSettingsPagePath,
-  pricingPagePath,
-  signInPagePath,
-  signUpPagePath,
-} from "@/path";
+import { pricingPagePath, signInPagePath, signUpPagePath } from "@/path";
 import getActivePath from "@/utils/get-active-path";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { navItems } from "../constant";
-import { LucideSettings } from "lucide-react";
-import Image from "next/image";
 
 const SideBar = () => {
   const pathname = usePathname();
@@ -76,29 +70,6 @@ const SideBar = () => {
               </SidebarMenuItem>
             );
           })}
-
-          {activeOrganization && (
-            <SidebarMenuItem>
-              <SidebarMenuButton
-                asChild
-                isActive={
-                  pathname ===
-                  organizationSettingsPagePath(activeOrganization.id)
-                }
-                className="h-10 rounded-lg px-2.5 transition-colors hover:bg-sidebar-foreground/5 hover:text-sidebar-foreground active:bg-sidebar-foreground/5 active:text-sidebar-foreground data-[active=true]:bg-muted data-[active=true]:text-sidebar-foreground data-[active=true]:font-semibold data-[active=true]:hover:bg-muted data-[active=true]:active:bg-muted"
-              >
-                <Link
-                  href={organizationSettingsPagePath(activeOrganization.id)}
-                  className="flex items-center gap-3"
-                >
-                  <span className="shrink-0 [&>svg]:size-4 [&>svg]:shrink-0">
-                    <LucideSettings />
-                  </span>
-                  <span className="truncate">Organization Settings</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          )}
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter className="p-3">

@@ -10,7 +10,12 @@ import {
 } from "@/path";
 import { useParams, usePathname } from "next/navigation";
 import BreadCrumbs from "./breadcrumbs";
-import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "./ui/dropdown-menu";
 import Link from "next/link";
 
 type OrganizationBreadcrumbsProps = {
@@ -24,18 +29,51 @@ const OrganizationBreadcrumbs = ({
   const pathName = usePathname();
 
   const lastSegment = pathName.split("/").at(-1);
-  const activeTab =
-    lastSegment === "invitations"
-      ? "invitations"
-      : lastSegment === "credentials"
-        ? "credentials"
-        : lastSegment === "usage"
-          ? "usage"
-          : lastSegment === "subscription"
-            ? "subscription"
-            : lastSegment === "settings"
-              ? "settings"
-              : "memberships";
+  // Default to memberships if not matching any known section
+  const validTabs = [
+    "memberships",
+    "invitations",
+    "credentials",
+    "usage",
+    "subscription",
+    "settings",
+  ];
+  const activeTab = validTabs.includes(lastSegment || "")
+    ? lastSegment
+    : "memberships";
+
+  const menuItems = [
+    {
+      value: "memberships",
+      label: "Memberships",
+      href: organizationMembershipPagePath(params.organizationId),
+    },
+    {
+      value: "invitations",
+      label: "Invitations",
+      href: organizationInvitationPagePath(params.organizationId),
+    },
+    {
+      value: "credentials",
+      label: "Credentials",
+      href: organizationCredentialsPagePath(params.organizationId),
+    },
+    {
+      value: "usage",
+      label: "Usage",
+      href: organizationCredentialUsagePagePath(params.organizationId),
+    },
+    {
+      value: "subscription",
+      label: "Subscription",
+      href: subscriptionPagePath(params.organizationId),
+    },
+    {
+      value: "settings",
+      label: "Settings",
+      href: organizationSettingsPagePath(params.organizationId),
+    },
+  ];
 
   return (
     <div className="flex flex-col gap-y-4">
@@ -43,55 +81,44 @@ const OrganizationBreadcrumbs = ({
         breadcrumbs={[
           { title: "Organizations", href: organizationPagePath() },
           { title: organizationName },
-          ...(activeTab !== "memberships"
-            ? [
-                {
-                  title: activeTab.charAt(0).toUpperCase() + activeTab.slice(1),
-                },
-              ]
-            : []),
+          {
+            title: activeTab
+              ? activeTab.charAt(0).toUpperCase() + activeTab.slice(1)
+              : "",
+          },
         ]}
       />
-      <Tabs value={activeTab}>
-        <TabsList>
-          <TabsTrigger value="memberships" asChild>
-            <Link href={organizationMembershipPagePath(params.organizationId)}>
-              Memberships
-            </Link>
-          </TabsTrigger>
-          <TabsTrigger value="invitations" asChild>
-            <Link href={organizationInvitationPagePath(params.organizationId)}>
-              Invitations
-            </Link>
-          </TabsTrigger>
-
-          <TabsTrigger value="credentials" asChild>
-            <Link href={organizationCredentialsPagePath(params.organizationId)}>
-              Credentials
-            </Link>
-          </TabsTrigger>
-
-          <TabsTrigger value="usage" asChild>
-            <Link
-              href={organizationCredentialUsagePagePath(params.organizationId)}
-            >
-              Usage
-            </Link>
-          </TabsTrigger>
-
-          <TabsTrigger value="subscription" asChild>
-            <Link href={subscriptionPagePath(params.organizationId)}>
-              Subscription
-            </Link>
-          </TabsTrigger>
-
-          <TabsTrigger value="settings" asChild>
-            <Link href={organizationSettingsPagePath(params.organizationId)}>
-              Settings
-            </Link>
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
+      <div>
+        <DropdownMenu>
+          <DropdownMenuTrigger className="px-3 py-2 border rounded bg-muted text-foreground flex items-center gap-2">
+            {menuItems.find((item) => item.value === activeTab)?.label ||
+              "Navigate"}
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
+              <path
+                d="M7 10l5 5 5-5"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            {menuItems.map((item) => (
+              <DropdownMenuItem asChild key={item.value}>
+                <Link
+                  href={item.href}
+                  className={
+                    item.value === activeTab ? "font-semibold bg-accent" : ""
+                  }
+                >
+                  {item.label}
+                </Link>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </div>
   );
 };
