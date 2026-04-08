@@ -5,6 +5,7 @@ import fromErrorToActionState, {
   toActionState,
 } from "@/components/form/utils/to-action-state";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
+import getStripeProvisioning from "@/features/stripe/queries/get-stripe-provisioning";
 import { auth } from "@/lib/auth";
 import { organizationInvitationPagePath } from "@/path";
 import { revalidatePath } from "next/cache";
@@ -22,6 +23,15 @@ const createInvitation = async (
   formData: FormData,
 ) => {
   await getAuthOrRedirect();
+
+  const { allowedMembers, currentMembers } =
+    await getStripeProvisioning(organizationId);
+
+  if (currentMembers >= allowedMembers)
+    return toActionState(
+      "ERROR",
+      "Please upgrade your plan to invite more members.",
+    );
 
   try {
     const { email, role } = createInvitationSchema.parse(
