@@ -37,21 +37,22 @@ const seed = async () => {
   });
 
   for (const org of organization) {
+    const testClock = await stripe.testHelpers.testClocks.create({
+      frozen_time: Math.round(new Date().getTime() / 1000),
+    });
+
     const customer = await stripe.customers.create({
       name: org.name,
       email: org.members[0].user.email,
       metadata: {
         organizationId: org.id,
       },
+      test_clock: testClock.id,
     });
 
     await prisma.stripeCustomer.upsert({
-      where: {
-        organizationId: org.id,
-      },
-      update: {
-        customerId: customer.id,
-      },
+      where: { organizationId: org.id },
+      update: { customerId: customer.id },
       create: {
         customerId: customer.id,
         organizationId: org.id,
