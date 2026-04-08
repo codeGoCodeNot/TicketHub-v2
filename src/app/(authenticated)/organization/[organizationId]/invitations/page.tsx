@@ -1,6 +1,7 @@
 import Heading from "@/components/heading";
 import OrganizationBreadcrumbs from "@/components/organization-breadcrumbs";
 import Spinner from "@/components/spinner";
+import InvitationCreateButton from "@/features/invitations/components/invitation-create-button";
 import InvitationList from "@/features/invitations/components/invitation-list";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
@@ -30,6 +31,7 @@ const InvitationPage = async ({ params }: InvitationPageProps) => {
             organizationName={organization?.name ?? "Organization"}
           />
         }
+        actions={<InvitationCreateButton organizationId={organizationId} />}
       />
 
       <Suspense fallback={<Spinner />}>

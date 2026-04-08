@@ -8,6 +8,8 @@ import {
 import { redirect } from "next/navigation";
 import getAuth from "../../../lib/get-auth";
 import { getSession } from "@/lib/get-session";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 const getAuthOrRedirect = async () => {
   const user = await getAuth();
@@ -25,8 +27,20 @@ const getAuthOrRedirect = async () => {
     redirect(onboardPath());
   }
 
-  if (!session?.session.activeOrganizationId)
+  if (!session?.session.activeOrganizationId) {
+    if (organizations.length === 1) {
+      await auth.api.setActiveOrganization({
+        headers: await headers(),
+        body: {
+          organizationId: organizations[0].organization.id,
+        },
+      });
+    } else {
+      redirect(selectActiveOrganizationPath());
+    }
+  } else {
     redirect(selectActiveOrganizationPath());
+  }
 
   return user;
 };
