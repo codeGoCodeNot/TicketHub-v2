@@ -29,7 +29,7 @@ const getStripeProvisioning = async (
 
   if (!isActive || !stripeCustomer.productId) {
     return {
-      allowedMembers: 2,
+      allowedMembers: 1,
       currentMembers,
     };
   }

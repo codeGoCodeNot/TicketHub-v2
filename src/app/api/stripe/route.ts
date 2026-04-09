@@ -47,6 +47,7 @@ export const POST = async (request: Request) => {
 
     return new NextResponse("Event received", { status: 200 });
   } catch (error) {
+    console.error("Webhook error:", error);
     return new NextResponse("Invalid webhook event", { status: 400 });
   }
 };
