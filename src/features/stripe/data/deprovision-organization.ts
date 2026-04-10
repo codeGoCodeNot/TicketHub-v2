@@ -51,7 +51,7 @@ export const deprovisionOrganization = async (
     await prisma.activityLog.create({
       data: {
         organizationId,
-        action: "deprovision",
+        action: "stripe_deprovision",
         detail: `${removedCount} member(s)/invitation(s) automatically removed due to plan change. Allowed limit: ${allowedMembers}.`,
       },
     });

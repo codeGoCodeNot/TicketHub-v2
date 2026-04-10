@@ -4,7 +4,7 @@ import { Stripe } from "stripe";
 export const createStripeSubscription = async (
   subscription: Stripe.Subscription,
 ) => {
-  await prisma.stripeCustomer.update({
+  const stripeCustomer = await prisma.stripeCustomer.update({
     where: { customerId: subscription.customer as string },
     data: {
       subscriptionId: subscription.id,
@@ -13,4 +13,14 @@ export const createStripeSubscription = async (
       priceId: subscription.items.data[0].price.id,
     },
   });
+
+  await Promise.all([
+    prisma.activityLog.create({
+      data: {
+        organizationId: stripeCustomer.organizationId, // 👈 use from DB not metadata
+        action: "subscription_created",
+        detail: `Subscription created with status: ${subscription.status}.`,
+      },
+    }),
+  ]);
 };

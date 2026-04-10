@@ -52,7 +52,7 @@ const createInvitation = async (
     await prisma.activityLog.create({
       data: {
         organizationId,
-        action: "invitation",
+        action: "invitation_created",
         detail: `Invitation sent to ${email} with role ${role}.`,
       },
     });

@@ -35,6 +35,14 @@ const cancelInvitation = async ({
         invitationId: invitation.id,
       },
     });
+
+    await prisma.activityLog.create({
+      data: {
+        organizationId,
+        action: "invitation_cancelled",
+        detail: `Invitation for ${email} cancelled.`,
+      },
+    });
   } catch (error) {
     return toActionState(
       "ERROR",
