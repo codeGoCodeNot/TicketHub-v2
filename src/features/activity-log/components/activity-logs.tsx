@@ -56,9 +56,9 @@ const ActivityLogs = ({ organizationId, initialData }: ActivityLogProps) => {
   return (
     <>
       {/* Mobile - Cards */}
-      <div className="flex flex-col gap-2 lg:hidden">
+      <div className="flex flex-col gap-y-2 lg:hidden">
         {paginatedLogs.map((log) => (
-          <div key={log.id} className="flex w-full justify-center">
+          <div key={log.id} className="flex w-full justify-center gap-x-1">
             <Card className="max-w-[420px] w-full" size="sm">
               <CardHeader className="flex flex-row items-center justify-between gap-2 pb-1">
                 <CardTitle className="font-semibold capitalize">
@@ -72,6 +72,21 @@ const ActivityLogs = ({ organizationId, initialData }: ActivityLogProps) => {
                 <CardDescription>{log.detail}</CardDescription>
               </CardContent>
             </Card>
+            <div className="flex flex-col gap-y-1">
+              {" "}
+              {/* 👈 outside card */}
+              <ActivityLogsDeleteButton
+                action={deleteLogs.bind(null, organizationId, log.id)}
+                title="Delete Log"
+                description="Are you sure you want to delete this log entry?"
+                icon={<LucideTrash />}
+                onSuccess={() =>
+                  queryClient.invalidateQueries({
+                    queryKey: ["activityLogs", organizationId],
+                  })
+                }
+              />
+            </div>
           </div>
         ))}
       </div>
