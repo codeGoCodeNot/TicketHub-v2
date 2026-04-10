@@ -30,6 +30,8 @@ export const organizationCredentialsPagePath = (organizationId: string) =>
   `/organization/${organizationId}/credentials`;
 export const organizationCredentialUsagePagePath = (organizationId: string) =>
   `/organization/${organizationId}/usage`;
+export const organizationActivityLogPagePath = (organizationId: string) =>
+  `/organization/${organizationId}/activity-log`;
 
 // invitation
 export const organizationInvitationPagePath = (organizationId: string) =>

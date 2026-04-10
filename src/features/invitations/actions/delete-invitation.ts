@@ -32,6 +32,14 @@ const deleteInvitation = async ({
         id: invitation.id,
       },
     });
+
+    await prisma.activityLog.create({
+      data: {
+        organizationId,
+        action: "invitation_deleted",
+        detail: `Invitation for ${email} deleted.`,
+      },
+    });
   } catch (error) {
     return toActionState(
       "ERROR",

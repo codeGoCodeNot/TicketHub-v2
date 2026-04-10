@@ -58,6 +58,11 @@ export type Verification = Prisma.VerificationModel
  */
 export type Organization = Prisma.OrganizationModel
 /**
+ * Model ActivityLog
+ * 
+ */
+export type ActivityLog = Prisma.ActivityLogModel
+/**
  * Model StripeCustomer
  * 
  */

@@ -59,6 +59,7 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   Organization: 'Organization',
+  ActivityLog: 'ActivityLog',
   StripeCustomer: 'StripeCustomer',
   CredentialUsage: 'CredentialUsage',
   Credential: 'Credential',
@@ -200,6 +201,17 @@ export const OrganizationScalarFieldEnum = {
 } as const
 
 export type OrganizationScalarFieldEnum = (typeof OrganizationScalarFieldEnum)[keyof typeof OrganizationScalarFieldEnum]
+
+
+export const ActivityLogScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  organizationId: 'organizationId',
+  action: 'action',
+  detail: 'detail'
+} as const
+
+export type ActivityLogScalarFieldEnum = (typeof ActivityLogScalarFieldEnum)[keyof typeof ActivityLogScalarFieldEnum]
 
 
 export const StripeCustomerScalarFieldEnum = {

@@ -7,6 +7,7 @@ import {
   organizationPagePath,
   organizationSettingsPagePath,
   subscriptionPagePath,
+  organizationActivityLogPagePath,
 } from "@/path";
 import { useParams, usePathname } from "next/navigation";
 import BreadCrumbs from "./breadcrumbs";
@@ -36,6 +37,7 @@ const OrganizationBreadcrumbs = ({
     "credentials",
     "usage",
     "subscription",
+    "activity-log",
     "settings",
   ];
   const activeTab = validTabs.includes(lastSegment || "")
@@ -72,6 +74,11 @@ const OrganizationBreadcrumbs = ({
       value: "settings",
       label: "Settings",
       href: organizationSettingsPagePath(params.organizationId),
+    },
+    {
+      value: "activity-log",
+      label: "Activity Log",
+      href: organizationActivityLogPagePath(params.organizationId),
     },
   ];
 

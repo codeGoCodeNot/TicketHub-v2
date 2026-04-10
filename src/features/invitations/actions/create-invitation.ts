@@ -7,6 +7,7 @@ import fromErrorToActionState, {
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import getStripeProvisioning from "@/features/stripe/queries/get-stripe-provisioning";
 import { auth } from "@/lib/auth";
+import prisma from "@/lib/prisma";
 import { organizationInvitationPagePath } from "@/path";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
@@ -44,6 +45,15 @@ const createInvitation = async (
         email,
         role,
         organizationId,
+      },
+    });
+
+    // log activity
+    await prisma.activityLog.create({
+      data: {
+        organizationId,
+        action: "invitation",
+        detail: `Invitation sent to ${email} with role ${role}.`,
       },
     });
   } catch (error) {

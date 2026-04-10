@@ -48,6 +48,14 @@ export const deprovisionOrganization = async (
   const removedCount = invitesDelete.length + membersDelete.length;
 
   if (removedCount > 0) {
+    await prisma.activityLog.create({
+      data: {
+        organizationId,
+        action: "deprovision",
+        detail: `${removedCount} member(s)/invitation(s) automatically removed due to plan change. Allowed limit: ${allowedMembers}.`,
+      },
+    });
+
     await inngest.send({
       name: "app/organization.deprovisioned",
       data: {
