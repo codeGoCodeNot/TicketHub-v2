@@ -20,6 +20,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import ActivityLogsDeleteButton from "./activity-log-delete-button";
+import { LucideTrash } from "lucide-react";
+import deleteLogs from "../actions/delete-logs";
+import { useQueryClient } from "@tanstack/react-query";
 
 type ActivityLogProps = {
   organizationId: string;
@@ -38,6 +42,8 @@ const ActivityLogs = ({ organizationId, initialData }: ActivityLogProps) => {
     usePaginatedActivityLogs(organizationId, initialData);
 
   const { ref, inView } = useInView();
+
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
@@ -78,6 +84,7 @@ const ActivityLogs = ({ organizationId, initialData }: ActivityLogProps) => {
               <TableHead>Date</TableHead>
               <TableHead>Action</TableHead>
               <TableHead>Detail</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -90,6 +97,19 @@ const ActivityLogs = ({ organizationId, initialData }: ActivityLogProps) => {
                   {log.action.replace(/_/g, " ")}
                 </TableCell>
                 <TableCell>{log.detail}</TableCell>
+                <TableCell>
+                  <ActivityLogsDeleteButton
+                    action={deleteLogs.bind(null, organizationId, log.id)}
+                    title="Delete Logs"
+                    description="Are you sure you want to delete these logs?"
+                    icon={<LucideTrash />}
+                    onSuccess={() =>
+                      queryClient.invalidateQueries({
+                        queryKey: ["activityLogs", organizationId],
+                      })
+                    }
+                  />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
