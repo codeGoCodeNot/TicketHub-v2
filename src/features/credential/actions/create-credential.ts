@@ -44,6 +44,14 @@ const createCredential = async (
         scopes: scopesToString(DEFAULT_CREDENTIAL_SCOPES),
       },
     });
+
+    await prisma.activityLog.create({
+      data: {
+        organizationId,
+        action: "credential_created",
+        detail: `Credential "${name}" created.`,
+      },
+    });
   } catch (error) {
     return fromErrorToActionState(error);
   }

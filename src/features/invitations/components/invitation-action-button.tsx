@@ -28,6 +28,7 @@ const InvitationActionButton = ({
     ),
     title,
     description,
+    pendingMessage: `${title} in progress...`,
   });
 
   return (

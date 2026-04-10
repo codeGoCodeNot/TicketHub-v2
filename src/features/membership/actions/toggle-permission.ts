@@ -8,6 +8,7 @@ import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import { organizationMembershipPagePath } from "@/path";
 import { revalidatePath } from "next/cache";
 import * as memberData from "../data";
+import prisma from "@/lib/prisma";
 
 const togglePermission = async (
   userId: string,
@@ -27,6 +28,14 @@ const togglePermission = async (
 
   await memberData.updateMember(member.id, {
     [permissionType]: value,
+  });
+
+  await prisma.activityLog.create({
+    data: {
+      organizationId,
+      action: "permission_toggled",
+      detail: `Permission "${permissionType}" for user with id "${userId}" set to ${value}.`,
+    },
   });
 
   revalidatePath(organizationMembershipPagePath(organizationId));

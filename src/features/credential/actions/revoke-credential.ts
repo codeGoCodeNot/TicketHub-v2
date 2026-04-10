@@ -12,12 +12,25 @@ const revokeCredential = async (organizationId: string, id: string) => {
   await getAuthOrRedirect();
 
   try {
-    await prisma.credential.update({
+    const credential = await prisma.credential.findUnique({
       where: {
         id,
       },
+      select: {
+        name: true,
+      },
+    });
+
+    await prisma.credential.update({
+      where: { id },
+      data: { revokedAt: new Date() },
+    });
+
+    await prisma.activityLog.create({
       data: {
-        revokedAt: new Date(),
+        organizationId,
+        action: "credential_revoked",
+        detail: `Credential "${credential?.name ?? id}" was revoked.`,
       },
     });
   } catch (error) {
