@@ -69,17 +69,17 @@ const upsertTicket = async (
       Object.fromEntries(formData.entries()),
     );
 
-    const dbData = {
+    const baseData = {
       ...data,
-      ...(id ? {} : { userId: user.id }),
       organizationId,
       bounty: toCent(data.bounty),
       private: data.private && hasActivePlan ? true : false,
-    } as Parameters<typeof ticketData.upsertTicket>[0]["data"];
+    };
 
     await ticketData.upsertTicket({
       id,
-      data: dbData,
+      data: { ...baseData, userId: user.id },
+      updateData: baseData,
     });
 
     await prisma.activityLog.create({

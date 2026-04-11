@@ -4,14 +4,19 @@ import prisma from "@/lib/prisma";
 type UpsertTicketArgs = {
   id: string;
   data: Prisma.TicketUncheckedCreateInput;
+  updateData?: Prisma.TicketUncheckedUpdateInput;
 };
 
-export const upsertTicket = async ({ id, data }: UpsertTicketArgs) => {
+export const upsertTicket = async ({
+  id,
+  data,
+  updateData,
+}: UpsertTicketArgs) => {
   return await prisma.ticket.upsert({
     where: {
       id: id || "",
     },
     create: data,
-    update: data,
+    update: updateData ?? data,
   });
 };
