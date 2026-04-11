@@ -5,7 +5,10 @@ import fromErrorToActionState, {
 } from "@/components/form/utils/to-action-state";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import prisma from "@/lib/prisma";
-import { organizationCredentialsPagePath } from "@/path";
+import {
+  organizationActivityLogPagePath,
+  organizationCredentialsPagePath,
+} from "@/path";
 import { revalidatePath } from "next/cache";
 
 const revokeCredential = async (organizationId: string, id: string) => {
@@ -38,6 +41,8 @@ const revokeCredential = async (organizationId: string, id: string) => {
   }
 
   revalidatePath(organizationCredentialsPagePath(organizationId));
+  revalidatePath(organizationActivityLogPagePath(organizationId));
+
   return toActionState("SUCCESS", "Credential revoked successfully.");
 };
 

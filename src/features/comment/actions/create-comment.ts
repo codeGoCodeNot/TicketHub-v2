@@ -7,12 +7,13 @@ import fromErrorToActionState, {
 import { fileSchema } from "@/features/attachments/schema/schema";
 import * as attachmentService from "@/features/attachments/service";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
-import { ticketPagePath } from "@/path";
+import { organizationActivityLogPagePath, ticketPagePath } from "@/path";
 import { revalidatePath } from "next/cache";
 import z from "zod";
 import * as commentData from "../data";
 import * as ticketService from "../../tickets/service";
 import { findTicketIdsFromText } from "../../tickets/utils/find-ticket-id-from-text";
+import prisma from "@/lib/prisma";
 
 const createSchema = z.object({
   content: z.string().min(1, "Content is required").max(1024),
@@ -56,6 +57,14 @@ export const createComment = async (
       userId: user.id,
     });
 
+    await prisma.activityLog.create({
+      data: {
+        organizationId: comment.ticket.organizationId,
+        action: "comment_created",
+        detail: `A new comment was added to ticket "${comment.ticket.title}".`,
+      },
+    });
+
     const referencedTicketIds = findTicketIdsFromText("tickets", content);
 
     if (referencedTicketIds.length > 0) {
@@ -69,6 +78,9 @@ export const createComment = async (
   }
 
   revalidatePath(ticketPagePath(ticketId));
+  revalidatePath(
+    organizationActivityLogPagePath(comment.ticket.organizationId),
+  );
   return toActionState("SUCCESS", "Comment created successfully", undefined, {
     ...comment,
     isOwner: true,

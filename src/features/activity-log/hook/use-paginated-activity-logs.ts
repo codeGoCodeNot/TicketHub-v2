@@ -1,6 +1,6 @@
 import { ActivityLog } from "@/generated/prisma/client";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import getActivityLogs from "../queries/get-activity-log";
+import getActivityLogs from "../actions/get-activity-log";
 
 type ActivityLogPage = {
   list: ActivityLog[];

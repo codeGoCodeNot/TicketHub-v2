@@ -1,4 +1,4 @@
-import getActivityLogs from "../queries/get-activity-log";
+import getActivityLogs from "../actions/get-activity-log";
 import ActivityLogs from "./activity-logs";
 
 type ActivityLogListProps = {

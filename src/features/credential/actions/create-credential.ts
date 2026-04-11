@@ -5,7 +5,10 @@ import fromErrorToActionState, {
   toActionState,
 } from "@/components/form/utils/to-action-state";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
-import { organizationCredentialsPagePath } from "@/path";
+import {
+  organizationActivityLogPagePath,
+  organizationCredentialsPagePath,
+} from "@/path";
 import { revalidatePath } from "next/cache";
 import z from "zod";
 import crypto from "node:crypto";
@@ -57,6 +60,7 @@ const createCredential = async (
   }
 
   revalidatePath(organizationCredentialsPagePath(organizationId));
+  revalidatePath(organizationActivityLogPagePath(organizationId));
 
   return toActionState(
     "SUCCESS",

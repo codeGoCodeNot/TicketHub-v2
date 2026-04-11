@@ -7,7 +7,13 @@ import fromErrorToActionState, {
 import { auth } from "@/lib/auth";
 import getAuth from "@/lib/get-auth";
 import { inngest } from "@/lib/inngest";
-import { organizationPagePath, signInPagePath } from "@/path";
+import prisma from "@/lib/prisma";
+import {
+  organizationActivityLogPagePath,
+  organizationPagePath,
+  signInPagePath,
+} from "@/path";
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import z from "zod";
@@ -24,6 +30,8 @@ const createOrganization = async (
 
   if (!user) redirect(signInPagePath());
 
+  let createOrgId: string | undefined;
+
   try {
     const data = createOrganizationSchema.parse(
       Object.fromEntries(_formData.entries()),
@@ -36,6 +44,8 @@ const createOrganization = async (
         slug: data.name.toLowerCase().replace(/\s+/g, "-"),
       },
     });
+
+    createOrgId = createdOrg.id;
 
     await inngest.send({
       name: "app/organization-created",
@@ -51,9 +61,19 @@ const createOrganization = async (
         organizationId: createdOrg.id,
       },
     });
+
+    await prisma.activityLog.create({
+      data: {
+        organizationId: createdOrg.id,
+        action: "organization_created",
+        detail: `Organization "${createdOrg.name}" was created.`,
+      },
+    });
   } catch (error) {
     return fromErrorToActionState(error);
   }
+
+  if (createOrgId) revalidatePath(organizationActivityLogPagePath(createOrgId));
 
   await setCookieByKey("toast", "Organization created successfully");
   redirect(organizationPagePath());

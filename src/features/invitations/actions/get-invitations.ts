@@ -8,6 +8,7 @@ const getInvitations = async (organizationId: string) => {
     where: {
       organizationId,
     },
+    orderBy: { createdAt: "desc" },
     include: {
       user: {
         select: { name: true, email: true },

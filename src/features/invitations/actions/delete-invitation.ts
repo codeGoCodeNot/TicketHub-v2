@@ -3,7 +3,10 @@
 import { toActionState } from "@/components/form/utils/to-action-state";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import prisma from "@/lib/prisma";
-import { organizationInvitationPagePath } from "@/path";
+import {
+  organizationActivityLogPagePath,
+  organizationInvitationPagePath,
+} from "@/path";
 import { revalidatePath } from "next/cache";
 
 type DeleteInvitationProps = {
@@ -48,6 +51,8 @@ const deleteInvitation = async ({
   }
 
   revalidatePath(organizationInvitationPagePath(organizationId));
+  revalidatePath(organizationActivityLogPagePath(organizationId));
+
   return toActionState("SUCCESS", "Invitation deleted successfully.");
 };
 

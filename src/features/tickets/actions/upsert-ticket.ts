@@ -8,7 +8,11 @@ import fromErrorToActionState, {
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import { getSession } from "@/lib/get-session";
 import prisma from "@/lib/prisma";
-import { ticketPagePath, ticketsPagePath } from "@/path";
+import {
+  organizationActivityLogPagePath,
+  ticketPagePath,
+  ticketsPagePath,
+} from "@/path";
 import { toCent } from "@/utils/currency";
 
 import { revalidatePath } from "next/cache";
@@ -72,12 +76,21 @@ const upsertTicket = async (
       id,
       data: dbData,
     });
+
+    await prisma.activityLog.create({
+      data: {
+        organizationId,
+        action: id ? "ticket_updated" : "ticket_created",
+        detail: `Ticket "${data.title}" was ${id ? "updated" : "created"}.`,
+      },
+    });
   } catch (error) {
     // extract validation errors and return them as action state
     return fromErrorToActionState(error, formData);
   }
 
   revalidatePath(ticketsPagePath());
+  revalidatePath(organizationActivityLogPagePath(organizationId));
 
   if (id) {
     await setCookieByKey("toast", "Ticket updated successfully");
