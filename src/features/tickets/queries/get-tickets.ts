@@ -1,11 +1,10 @@
-import prisma from "@/lib/prisma";
-import { ParsedSearchParams } from "../search-params";
-import getAuth from "@/lib/get-auth";
+import { PAGE_SIZE_OPTIONS } from "@/components/pagination/constant";
 import isOwnership from "@/features/auth/utils/is-ownership";
 import getActiveOrganization from "@/features/organization/queries/get-active-organization";
-import getMembership from "@/features/membership/queries/get-membership";
+import getAuth from "@/lib/get-auth";
+import prisma from "@/lib/prisma";
+import { ParsedSearchParams } from "../search-params";
 import getTicketPermission from "./get-ticket-permission";
-import { PAGE_SIZE_OPTIONS } from "@/components/pagination/constant";
 
 // Query to fetch all tickets
 
@@ -30,6 +29,7 @@ const getTickets = async (
       contains: searchParams.search,
       mode: "insensitive" as const,
     },
+    OR: [{ private: false }, { private: true, userId: user?.id ?? "" }],
   };
 
   // calculate skip and take for pagination
@@ -69,7 +69,6 @@ const getTickets = async (
         });
         const isOwner = isOwnership(user, ticket);
 
-        console.log("in get-tickets", permissions.canUpdateTickets);
         return {
           ...ticket,
           isOwner,

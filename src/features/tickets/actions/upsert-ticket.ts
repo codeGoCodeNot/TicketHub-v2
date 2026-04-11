@@ -71,11 +71,11 @@ const upsertTicket = async (
 
     const dbData = {
       ...data,
-      userId: user.id,
+      ...(id ? {} : { userId: user.id }),
       organizationId,
       bounty: toCent(data.bounty),
       private: data.private && hasActivePlan ? true : false,
-    };
+    } as Parameters<typeof ticketData.upsertTicket>[0]["data"];
 
     await ticketData.upsertTicket({
       id,
