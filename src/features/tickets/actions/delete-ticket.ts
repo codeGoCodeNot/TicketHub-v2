@@ -6,7 +6,7 @@ import fromErrorToActionState, {
 } from "@/components/form/utils/to-action-state";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import prisma from "@/lib/prisma";
-import { ticketsPagePath } from "@/path";
+import { organizationActivityLogPagePath, ticketsPagePath } from "@/path";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import * as ticketData from "../data";
@@ -16,9 +16,8 @@ import { inngest } from "@/lib/inngest";
 const deleteTicket = async (id: string) => {
   const user = await getAuthOrRedirect();
 
+  const ticket = await ticketData.findTicket(id);
   try {
-    const ticket = await ticketData.findTicket(id);
-
     const permission = await getTicketPermission({
       organizationId: ticket?.organizationId!,
       userId: user.id,
@@ -49,11 +48,20 @@ const deleteTicket = async (id: string) => {
         })),
       );
     }
+
+    await prisma.activityLog.create({
+      data: {
+        organizationId: ticket.organizationId,
+        action: "ticket_deleted",
+        detail: `Ticket "${ticket.title}" was deleted.`,
+      },
+    });
   } catch (error) {
     return fromErrorToActionState(error);
   }
 
   revalidatePath(ticketsPagePath());
+  revalidatePath(organizationActivityLogPagePath(ticket.organizationId));
 
   await setCookieByKey("toast", "Ticket deleted successfully");
   redirect(ticketsPagePath());

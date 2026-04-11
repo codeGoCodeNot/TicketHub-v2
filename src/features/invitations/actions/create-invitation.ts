@@ -8,7 +8,10 @@ import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import getStripeProvisioning from "@/features/stripe/queries/get-stripe-provisioning";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { organizationInvitationPagePath } from "@/path";
+import {
+  organizationActivityLogPagePath,
+  organizationInvitationPagePath,
+} from "@/path";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import z from "zod";
@@ -61,6 +64,8 @@ const createInvitation = async (
   }
 
   revalidatePath(organizationInvitationPagePath(organizationId));
+  revalidatePath(organizationActivityLogPagePath(organizationId));
+
   return toActionState("SUCCESS", "Invitation created successfully");
 };
 

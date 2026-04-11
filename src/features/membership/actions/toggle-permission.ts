@@ -5,7 +5,10 @@ import {
   toActionState,
 } from "@/components/form/utils/to-action-state";
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
-import { organizationMembershipPagePath } from "@/path";
+import {
+  organizationActivityLogPagePath,
+  organizationMembershipPagePath,
+} from "@/path";
 import { revalidatePath } from "next/cache";
 import * as memberData from "../data";
 import prisma from "@/lib/prisma";
@@ -39,6 +42,8 @@ const togglePermission = async (
   });
 
   revalidatePath(organizationMembershipPagePath(organizationId));
+  revalidatePath(organizationActivityLogPagePath(organizationId));
+
   return toActionState("SUCCESS", "Permission updated successfully.");
 };
 

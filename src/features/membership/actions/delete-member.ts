@@ -6,7 +6,10 @@ import fromErrorToActionState, {
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { organizationMembershipPagePath } from "@/path";
+import {
+  organizationActivityLogPagePath,
+  organizationMembershipPagePath,
+} from "@/path";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
@@ -36,6 +39,8 @@ const deleteMember = async (organizationId: string, memberId: string) => {
   }
 
   revalidatePath(organizationMembershipPagePath(organizationId));
+  revalidatePath(organizationActivityLogPagePath(organizationId));
+
   return toActionState("SUCCESS", "Member removed successfully.");
 };
 

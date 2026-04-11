@@ -7,7 +7,7 @@ import deleteAttachment from "@/features/attachments/actions/delete-attachments"
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import isOwnership from "@/features/auth/utils/is-ownership";
 import prisma from "@/lib/prisma";
-import { ticketPagePath } from "@/path";
+import { organizationActivityLogPagePath, ticketPagePath } from "@/path";
 import { revalidatePath } from "next/cache";
 import * as ticketService from "../../tickets/service";
 
@@ -20,6 +20,12 @@ export const deleteComment = async (id: string) => {
     },
     include: {
       attachments: true,
+      ticket: {
+        select: {
+          title: true,
+          organizationId: true,
+        },
+      },
     },
   });
 
@@ -42,10 +48,22 @@ export const deleteComment = async (id: string) => {
     });
 
     await ticketService.disconnectReferencedTicket(comment);
+
+    await prisma.activityLog.create({
+      data: {
+        organizationId: comment.ticket.organizationId,
+        action: "comment_deleted",
+        detail: `A comment was deleted from ticket "${comment.ticket.title}".`,
+      },
+    });
   } catch (error) {
     return fromErrorToActionState(error);
   }
 
   revalidatePath(ticketPagePath(comment.ticketId));
+  revalidatePath(
+    organizationActivityLogPagePath(comment.ticket.organizationId),
+  );
+
   return toActionState("SUCCESS", "Comment deleted successfully.");
 };
