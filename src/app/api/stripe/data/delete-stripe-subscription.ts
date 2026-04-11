@@ -4,8 +4,15 @@ import Stripe from "stripe";
 
 export const deleteStripeSubscription = async (
   subscription: Stripe.Subscription,
+  eventAt: number,
 ) => {
-  const stripeCustomer = await prisma.stripeCustomer.update({
+  const stripeCustomer = await prisma.stripeCustomer.findUniqueOrThrow({
+    where: { customerId: subscription.customer as string },
+  });
+
+  if (stripeCustomer.eventAt && stripeCustomer.eventAt >= eventAt) return;
+
+  const updated = await prisma.stripeCustomer.update({
     where: {
       customerId: subscription.customer as string,
     },
@@ -14,8 +21,9 @@ export const deleteStripeSubscription = async (
       subscriptionStatus: null,
       productId: null,
       priceId: null,
+      eventAt,
     },
   });
 
-  await stripeData.deprovisionOrganization(stripeCustomer.organizationId, 1);
+  await stripeData.deprovisionOrganization(updated.organizationId, 1);
 };

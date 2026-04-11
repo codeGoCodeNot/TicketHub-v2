@@ -7,12 +7,13 @@ import fromErrorToActionState, {
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import isOwnership from "@/features/auth/utils/is-ownership";
 import { AttachmentEntity } from "@/generated/prisma/enums";
-import { ticketPagePath } from "@/path";
+import { organizationActivityLogPagePath, ticketPagePath } from "@/path";
 import { revalidatePath } from "next/cache";
 import z from "zod";
 import { fileSchema } from "../schema/schema";
 import * as attachmentService from "../service";
 import { isComment, isTicket } from "../types";
+import prisma from "@/lib/prisma";
 
 type CreateAttachmentsArgs = {
   entityId: string;
@@ -31,6 +32,8 @@ const createAttachments = async (
   formData: FormData,
 ) => {
   const user = await getAuthOrRedirect();
+
+  let organizationId;
 
   // service layer
   const subject = await attachmentService.getAttachmentSubject(
@@ -58,6 +61,20 @@ const createAttachments = async (
       files,
       userId: user.id,
     });
+
+    const maybeOrganizationId = isTicket(subject)
+      ? subject.organizationId
+      : subject.ticket.organizationId;
+
+    organizationId = maybeOrganizationId;
+
+    await prisma.activityLog.create({
+      data: {
+        organizationId,
+        action: "attachment_created",
+        detail: `${user.name} added ${files.length} attachment(s) to ${entity.toLowerCase()} ${entityId}.`,
+      },
+    });
   } catch (error) {
     return fromErrorToActionState(error);
   }
@@ -69,6 +86,9 @@ const createAttachments = async (
     case "COMMENT":
       if (isComment(subject)) revalidatePath(ticketPagePath(subject.ticket.id));
   }
+
+  if (organizationId)
+    revalidatePath(organizationActivityLogPagePath(organizationId));
 
   return toActionState("SUCCESS", "Attachments uploaded successfully.");
 };

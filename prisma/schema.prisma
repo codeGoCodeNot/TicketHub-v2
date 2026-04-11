@@ -191,6 +191,7 @@ model ActivityLog {
 model StripeCustomer {
   customerId String @unique
   organizationId String @unique
+  eventAt Int?
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   subscriptionId String?
   subscriptionStatus StripeSubscriptionStatus?

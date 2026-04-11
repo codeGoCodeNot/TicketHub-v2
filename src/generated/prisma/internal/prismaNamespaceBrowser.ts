@@ -217,6 +217,7 @@ export type ActivityLogScalarFieldEnum = (typeof ActivityLogScalarFieldEnum)[key
 export const StripeCustomerScalarFieldEnum = {
   customerId: 'customerId',
   organizationId: 'organizationId',
+  eventAt: 'eventAt',
   subscriptionId: 'subscriptionId',
   subscriptionStatus: 'subscriptionStatus',
   productId: 'productId',

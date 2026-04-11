@@ -3,16 +3,25 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import * as stripeData from "./data";
 
-const handleSubscriptionCreated = async (subscription: Stripe.Subscription) => {
-  await stripeData.createStripeSubscription(subscription);
+const handleSubscriptionCreated = async (
+  subscription: Stripe.Subscription,
+  eventAt: number,
+) => {
+  await stripeData.createStripeSubscription(subscription, eventAt);
 };
 
-const handleSubscriptionUpdated = async (subscription: Stripe.Subscription) => {
-  await stripeData.updateStripeSubscription(subscription);
+const handleSubscriptionUpdated = async (
+  subscription: Stripe.Subscription,
+  eventAt: number,
+) => {
+  await stripeData.updateStripeSubscription(subscription, eventAt);
 };
 
-const handleSubscriptionDeleted = async (subscription: Stripe.Subscription) => {
-  await stripeData.deleteStripeSubscription(subscription);
+const handleSubscriptionDeleted = async (
+  subscription: Stripe.Subscription,
+  eventAt: number,
+) => {
+  await stripeData.deleteStripeSubscription(subscription, eventAt);
 };
 
 export const POST = async (request: Request) => {
@@ -33,13 +42,13 @@ export const POST = async (request: Request) => {
 
     switch (event.type) {
       case "customer.subscription.created":
-        await handleSubscriptionCreated(event.data.object);
+        await handleSubscriptionCreated(event.data.object, event.created);
         break;
       case "customer.subscription.updated":
-        await handleSubscriptionUpdated(event.data.object);
+        await handleSubscriptionUpdated(event.data.object, event.created);
         break;
       case "customer.subscription.deleted":
-        await handleSubscriptionDeleted(event.data.object);
+        await handleSubscriptionDeleted(event.data.object, event.created);
         break;
       default:
         console.log(`Unhandled event type: ${event.type}`);
