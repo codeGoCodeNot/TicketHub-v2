@@ -17,9 +17,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 type TicketUpsertFormProps = {
   ticket?: Ticket;
   hasActivePlan?: boolean;
+  isOwner?: boolean;
 };
 
-const TicketUpsertForm = ({ ticket, hasActivePlan }: TicketUpsertFormProps) => {
+const TicketUpsertForm = ({
+  ticket,
+  hasActivePlan,
+  isOwner,
+}: TicketUpsertFormProps) => {
   const [actionState, action] = useActionState(
     upsertTicket.bind(null, ticket?.id ?? ""),
     EMPTY_ACTION_STATE,
@@ -88,21 +93,22 @@ const TicketUpsertForm = ({ ticket, hasActivePlan }: TicketUpsertFormProps) => {
         </div>
       </div>
 
-      {hasActivePlan ? (
-        <div className="flex items-center gap-x-2">
-          <Checkbox
-            id="private"
-            name="private"
-            value="true"
-            defaultChecked={ticket?.private ?? false}
-          />
-          <Label htmlFor="private">Private ticket</Label>
-        </div>
-      ) : (
-        <p className="text-xs text-muted-foreground">
-          🔒 Upgrade to a paid plan to create private tickets.
-        </p>
-      )}
+      {(isOwner || !ticket) &&
+        (hasActivePlan ? (
+          <div className="flex items-center gap-x-2">
+            <Checkbox
+              id="private"
+              name="private"
+              value="true"
+              defaultChecked={ticket?.private ?? false}
+            />
+            <Label htmlFor="private">Private ticket</Label>
+          </div>
+        ) : (
+          <p className="text-xs text-muted-foreground">
+            🔒 Upgrade to a paid plan to create private tickets.
+          </p>
+        ))}
 
       <SubmitButton label={ticket ? "Update Ticket" : "Create Ticket"} />
     </Form>

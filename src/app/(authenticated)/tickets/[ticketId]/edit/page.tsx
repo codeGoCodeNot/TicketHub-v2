@@ -52,7 +52,11 @@ const TicketEditPage = async ({ params }: TicketEditPageProps) => {
           title="Edit a ticket"
           description="Edit an existing ticket"
           content={
-            <TicketUpsertForm ticket={ticket} hasActivePlan={hasActivePlan} />
+            <TicketUpsertForm
+              ticket={ticket}
+              hasActivePlan={hasActivePlan}
+              isOwner={isTicketOwner}
+            />
           }
         />
       </div>
