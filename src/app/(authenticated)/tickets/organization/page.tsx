@@ -2,9 +2,11 @@ import CardCompact from "@/components/card-compact";
 import Heading from "@/components/heading";
 import Spinner from "@/components/spinner";
 import getActiveOrganization from "@/features/organization/queries/get-active-organization";
+import getStripeProvisioning from "@/features/stripe/queries/get-stripe-provisioning";
 import TicketList from "@/features/tickets/components/ticket-list";
 import TicketUpsertForm from "@/features/tickets/components/ticket-upsert-form";
 import { searchParamsCache } from "@/features/tickets/search-params";
+import { getSession } from "@/lib/get-session";
 import { SearchParams } from "nuqs/server";
 
 import { Suspense } from "react";
@@ -19,6 +21,11 @@ const TicketsByOrganizationPage = async ({
   const parsed = await searchParamsCache.parse(searchParams);
   const activeOrganization = await getActiveOrganization();
 
+  const session = await getSession();
+  const { hasActivePlan } = await getStripeProvisioning(
+    session?.session.activeOrganizationId!,
+  );
+
   return (
     <div className="flex flex-col gap-y-8 flex-1">
       <Heading
@@ -29,7 +36,7 @@ const TicketsByOrganizationPage = async ({
         className="w-full max-w-[420px] self-center"
         title="Create Ticket"
         description="A new ticket can be created here"
-        content={<TicketUpsertForm />}
+        content={<TicketUpsertForm hasActivePlan={hasActivePlan} />}
       />
       <Suspense fallback={<Spinner />}>
         <TicketList

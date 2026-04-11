@@ -25,12 +25,15 @@ const getStripeProvisioning = async (
     ]);
 
   const currentMembers = membershipCount + invitationCount;
-  const isActive = stripeCustomer?.subscriptionStatus === "active";
+  const isActive =
+    stripeCustomer?.subscriptionStatus === "active" ||
+    stripeCustomer?.subscriptionStatus === "trialing";
 
   if (!isActive || !stripeCustomer.productId) {
     return {
       allowedMembers: 1,
       currentMembers,
+      hasActivePlan: false,
     };
   }
 
@@ -39,6 +42,7 @@ const getStripeProvisioning = async (
   return {
     allowedMembers: +product.metadata.allowedMembers,
     currentMembers,
+    hasActivePlan: true,
   };
 };
 

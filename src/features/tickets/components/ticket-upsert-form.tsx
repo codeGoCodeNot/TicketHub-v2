@@ -12,13 +12,14 @@ import { Ticket } from "@/generated/prisma/client";
 import { fromCent } from "@/utils/currency";
 import { useActionState, useRef } from "react";
 import upsertTicket from "../actions/upsert-ticket";
-import { da } from "date-fns/locale";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type TicketUpsertFormProps = {
   ticket?: Ticket;
+  hasActivePlan?: boolean;
 };
 
-const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
+const TicketUpsertForm = ({ ticket, hasActivePlan }: TicketUpsertFormProps) => {
   const [actionState, action] = useActionState(
     upsertTicket.bind(null, ticket?.id ?? ""),
     EMPTY_ACTION_STATE,
@@ -86,6 +87,22 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
           <FieldError actionState={actionState} name="bounty" />
         </div>
       </div>
+
+      {hasActivePlan ? (
+        <div className="flex items-center gap-x-2">
+          <Checkbox
+            id="private"
+            name="private"
+            value="true"
+            defaultChecked={ticket?.private ?? false}
+          />
+          <Label htmlFor="private">Private ticket</Label>
+        </div>
+      ) : (
+        <p className="text-xs text-muted-foreground">
+          🔒 Upgrade to a paid plan to create private tickets.
+        </p>
+      )}
 
       <SubmitButton label={ticket ? "Update Ticket" : "Create Ticket"} />
     </Form>

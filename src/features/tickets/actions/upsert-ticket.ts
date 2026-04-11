@@ -20,12 +20,14 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import * as ticketData from "../data";
 import getTicketPermission from "../queries/get-ticket-permission";
+import getStripeProvisioning from "@/features/stripe/queries/get-stripe-provisioning";
 
 const upsertTicketSchema = z.object({
   title: z.string().min(1, "Title is required."),
   content: z.string().min(3, "Content must be at least 3 characters long."),
   bounty: z.coerce.number().positive("Bounty is required."),
   deadline: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "is required"),
+  private: z.coerce.boolean().default(false),
 });
 
 const upsertTicket = async (
@@ -36,6 +38,8 @@ const upsertTicket = async (
   const user = await getAuthOrRedirect();
   const session = await getSession();
   const organizationId = session?.session.activeOrganizationId;
+
+  const { hasActivePlan } = await getStripeProvisioning(organizationId);
 
   if (!organizationId)
     return toActionState("ERROR", "Active organization not found.", formData);
@@ -70,6 +74,7 @@ const upsertTicket = async (
       userId: user.id,
       organizationId,
       bounty: toCent(data.bounty),
+      private: data.private && hasActivePlan ? true : false,
     };
 
     await ticketData.upsertTicket({

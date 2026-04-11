@@ -7,6 +7,9 @@ import TicketUpsertForm from "@/features/tickets/components/ticket-upsert-form";
 import getTicket from "@/features/tickets/queries/get-ticket";
 import { ticketPagePath, ticketsPagePath } from "@/path";
 import { forbidden, notFound } from "next/navigation";
+import { getSession } from "@/lib/get-session";
+import getStripeProvisioning from "@/features/stripe/queries/get-stripe-provisioning";
+import getTicketPermission from "@/features/tickets/queries/get-ticket-permission";
 
 type TicketEditPageProps = {
   params: Promise<{ ticketId: string }>;
@@ -17,11 +20,21 @@ const TicketEditPage = async ({ params }: TicketEditPageProps) => {
   const { ticketId } = await params;
   const ticket = await getTicket(ticketId);
 
-  const isTicketFound = !!ticket;
+  if (!ticket) notFound();
+
   const isTicketOwner = isOwnership(user, ticket);
 
-  if (!isTicketFound) notFound();
-  if (!isTicketOwner) forbidden();
+  const permission = await getTicketPermission({
+    organizationId: ticket.organizationId,
+    userId: user?.id ?? "",
+  });
+
+  if (!isTicketOwner && !permission.canUpdateTickets) forbidden();
+
+  const session = await getSession();
+  const { hasActivePlan } = await getStripeProvisioning(
+    session?.session.activeOrganizationId!,
+  );
 
   return (
     <div className="flex flex-col gap-y-8 flex-1">
@@ -38,7 +51,9 @@ const TicketEditPage = async ({ params }: TicketEditPageProps) => {
           className="w-full max-w-[420px] animate-fade-from-top"
           title="Edit a ticket"
           description="Edit an existing ticket"
-          content={<TicketUpsertForm ticket={ticket} />}
+          content={
+            <TicketUpsertForm ticket={ticket} hasActivePlan={hasActivePlan} />
+          }
         />
       </div>
     </div>
