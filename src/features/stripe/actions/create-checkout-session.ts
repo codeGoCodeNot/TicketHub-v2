@@ -15,17 +15,33 @@ const createCheckoutSession = async (
 
   await getAuthOrRedirect();
 
-  const stripeCustomer = await prisma.stripeCustomer.findUnique({
+  let stripeCustomer = await prisma.stripeCustomer.findUnique({
     where: {
       organizationId,
     },
   });
 
-  if (!stripeCustomer)
-    return toActionState(
-      "ERROR",
-      "Stripe customer not found for this organization",
-    );
+  if (!stripeCustomer) {
+    const organization = await prisma.organization.findUniqueOrThrow({
+      where: {
+        id: organizationId,
+      },
+    });
+
+    const customer = await stripe.customers.create({
+      name: organization.name,
+      metadata: {
+        organizationId,
+      },
+    });
+
+    stripeCustomer = await prisma.stripeCustomer.create({
+      data: {
+        customerId: customer.id,
+        organizationId,
+      },
+    });
+  }
 
   const session = await stripe.checkout.sessions.create({
     customer: stripeCustomer.customerId,
