@@ -43,7 +43,7 @@ const AiChatBot = ({ initialMessages, userName }: AiChatBotProps) => {
             {messages.map((message) => (
               <div
                 key={message.id}
-                className={`p-2 rounded-lg max-w-[85%] ${
+                className={`text-xs p-2 rounded-lg max-w-[85%] ${
                   message.role === "user"
                     ? "bg-primary text-primary-foreground self-end"
                     : "bg-muted self-start"
