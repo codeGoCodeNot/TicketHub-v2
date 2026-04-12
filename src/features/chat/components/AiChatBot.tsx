@@ -1,16 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LucideMessageSquare, LucideSend, LucideX } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
-const AiChatBot = () => {
+type AiChatBotProps = {
+  initialMessages?: { role: string; content: string; id: string }[];
+  userName?: string;
+};
+
+const AiChatBot = ({ initialMessages, userName }: AiChatBotProps) => {
   const [input, setInput] = useState("");
-  const { messages, sendMessage } = useChat();
+  const { messages, sendMessage, setMessages } = useChat();
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (initialMessages?.length) {
+      setMessages(
+        initialMessages.map((msg) => ({
+          id: msg.id,
+          role: msg.role as "user" | "assistant" | "system",
+          parts: [{ type: "text", text: msg.content }],
+        })),
+      );
+    }
+  }, []);
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
@@ -26,20 +43,22 @@ const AiChatBot = () => {
             {messages.map((message) => (
               <div
                 key={message.id}
-                className={`text-xs p-2 rounded-lg max-w-[85%] ${
+                className={`p-2 rounded-lg max-w-[85%] ${
                   message.role === "user"
                     ? "bg-primary text-primary-foreground self-end"
                     : "bg-muted self-start"
                 }`}
               >
-                {message.role === "user" ? "You: " : "AI: "}
+                {message.role === "user"
+                  ? `${userName?.split(" ")[0] ?? "You"}: `
+                  : "AI: "}
                 {message.parts.map((part, idx) => {
                   switch (part.type) {
                     case "text":
                       return (
                         <div
                           key={idx}
-                          className="text-sm prose prose-sm dark:prose-invert max-w-none"
+                          className="prose prose-xs dark:prose-invert max-w-none overflow-hidden break-words"
                         >
                           <ReactMarkdown>{part.text}</ReactMarkdown>
                         </div>

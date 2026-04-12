@@ -1,22 +1,20 @@
 import { convertToModelMessages, streamText, UIMessage } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 import { redis } from "@/lib/ratelimit";
+import prisma from "@/lib/prisma";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export const POST = async (request: Request) => {
   const { messages }: { messages: UIMessage[] } = await request.json();
 
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session) return new Response("Unauthorized", { status: 401 });
+
   // get last message and create a cache key based on its text content
   const lastMessage = messages[messages.length - 1];
-  const cacheKey = `chat:${lastMessage.parts.map((part: any) => part.text).join(":")}`;
-
-  // check if we have a cached response for this message
-  const cached = await redis.get(cacheKey);
-
-  if (cached) {
-    return new Response(cached as string, {
-      headers: { "Content-Type": "text/plain" },
-    });
-  }
+  const userText = lastMessage.parts.map((part: any) => part.text).join("");
+  const cacheKey = `chat:${session.user.id}:${userText}`;
 
   const result = streamText({
     model: anthropic("claude-haiku-4-5-20251001"),
@@ -37,9 +35,27 @@ export const POST = async (request: Request) => {
       `,
 
     messages: await convertToModelMessages(messages),
+
     onFinish: async ({ text }) => {
-      // cache the response for 1 hour
-      await redis.set(cacheKey, text, { ex: 60 * 60 });
+      const alreadySaved = await redis.get(cacheKey);
+
+      if (!alreadySaved) {
+        await redis.set(cacheKey, "1", { ex: 60 * 60 * 24 });
+        await prisma.chatMessage.createMany({
+          data: [
+            {
+              role: "user",
+              content: userText,
+              userId: session.user.id,
+            },
+            {
+              role: "assistant",
+              content: text,
+              userId: session.user.id,
+            },
+          ],
+        });
+      }
     },
   });
 

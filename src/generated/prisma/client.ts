@@ -47,6 +47,11 @@ export { Prisma }
  */
 export type Ticket = Prisma.TicketModel
 /**
+ * Model ChatMessage
+ * 
+ */
+export type ChatMessage = Prisma.ChatMessageModel
+/**
  * Model Comment
  * 
  */

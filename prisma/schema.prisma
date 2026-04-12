@@ -42,6 +42,17 @@ enum TicketStatus {
   DONE
 }
 
+model ChatMessage {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  role String
+  content String
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
 
 model Comment {
   id        String   @id @default(uuid())
@@ -97,6 +108,7 @@ model User {
   members     Member[]
   invitations Invitation[]
   credentials Credential[]
+  chatMessages ChatMessage[]
 
   role       String?
   banned     Boolean?  @default(false)
