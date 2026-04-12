@@ -5,6 +5,7 @@ import { useChat } from "@ai-sdk/react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LucideMessageSquare, LucideSend, LucideX } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 
 const AiChatBot = () => {
   const [input, setInput] = useState("");
@@ -23,12 +24,26 @@ const AiChatBot = () => {
           </div>
           <div className="flex flex-col gap-2 p-3 h-64 overflow-y-auto">
             {messages.map((message) => (
-              <div key={message.id}>
+              <div
+                key={message.id}
+                className={`text-xs p-2 rounded-lg max-w-[85%] ${
+                  message.role === "user"
+                    ? "bg-primary text-primary-foreground self-end"
+                    : "bg-muted self-start"
+                }`}
+              >
                 {message.role === "user" ? "You: " : "AI: "}
                 {message.parts.map((part, idx) => {
                   switch (part.type) {
                     case "text":
-                      return <span key={idx}>{part.text}</span>;
+                      return (
+                        <div
+                          key={idx}
+                          className="text-sm prose prose-sm dark:prose-invert max-w-none"
+                        >
+                          <ReactMarkdown>{part.text}</ReactMarkdown>
+                        </div>
+                      );
                   }
                 })}
               </div>

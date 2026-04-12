@@ -12,3 +12,5 @@ export const forgotPasswordRateLimit = new Ratelimit({
   limiter: Ratelimit.slidingWindow(10, "10m"),
   prefix: "ratelimit:forgotPassword",
 });
+
+export const redis = Redis.fromEnv();
