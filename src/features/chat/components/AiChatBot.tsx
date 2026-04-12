@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,8 @@ const AiChatBot = ({ initialMessages, userName }: AiChatBotProps) => {
   const { messages, sendMessage, setMessages } = useChat();
   const [open, setOpen] = useState(false);
 
+  const bottomRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (initialMessages?.length) {
       setMessages(
@@ -28,6 +30,10 @@ const AiChatBot = ({ initialMessages, userName }: AiChatBotProps) => {
       );
     }
   }, []);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, open]);
 
   return (
     <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
@@ -67,6 +73,7 @@ const AiChatBot = ({ initialMessages, userName }: AiChatBotProps) => {
                 })}
               </div>
             ))}
+            <div ref={bottomRef} />
           </div>
 
           <form
