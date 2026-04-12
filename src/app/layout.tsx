@@ -17,8 +17,31 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "TicketHub",
-  description: "Create and manage your tickets with ease",
+  title: {
+    default: "TicketHub v2",
+    template: "%s | TicketHub v2",
+  },
+  description:
+    "A production-grade ticket management SaaS for teams. Create tickets, manage organizations, and track progress.",
+  keywords: [
+    "ticket management",
+    "project management",
+    "SaaS",
+    "team collaboration",
+  ],
+  authors: [{ name: "Johnsen Berdin", url: "https://johnsenb.dev" }],
+  openGraph: {
+    title: "TicketHub v2",
+    description: "A production-grade ticket management SaaS for teams.",
+    url: "https://tickethubv2.johnsenb.dev",
+    siteName: "TicketHub v2",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "TicketHub v2",
+    description: "A production-grade ticket management SaaS for teams.",
+  },
 };
 
 export default function RootLayout({
