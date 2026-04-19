@@ -47,7 +47,10 @@ const Header = () => {
   if (loading) return null;
 
   return (
-    <nav className="w-full flex py-2.5 px-5 justify-between border-b bg-background/95 backdrop-blur supports-backdrop-blur:bg-background/60 fixed top-0 right-0 left-0 z-20 animate-fade-from-top">
+    <nav
+      key={pathName}
+      className="w-full flex py-2.5 px-5 justify-between border-b bg-background/95 backdrop-blur supports-backdrop-blur:bg-background/60 fixed top-0 right-0 left-0 z-20 animate-fade-from-top"
+    >
       <div className="flex gap-x-2 items-center">
         <Button asChild variant="ghost" className="font-semibold text-lg">
           <Link href={homePagePath()}>
