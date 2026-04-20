@@ -2,6 +2,8 @@
 
 import { authClient } from "@/lib/auth-client";
 import { signInPagePath } from "@/path";
+import { useQueryClient } from "@tanstack/react-query";
+
 import { LucideLogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -10,25 +12,25 @@ import { toast } from "sonner";
 const SignOutItem = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
 
-  const handleSignOut = async () => {
+  const handleLogout = async () => {
     setLoading(true);
     const { error } = await authClient.signOut();
     setLoading(false);
 
     if (error) {
-      return toast.error(
-        error.message || "Failed to sign out. Please try again.",
-      );
+      return toast.error("Failed to log out. Please try again.");
     } else {
-      toast.success("Signed out successfully.");
+      queryClient.removeQueries({ queryKey: ["user"] });
+      toast.success("Logged out successfully.");
       router.push(signInPagePath());
     }
   };
 
   return (
     <button
-      onClick={handleSignOut}
+      onClick={handleLogout}
       disabled={loading}
       className="flex items-center gap-x-2 w-full"
     >
