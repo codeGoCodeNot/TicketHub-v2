@@ -6,10 +6,9 @@ import useActionFeedback from "@/components/form/hooks/use-action-feedback";
 import SubmitButton from "@/components/form/submit-button";
 import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
 import { Input } from "@/components/ui/input";
-import { authClient } from "@/lib/auth-client";
+import { useQueryClient } from "@tanstack/react-query";
 import { LucideUserCircle } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { useActionState, useCallback, useRef, useState } from "react";
 import updateProfile from "../actions/update-profile";
 import createCroppedImage from "../utils/create-cropped-image";
@@ -38,6 +37,8 @@ const UpdateProfileForm = ({
     EMPTY_ACTION_STATE,
   );
 
+  const queryClient = useQueryClient();
+
   const [previewUrl, setPreviewUrl] = useState<string | null>(image ?? null);
   const [cropSrc, setCropSrc] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -48,13 +49,11 @@ const UpdateProfileForm = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const router = useRouter();
-  const { refetch } = authClient.useSession();
+
 
   useActionFeedback(actionState, {
     onSuccess: () => {
-      refetch();
-      router.refresh();
+      queryClient.invalidateQueries({ queryKey: ["user"] });
     },
   });
 
