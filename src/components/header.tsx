@@ -1,18 +1,16 @@
 "use client";
 
-import { authClient } from "@/lib/auth-client";
+import { getAuthUser } from "@/features/auth/actions/get-auth-user";
 import { homePagePath, signInPagePath, signUpPagePath } from "@/path";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { LucideTickets } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 import AccountDropdown from "./account-dropdown";
 import ThemeSwitcher from "./theme/theme-switcher";
 import { Button } from "./ui/button";
 import { SidebarTrigger } from "./ui/sidebar";
-import { useEffect, useState } from "react";
-import { User } from "better-auth/types";
-import { usePathname } from "next/navigation";
-import { getAuthUser } from "@/features/auth/actions/get-auth-user";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const Header = () => {
   const pathname = usePathname();
