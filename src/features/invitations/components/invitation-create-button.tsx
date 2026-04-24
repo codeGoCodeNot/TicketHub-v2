@@ -16,8 +16,9 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import createInvitation from "../actions/create-invitation";
+import { toast } from "sonner";
 
 type InvitationCreateButtonProps = {
   organizationId: string;
@@ -32,6 +33,13 @@ const InvitationCreateButton = ({
     createInvitation.bind(null, organizationId),
     EMPTY_ACTION_STATE,
   );
+
+  useEffect(() => {
+    if (actionState.status === "SUCCESS") {
+      toast.success(actionState.message);
+      setOpen(false);
+    }
+  }, [actionState.timestamp]);
 
   const handleClose = () => {
     setOpen(false);
