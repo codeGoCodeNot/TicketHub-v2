@@ -16,9 +16,14 @@ export const POST = async (request: Request) => {
   const userText = lastMessage.parts.map((part: any) => part.text).join("");
   const cacheKey = `chat:${session.user.id}:${userText}`;
 
+  const filteredMessages = messages.filter((message) =>
+    message.parts.some((part: any) => part.text.trim() !== ""),
+  );
+
   const result = streamText({
     model: anthropic("claude-haiku-4-5-20251001"),
     system: `You are the official AI assistant for TicketHub v2 — a team-based ticket and task management platform.
+  
 
 Your job is to help users navigate and use TicketHub v2 effectively.
 
@@ -65,7 +70,7 @@ If you cannot answer something, direct the user to contact the developer:
 
 Always be concise, friendly, and helpful. Only answer questions related to TicketHub v2.`,
 
-    messages: await convertToModelMessages(messages),
+    messages: await convertToModelMessages(filteredMessages),
 
     onFinish: async ({ text }) => {
       const alreadySaved = await redis.get(cacheKey);
