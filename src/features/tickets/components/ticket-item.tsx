@@ -1,25 +1,34 @@
 import ToolTip from "@/components/tool-tip";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { ticketEditPagePath, ticketPagePath } from "@/path";
 import { toCurrencyFromCents } from "@/utils/currency";
 import clsx from "clsx";
 import {
+  LucideCalendar,
+  LucideCoins,
   LucideEdit,
   LucideMoreVertical,
   LucideSquareArrowOutUpRight,
 } from "lucide-react";
 import Link from "next/link";
-import { TICKET_ICONS } from "../constants";
+import { TICKET_ICONS, TICKET_STATUS_LABELS } from "../constants";
 import { TicketWithMetada } from "../type";
 import TicketMoreMenu from "./ticket-more-menu";
+
+const STATUS_CLASSES: Record<string, string> = {
+  OPEN: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300",
+  IN_PROGRESS:
+    "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
+  DONE: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
+};
 
 type TicketItemProps = {
   ticket: TicketWithMetada;
@@ -40,17 +49,17 @@ const TicketItem = ({
     (ticket.isOwner || ticket.canUpdateTickets) &&
     (ticket.canUpdateTickets ? (
       <ToolTip label="Edit ticket">
-        <Button variant="outline" size="icon" asChild>
+        <Button variant="ghost" size="icon" className="size-8" asChild>
           <Link prefetch href={ticketEditPagePath(ticket.id)}>
-            <LucideEdit />
+            <LucideEdit className="size-4" />
           </Link>
         </Button>
       </ToolTip>
     ) : (
       <ToolTip label="You do not have permission to edit this ticket.">
         <span>
-          <Button variant="outline" size="icon" disabled>
-            <LucideEdit />
+          <Button variant="ghost" size="icon" className="size-8" disabled>
+            <LucideEdit className="size-4" />
           </Button>
         </span>
       </ToolTip>
@@ -58,14 +67,9 @@ const TicketItem = ({
 
   const detailButton = (
     <ToolTip label="View details">
-      <Button
-        asChild
-        variant="outline"
-        size="icon"
-        className="hover:bg-secondary/80"
-      >
+      <Button asChild variant="ghost" size="icon" className="size-8">
         <Link prefetch href={ticketPagePath(ticket.id)}>
-          <LucideSquareArrowOutUpRight />
+          <LucideSquareArrowOutUpRight className="size-4" />
         </Link>
       </Button>
     </ToolTip>
@@ -75,8 +79,8 @@ const TicketItem = ({
     <TicketMoreMenu
       ticket={ticket}
       trigger={
-        <Button variant="outline" size="icon">
-          <LucideMoreVertical />
+        <Button variant="ghost" size="icon" className="size-8">
+          <LucideMoreVertical className="size-4" />
         </Button>
       }
       canDeleteTickets={ticket.canDeleteTickets}
@@ -85,67 +89,84 @@ const TicketItem = ({
 
   return (
     <div
-      className={clsx("flex flex-col gap-x-1 w-full gap-y-4", {
-        "max-w-[420px]": !isDetail,
-        "max-w-[550px]": isDetail,
+      className={clsx("flex flex-col gap-y-4 w-full", {
+        "max-w-[640px]": !isDetail,
+        "max-w-[560px]": isDetail,
       })}
     >
-      <div className="flex gap-x-1">
-        <Card className="w-full">
-          <CardHeader>
-            <CardTitle className="flex justify-between items-center">
-              <div className="flex flex-col gap-y-2 w-full">
-                <div className="flex items-center gap-x-1 w-full justify-end mb-2">
-                  <Avatar>
-                    <AvatarImage
-                      src={ticket.user.image ?? undefined}
-                      alt={ticket.user.name || "User Avatar"}
-                    />
-                    <AvatarFallback>
-                      {ticket.user.name?.charAt(0).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="text-xs text-muted-foreground">
-                    {ticket.user?.name.split(" ")[0]}
-                  </div>
-                </div>
-                <div className="flex gap-x-2 items-center">
-                  <span>{TICKET_ICONS[ticket.status]}</span>
-                  <span className="truncate text-lg">{ticket.title}</span>
-                </div>
-              </div>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <span
-              className={clsx("whitespace-break-spaces", {
-                "line-clamp-3": !isDetail,
-              })}
-            >
-              {ticket.content}
-            </span>
-          </CardContent>
-          <CardFooter className="flex justify-between">
-            <p className="text-sm text-muted-foreground">{ticket.deadline}</p>
-            <p className="text-sm text-muted-foreground">
+      <Card className="w-full transition-shadow hover:shadow-md">
+        <CardHeader className="gap-y-2">
+          <div className="flex items-center justify-between gap-x-2">
+            <div className="flex items-center gap-x-2 min-w-0">
+              <Avatar className="size-6 shrink-0">
+                <AvatarImage
+                  src={ticket.user.image ?? undefined}
+                  alt={ticket.user.name || "User Avatar"}
+                />
+                <AvatarFallback className="text-xs">
+                  {ticket.user.name?.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <span className="text-xs text-muted-foreground truncate">
+                {ticket.user.name?.split(" ")[0]}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-x-1 shrink-0">
+              <Badge
+                variant="secondary"
+                className={clsx(
+                  "gap-x-1 rounded-sm border-0 text-xs font-medium",
+                  STATUS_CLASSES[ticket.status],
+                )}
+              >
+                {TICKET_ICONS[ticket.status]}
+                {TICKET_STATUS_LABELS[ticket.status]}
+              </Badge>
+              {isDetail ? (
+                <>
+                  {editButton}
+                  {moreMenu}
+                </>
+              ) : (
+                <>
+                  {detailButton}
+                  {editButton}
+                </>
+              )}
+            </div>
+          </div>
+
+          <p className="text-sm font-semibold leading-snug text-foreground">
+            {ticket.title}
+          </p>
+        </CardHeader>
+
+        <CardContent>
+          <p
+            className={clsx(
+              "text-xs text-muted-foreground whitespace-break-spaces leading-relaxed",
+              { "line-clamp-3": !isDetail },
+            )}
+          >
+            {ticket.content}
+          </p>
+        </CardContent>
+
+        <CardFooter className="gap-x-5">
+          <div className="flex items-center gap-x-1.5 text-xs text-muted-foreground">
+            <LucideCalendar className="size-3.5 shrink-0" />
+            <span>{ticket.deadline}</span>
+          </div>
+          <div className="flex items-center gap-x-1.5 text-xs">
+            <LucideCoins className="size-3.5 shrink-0 text-muted-foreground" />
+            <span className="font-medium text-foreground">
               {toCurrencyFromCents(ticket.bounty)}
-            </p>
-          </CardFooter>
-        </Card>
-        <div className="flex flex-col gap-y-1">
-          {isDetail ? (
-            <>
-              {editButton}
-              {moreMenu}
-            </>
-          ) : (
-            <>
-              {detailButton}
-              {editButton}
-            </>
-          )}
-        </div>
-      </div>
+            </span>
+          </div>
+        </CardFooter>
+      </Card>
+
       {attachments}
       {referencedTicket}
       {comments}
