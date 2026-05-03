@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient, InfiniteData } from "@tanstack/react-query";
 import getComments from "../../queries/get-comments";
 import { CommentWithMetadata } from "../../type";
 import removeAttachmentFromCache from "./remove-attachment-from-cache";
@@ -44,12 +44,31 @@ const usePaginatedComments = (
   const paginatedComments = data.pages.flatMap((page) => page.list);
   const queryClient = useQueryClient();
 
+  const handleCreateComment = (comment: CommentWithMetadata) => {
+    queryClient.setQueryData<
+      InfiniteData<Awaited<ReturnType<typeof getComments>>>
+    >(queryKey, (cache) => {
+      if (!cache) return cache;
+      const [first, ...rest] = cache.pages;
+      return {
+        ...cache,
+        pages: [
+          {
+            ...first,
+            list: [comment, ...first.list],
+            metadata: { ...first.metadata, count: first.metadata.count + 1 },
+          },
+          ...rest,
+        ],
+      };
+    });
+  };
+
   const handleDeleteAttachment = (commentId: string, attachmentId: string) => {
     removeAttachmentFromCache(
       { queryClient, queryKey },
       { commentId, attachmentId },
     );
-    queryClient.invalidateQueries({ queryKey });
   };
 
   const handleDeleteComment = (commentId: string) => {
@@ -61,7 +80,7 @@ const usePaginatedComments = (
     hasNextPage,
     isFetchingNextPage,
     paginatedComments,
-    onHandleCreateComment: () => queryClient.invalidateQueries({ queryKey }),
+    onHandleCreateComment: handleCreateComment,
     onHandleDeleteCommentAttachment: handleDeleteAttachment,
     onHandleDeleteComment: handleDeleteComment,
     onHandleUpdateComment: () => queryClient.invalidateQueries({ queryKey }),

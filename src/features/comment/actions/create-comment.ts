@@ -28,6 +28,7 @@ export const createComment = async (
   const user = await getAuthOrRedirect();
 
   let comment;
+  let attachments: Awaited<ReturnType<typeof attachmentService.createAttachments>> = [];
 
   try {
     const { content, files } = createSchema.parse({
@@ -49,7 +50,7 @@ export const createComment = async (
       },
     });
 
-    await attachmentService.createAttachments({
+    attachments = await attachmentService.createAttachments({
       entity: "COMMENT",
       subject: comment,
       entityId: comment.id,
@@ -83,6 +84,7 @@ export const createComment = async (
   );
   return toActionState("SUCCESS", "Comment created successfully", undefined, {
     ...comment,
+    attachments,
     isOwner: true,
   });
 };

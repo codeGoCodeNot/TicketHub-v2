@@ -1,7 +1,7 @@
 "use client";
 
 import CardCompact from "@/components/card-compact";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { CommentWithMetadata } from "../../type";
 import CommentCreateForm from "../comment-create-form";
@@ -19,9 +19,10 @@ type CommentsProps = {
       cursor?: { id: string; createdAt: number };
     };
   };
+  currentUser: { id: string; name: string | null; image: string | null };
 };
 
-const Comments = ({ ticketId, comments }: CommentsProps) => {
+const Comments = ({ ticketId, comments, currentUser }: CommentsProps) => {
   const {
     fetchNextPage,
     hasNextPage,
@@ -34,12 +35,36 @@ const Comments = ({ ticketId, comments }: CommentsProps) => {
   } = usePaginatedComments(ticketId, comments);
 
   const { ref, inView } = useInView();
+  const [pendingComment, setPendingComment] = useState<CommentWithMetadata | null>(null);
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
   }, [fetchNextPage, hasNextPage, inView, isFetchingNextPage]);
+
+  const displayedComments = pendingComment
+    ? [pendingComment, ...paginatedComments]
+    : paginatedComments;
+
+  const handleBeforeSubmit = (content: string) => {
+    setPendingComment({
+      id: `optimistic-${Date.now()}`,
+      content,
+      userId: currentUser.id,
+      ticketId,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      user: { name: currentUser.name, image: currentUser.image ?? null },
+      attachments: [],
+      isOwner: true,
+    } as CommentWithMetadata);
+  };
+
+  const handleCreateComment = (comment: CommentWithMetadata) => {
+    setPendingComment(null);
+    onHandleCreateComment(comment);
+  };
 
   return (
     <>
@@ -50,13 +75,15 @@ const Comments = ({ ticketId, comments }: CommentsProps) => {
         content={
           <CommentCreateForm
             ticketId={ticketId}
-            onCreateComment={onHandleCreateComment}
+            onCreateComment={handleCreateComment}
+            onBeforeSubmit={handleBeforeSubmit}
+            onError={() => setPendingComment(null)}
           />
         }
       />
       <CommentEditStateProvider>
         <div className="flex flex-col gap-y-2 ml-8 mt-2">
-          {paginatedComments.map((comment) => (
+          {displayedComments.map((comment) => (
             <CommentItem
               key={comment.id}
               comment={comment}

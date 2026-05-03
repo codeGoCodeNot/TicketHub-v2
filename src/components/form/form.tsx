@@ -10,6 +10,7 @@ type FormProps = {
   children: React.ReactNode;
   onSuccess?: (actionState: ActionState) => void;
   onError?: (actionState: ActionState) => void;
+  onSubmit?: (e: React.SubmitEvent<HTMLFormElement>) => void;
 };
 
 const Form = ({
@@ -18,6 +19,7 @@ const Form = ({
   children,
   onSuccess,
   onError,
+  onSubmit,
 }: FormProps) => {
   useActionFeedback(actionState, {
     onSuccess: ({ actionState }) => {
@@ -31,7 +33,7 @@ const Form = ({
   });
 
   return (
-    <form action={action} className="flex flex-col gap-y-2">
+    <form action={action} onSubmit={onSubmit} className="flex flex-col gap-y-2">
       {children}
     </form>
   );

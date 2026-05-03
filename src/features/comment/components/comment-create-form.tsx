@@ -17,11 +17,15 @@ import { ACCEPTED } from "@/features/attachments/constants";
 type CommentCreateFormProps = {
   ticketId: string;
   onCreateComment?: (comment: CommentWithMetadata) => void;
+  onBeforeSubmit?: (content: string) => void;
+  onError?: () => void;
 };
 
 const CommentCreateForm = ({
   ticketId,
   onCreateComment,
+  onBeforeSubmit,
+  onError,
 }: CommentCreateFormProps) => {
   const [actionState, action] = useActionState(
     createComment.bind(null, ticketId),
@@ -32,8 +36,19 @@ const CommentCreateForm = ({
     onCreateComment?.(actionState.data as CommentWithMetadata);
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const content = (new FormData(e.currentTarget).get("content") as string) ?? "";
+    if (content.trim()) onBeforeSubmit?.(content);
+  };
+
   return (
-    <Form action={action} actionState={actionState} onSuccess={handleSuccess}>
+    <Form
+      action={action}
+      actionState={actionState}
+      onSuccess={handleSuccess}
+      onError={onError}
+      onSubmit={handleSubmit}
+    >
       <Textarea placeholder="Write a comment..." name="content" />
       <FieldError name="content" actionState={actionState} />
 

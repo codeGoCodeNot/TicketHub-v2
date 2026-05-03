@@ -7,6 +7,7 @@ import getComments from "@/features/comment/queries/get-comments";
 import ReferencedTickets from "@/features/tickets/components/referenced-tickets";
 import TicketItem from "@/features/tickets/components/ticket-item";
 import getTicket from "@/features/tickets/queries/get-ticket";
+import getAuth from "@/lib/get-auth";
 import { ticketsPagePath } from "@/path";
 import { notFound } from "next/navigation";
 
@@ -17,9 +18,10 @@ type TicketPageProps = {
 const TicketPage = async ({ params }: TicketPageProps) => {
   const { ticketId } = await params;
 
-  const [ticket, comments] = await Promise.all([
+  const [ticket, comments, user] = await Promise.all([
     getTicket(ticketId),
     getComments(ticketId),
+    getAuth(),
   ]);
 
   if (!ticket) {
@@ -38,7 +40,17 @@ const TicketPage = async ({ params }: TicketPageProps) => {
       <div className="flex justify-center animate-fade-from-top">
         <TicketItem
           ticket={ticket}
-          comments={<Comments ticketId={ticket.id} comments={comments} />}
+          comments={
+            <Comments
+              ticketId={ticket.id}
+              comments={comments}
+              currentUser={{
+                id: user!.id,
+                name: user!.name,
+                image: user!.image ?? null,
+              }}
+            />
+          }
           isDetail
           attachments={
             <Attachments
