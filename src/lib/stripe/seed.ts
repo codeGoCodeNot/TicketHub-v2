@@ -3,9 +3,6 @@ import prisma from "../prisma";
 import { stripe } from "./stripe";
 
 const seed = async () => {
-  const t0 = performance.now();
-  console.log("Seeding Stripe data...");
-
   const prices = await stripe.prices.list();
   const products = await stripe.products.list();
   const customers = await stripe.customers.list();
@@ -128,10 +125,6 @@ const seed = async () => {
     },
   });
 
-  const t1 = performance.now();
-  console.log(
-    `Stripe data seeded in ${((t1 - t0) / 1000).toFixed(2)} seconds.`,
-  );
 };
 
 seed();

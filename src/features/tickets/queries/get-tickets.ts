@@ -4,16 +4,15 @@ import getActiveOrganization from "@/features/organization/queries/get-active-or
 import getAuth from "@/lib/get-auth";
 import prisma from "@/lib/prisma";
 import { ParsedSearchParams } from "../search-params";
-import getTicketPermission from "./get-ticket-permission";
-
-// Query to fetch all tickets
 
 const getTickets = async (
   userId: string | undefined,
   searchParams: ParsedSearchParams,
 ) => {
-  const user = await getAuth();
-  const activeOrganization = await getActiveOrganization();
+  const [user, activeOrganization] = await Promise.all([
+    getAuth(),
+    getActiveOrganization(),
+  ]);
 
   if (!PAGE_SIZE_OPTIONS.includes(searchParams.size)) {
     throw new Error("Invalid page size");
@@ -21,7 +20,6 @@ const getTickets = async (
 
   const where = {
     userId,
-    // search by title with case-insensitive matching
     ...(searchParams.byOrganization && activeOrganization
       ? { organizationId: activeOrganization.id }
       : {}),
@@ -32,7 +30,6 @@ const getTickets = async (
     OR: [{ private: false }, { private: true, userId: user?.id ?? "" }],
   };
 
-  // calculate skip and take for pagination
   const skip = searchParams.page * searchParams.size;
   const take = searchParams.size;
 
@@ -41,9 +38,7 @@ const getTickets = async (
       where,
       skip,
       take,
-      // dynamic sorting based on sortKey and sortValue from searchParams
       orderBy: {
-        // generic sorting based on sortKey and sortValue
         [searchParams.sortKey]: searchParams.sortValue,
       },
       include: {
@@ -55,28 +50,35 @@ const getTickets = async (
         },
       },
     }),
-    prisma.ticket.count({
-      where,
-    }),
+    prisma.ticket.count({ where }),
   ]);
 
-  return {
-    list: await Promise.all(
-      tickets.map(async (ticket) => {
-        const permissions = await getTicketPermission({
-          organizationId: ticket.organizationId,
-          userId: user?.id ?? "",
-        });
-        const isOwner = isOwnership(user, ticket);
+  // Batch-fetch memberships for all unique orgs to avoid N+1 per-ticket permission lookups
+  const orgIds = [...new Set(tickets.map((t) => t.organizationId))];
+  const memberships = await prisma.member.findMany({
+    where: {
+      userId: user?.id ?? "",
+      organizationId: { in: orgIds },
+    },
+    select: {
+      organizationId: true,
+      canDeleteTickets: true,
+      canUpdateTickets: true,
+    },
+  });
+  const membershipMap = new Map(memberships.map((m) => [m.organizationId, m]));
 
-        return {
-          ...ticket,
-          isOwner,
-          canDeleteTickets: !!permissions.canDeleteTickets,
-          canUpdateTickets: !!permissions.canUpdateTickets,
-        };
-      }),
-    ),
+  return {
+    list: tickets.map((ticket) => {
+      const membership = membershipMap.get(ticket.organizationId);
+      const isOwner = isOwnership(user, ticket);
+      return {
+        ...ticket,
+        isOwner,
+        canDeleteTickets: !!membership?.canDeleteTickets,
+        canUpdateTickets: !!membership?.canUpdateTickets,
+      };
+    }),
     metadata: { count, hasNextPage: count > skip + take },
   };
 };
