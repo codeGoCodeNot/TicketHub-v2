@@ -43,13 +43,14 @@ const OrganizationSwitchButton = ({
       <Button
         variant={isActive ? "default" : "outline"}
         size="icon"
+        className="size-8"
         disabled={loading}
         onClick={handleSwitch}
       >
         {loading ? (
-          <LucideLoaderCircle className="animate-spin" />
+          <LucideLoaderCircle className="size-4 animate-spin" />
         ) : (
-          <LucideArrowLeftRight />
+          <LucideArrowLeftRight className="size-4" />
         )}
       </Button>
     </ToolTip>

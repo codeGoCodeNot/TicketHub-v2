@@ -5,13 +5,12 @@ import Form from "@/components/form/form";
 import SubmitButton from "@/components/form/submit-button";
 import { EMPTY_ACTION_STATE } from "@/components/form/utils/to-action-state";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useActionState, useEffect, useRef, useState } from "react";
+import Linkify from "linkify-react";
 import { updateComment } from "../actions/update-comment";
 import { useCommentEditState } from "./comment-edit-state";
-import { Input } from "@/components/ui/input";
-import { LucidePaperclip } from "lucide-react";
-import Linkify from "linkify-react";
 import renderLink from "../utils/render-link";
 
 type CommentEditInlineProps = {
@@ -19,7 +18,6 @@ type CommentEditInlineProps = {
   content: string;
   isOwner: boolean;
   onUpdate?: () => void;
-  date?: React.ReactNode;
 };
 
 const CommentEditInline = ({
@@ -27,11 +25,9 @@ const CommentEditInline = ({
   content,
   isOwner,
   onUpdate,
-  date,
 }: CommentEditInlineProps) => {
   const { isEditing, stopEditing } = useCommentEditState();
   const isCurrentCommentEditing = isEditing(commentId);
-  // Local draft lets users type freely before submit/cancel.
   const [draft, setDraft] = useState(content);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -40,7 +36,6 @@ const CommentEditInline = ({
     EMPTY_ACTION_STATE,
   );
 
-  //   Auto-focus the textarea when entering edit mode.
   useEffect(() => {
     if (isCurrentCommentEditing) {
       textareaRef.current?.focus();
@@ -48,7 +43,6 @@ const CommentEditInline = ({
   }, [isCurrentCommentEditing]);
 
   const handleCancel = () => {
-    // Reset unsaved changes and leave edit mode.
     setDraft(content);
     stopEditing(commentId);
   };
@@ -60,19 +54,15 @@ const CommentEditInline = ({
   };
 
   if (!isOwner || !isCurrentCommentEditing) {
-    // Read-only view when not editing.
     return (
-      <div className="flex-flex-col">
+      <div className="flex flex-col">
         <Linkify
           as="p"
-          className="whitespace-pre-wrap break-words text-sm mb-2"
-          options={{
-            render: renderLink,
-          }}
+          className="text-sm text-foreground leading-relaxed whitespace-pre-wrap break-words"
+          options={{ render: renderLink }}
         >
           {content}
         </Linkify>
-        {date}
       </div>
     );
   }
@@ -84,23 +74,24 @@ const CommentEditInline = ({
         name="content"
         value={draft}
         onChange={(event) => setDraft(event.target.value)}
-        className="min-h-24"
+        className="min-h-24 resize-none"
       />
       <FieldError actionState={actionState} name="content" />
 
-      <div className="flex items-center justify-end gap-x-2">
-        <LucidePaperclip className="text-muted-foreground" />
+      <div className="flex items-center justify-between gap-x-2 mt-1">
         <Input
           type="file"
           name="files"
           multiple
           accept="image/*,.pdf,.doc,.docx"
-          className="text-sm"
+          className="text-xs flex-1"
         />
-        <Button type="button" variant="ghost" size="sm" onClick={handleCancel}>
-          Cancel
-        </Button>
-        <SubmitButton label="Save" />
+        <div className="flex items-center gap-x-2 shrink-0">
+          <Button type="button" variant="ghost" size="sm" onClick={handleCancel}>
+            Cancel
+          </Button>
+          <SubmitButton label="Save" />
+        </div>
       </div>
     </Form>
   );

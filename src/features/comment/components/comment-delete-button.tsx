@@ -17,11 +17,15 @@ const CommentDeleteButton = ({
   const [deleteButton, deleteDialog] = useConfirmDialog({
     action: deleteComment.bind(null, id),
     trigger: (isPending) => (
-      <Button variant="destructive" size="icon">
+      <Button
+        variant="ghost"
+        size="icon"
+        className="size-8 text-muted-foreground hover:text-destructive"
+      >
         {isPending ? (
-          <LucideLoaderCircle className="animate-spin" />
+          <LucideLoaderCircle className="size-4 animate-spin" />
         ) : (
-          <LucideTrash2 />
+          <LucideTrash2 className="size-4" />
         )}
       </Button>
     ),

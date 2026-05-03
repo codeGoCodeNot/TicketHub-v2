@@ -82,7 +82,7 @@ const Comments = ({ ticketId, comments, currentUser }: CommentsProps) => {
         }
       />
       <CommentEditStateProvider>
-        <div className="flex flex-col gap-y-2 ml-8 mt-2">
+        <div className="flex flex-col gap-y-3 mt-2">
           {displayedComments.map((comment) => (
             <CommentItem
               key={comment.id}

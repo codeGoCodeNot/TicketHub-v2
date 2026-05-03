@@ -1,11 +1,10 @@
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import {
   Table,
@@ -19,7 +18,11 @@ import {
 import { getSession } from "@/lib/get-session";
 import { organizationMembershipPagePath } from "@/path";
 import { format } from "date-fns";
-import { LucideArrowUpRightFromSquare, LucidePen } from "lucide-react";
+import {
+  LucideArrowUpRightFromSquare,
+  LucideCalendar,
+  LucideUsers,
+} from "lucide-react";
 import Link from "next/link";
 import getOrganizationsByUser from "../queries/get-organizations-by-user";
 import OrganizationDeleteButton from "./organization-delete-button";
@@ -43,7 +46,7 @@ const OrganizationList = async ({
   return (
     <>
       {/* Mobile - Cards */}
-      <div className="flex flex-col gap-2 lg:hidden">
+      <div className="flex flex-col gap-3 lg:hidden">
         {organizations.map(({ organization, membershipByUser }) => {
           const activeOrganizationId = session?.session.activeOrganizationId;
           const isActive = activeOrganizationId === organization.id;
@@ -51,64 +54,92 @@ const OrganizationList = async ({
             membershipByUser.role,
           );
           const showActions = !onlySwitch && isAdminOrOwner;
-          const switchButton = (
-            <OrganizationSwitchButton
-              organizationId={organization.id}
-              isActive={isActive}
-            />
-          );
 
           return (
-            <div
-              key={organization.id}
-              className="flex gap-x-1 w-full justify-center"
-            >
-              <Card className="max-w-[420px] w-full">
-                <CardHeader className="flex flex-row items-center justify-between gap-2">
-                  <CardTitle className="font-semibold">
-                    {organization.name}
-                  </CardTitle>
-                  {isActive && (
-                    <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded-full">
-                      Active
-                    </span>
-                  )}
+            <div key={organization.id} className="flex justify-center w-full">
+              <Card className="max-w-[420px] w-full transition-shadow hover:shadow-md">
+                <CardHeader className="gap-y-2">
+                  <div className="flex items-center justify-between gap-x-2">
+                    <div className="flex items-center gap-x-2 min-w-0">
+                      <Avatar className="size-6 shrink-0">
+                        <AvatarFallback className="text-xs">
+                          {organization.name.charAt(0).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="text-sm font-semibold truncate">
+                        {organization.name}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-x-1 shrink-0">
+                      {isActive && (
+                        <Badge
+                          variant="secondary"
+                          className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 rounded-sm border-0 text-xs font-medium"
+                        >
+                          Active
+                        </Badge>
+                      )}
+                      <OrganizationSwitchButton
+                        organizationId={organization.id}
+                        isActive={isActive}
+                      />
+                      <OrganizationLeaveButton
+                        organizationId={organization.id}
+                      />
+                      {showActions && (
+                        <ToolTip label="View organization memberships">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="size-8"
+                            asChild
+                          >
+                            <Link
+                              href={organizationMembershipPagePath(
+                                organization.id,
+                              )}
+                            >
+                              <LucideArrowUpRightFromSquare className="size-4" />
+                            </Link>
+                          </Button>
+                        </ToolTip>
+                      )}
+                      {showActions && (
+                        <OrganizationEditButton
+                          organizationId={organization.id}
+                          currentName={organization.name}
+                        />
+                      )}
+                      {showActions && (
+                        <OrganizationDeleteButton
+                          organizationId={organization.id}
+                        />
+                      )}
+                    </div>
+                  </div>
                 </CardHeader>
-                <CardContent className="flex flex-col gap-1 pt-0">
-                  <CardDescription>
-                    Joined:{" "}
-                    {format(membershipByUser.createdAt, "yyyy/MM/dd, hh:mm")}
-                  </CardDescription>
-                  <CardDescription>
-                    Members: {organization._count.members}
-                  </CardDescription>
+
+                <CardContent className="pt-0">
+                  <div className="flex items-center gap-x-4">
+                    <div className="flex items-center gap-x-1.5 text-xs text-muted-foreground">
+                      <LucideCalendar className="size-3.5 shrink-0" />
+                      <span>
+                        {format(membershipByUser.createdAt, "MMM d, yyyy")}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-x-1.5 text-xs text-muted-foreground">
+                      <LucideUsers className="size-3.5 shrink-0" />
+                      <span>
+                        {organization._count.members}{" "}
+                        {organization._count.members === 1
+                          ? "member"
+                          : "members"}
+                      </span>
+                    </div>
+                  </div>
                 </CardContent>
-                <CardFooter className="text-xs text-muted-foreground">
-                  Organization ID: {organization.id}
-                </CardFooter>
               </Card>
-              <div className="flex flex-col gap-y-1">
-                {switchButton}
-                {<OrganizationLeaveButton organizationId={organization.id} />}
-                {showActions && (
-                  <Button variant="outline" size="icon" asChild>
-                    <Link
-                      href={organizationMembershipPagePath(organization.id)}
-                    >
-                      <LucideArrowUpRightFromSquare />
-                    </Link>
-                  </Button>
-                )}
-                {showActions && (
-                  <OrganizationEditButton
-                    organizationId={organization.id}
-                    currentName={organization.name}
-                  />
-                )}
-                {showActions && (
-                  <OrganizationDeleteButton organizationId={organization.id} />
-                )}
-              </div>
             </div>
           );
         })}
@@ -120,9 +151,9 @@ const OrganizationList = async ({
           <TableCaption>A list of your organizations</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead>Organization ID</TableHead>
+              <TableHead>ID</TableHead>
               <TableHead>Name</TableHead>
-              <TableHead>Joined At</TableHead>
+              <TableHead>Joined</TableHead>
               <TableHead>Members</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
@@ -137,24 +168,25 @@ const OrganizationList = async ({
               );
               const showActions = !onlySwitch && isAdminOrOwner;
 
-              const switchButton = (
-                <OrganizationSwitchButton
-                  organizationId={organization.id}
-                  isActive={isActive}
-                />
-              );
-
               const buttons = (
                 <>
-                  {switchButton}
-                  {<OrganizationLeaveButton organizationId={organization.id} />}
+                  <OrganizationSwitchButton
+                    organizationId={organization.id}
+                    isActive={isActive}
+                  />
+                  <OrganizationLeaveButton organizationId={organization.id} />
                   {showActions && (
                     <ToolTip label="View organization memberships">
-                      <Button variant="outline" size="icon" asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="size-8"
+                        asChild
+                      >
                         <Link
                           href={organizationMembershipPagePath(organization.id)}
                         >
-                          <LucideArrowUpRightFromSquare />
+                          <LucideArrowUpRightFromSquare className="size-4" />
                         </Link>
                       </Button>
                     </ToolTip>
@@ -175,12 +207,43 @@ const OrganizationList = async ({
 
               return (
                 <TableRow key={organization.id}>
-                  <TableCell>{organization.id}</TableCell>
-                  <TableCell>{organization.name}</TableCell>
                   <TableCell>
-                    {format(membershipByUser.createdAt, "yyyy/MM/dd, hh:mm")}
+                    <ToolTip label={organization.id}>
+                      <span className="font-mono text-xs text-muted-foreground cursor-default">
+                        {organization.id.slice(0, 8)}…
+                      </span>
+                    </ToolTip>
                   </TableCell>
-                  <TableCell>{organization._count.members}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-x-2">
+                      <Avatar className="size-6 shrink-0">
+                        <AvatarFallback className="text-xs">
+                          {organization.name.charAt(0).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="text-sm font-medium">
+                        {organization.name}
+                      </span>
+                      {isActive && (
+                        <Badge
+                          variant="secondary"
+                          className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 rounded-sm border-0 text-xs font-medium"
+                        >
+                          Active
+                        </Badge>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-xs text-muted-foreground">
+                      {format(membershipByUser.createdAt, "MMM d, yyyy")}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-xs font-medium">
+                      {organization._count.members}
+                    </span>
+                  </TableCell>
                   <TableCell className="flex flex-shrink flex-wrap gap-1 min-w-0">
                     {buttons}
                   </TableCell>

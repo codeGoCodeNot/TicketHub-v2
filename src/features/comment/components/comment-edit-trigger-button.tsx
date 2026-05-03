@@ -17,14 +17,14 @@ const CommentEditTriggerButton = ({
   return (
     <Button
       type="button"
-      // Visual state reflects whether this row is currently in edit mode.
-      variant={isCurrentCommentEditing ? "secondary" : "outline"}
+      variant={isCurrentCommentEditing ? "secondary" : "ghost"}
       size="icon"
+      className="size-8"
       onClick={() => startEditing(commentId)}
       disabled={isCurrentCommentEditing}
       aria-label="Edit comment"
     >
-      <LucidePencil />
+      <LucidePencil className="size-4" />
     </Button>
   );
 };

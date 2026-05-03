@@ -49,18 +49,24 @@ const CommentCreateForm = ({
       onError={onError}
       onSubmit={handleSubmit}
     >
-      <Textarea placeholder="Write a comment..." name="content" />
+      <Textarea
+        placeholder="Write a comment..."
+        name="content"
+        className="min-h-[80px] resize-none"
+      />
       <FieldError name="content" actionState={actionState} />
 
-      <Input
-        name="files"
-        id="files"
-        type="file"
-        multiple
-        accept={ACCEPTED.join(", ")}
-      />
-
-      <SubmitButton label="Comment" />
+      <div className="flex items-center gap-x-2">
+        <Input
+          name="files"
+          id="files"
+          type="file"
+          multiple
+          accept={ACCEPTED.join(", ")}
+          className="text-xs flex-1"
+        />
+        <SubmitButton label="Comment" />
+      </div>
     </Form>
   );
 };

@@ -58,8 +58,8 @@ const OrganizationEditButton = ({
     <Dialog open={open} onOpenChange={setOpen}>
       <ToolTip label="Edit organization">
         <DialogTrigger asChild>
-          <Button variant="outline" size="icon">
-            <LucidePen />
+          <Button variant="outline" size="icon" className="size-8">
+            <LucidePen className="size-4" />
           </Button>
         </DialogTrigger>
       </ToolTip>
