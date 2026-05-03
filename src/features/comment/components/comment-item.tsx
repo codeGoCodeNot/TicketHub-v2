@@ -15,6 +15,8 @@ type CommentItemProps = {
   ) => void;
   onHandleDeleteComment?: (commentId: string) => void;
   onHandleUpdateComment?: () => void;
+  onBeforeDeleteComment?: (commentId: string) => void;
+  onRollbackDeleteComment?: (commentId: string) => void;
 };
 
 const CommentItem = ({
@@ -22,6 +24,8 @@ const CommentItem = ({
   onHandleDeleteCommentAttachment,
   onHandleDeleteComment,
   onHandleUpdateComment,
+  onBeforeDeleteComment,
+  onRollbackDeleteComment,
 }: CommentItemProps) => {
   const isEdited =
     new Date(comment.updatedAt).getTime() >
@@ -61,6 +65,8 @@ const CommentItem = ({
                 <CommentDeleteButton
                   id={comment.id}
                   onHandleDelete={onHandleDeleteComment}
+                  onBeforeDelete={() => onBeforeDeleteComment?.(comment.id)}
+                  onRollbackDelete={() => onRollbackDeleteComment?.(comment.id)}
                 />
               </>
             )}

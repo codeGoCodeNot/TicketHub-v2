@@ -8,7 +8,6 @@ type UsePaginatedCommentsProps = {
   comments: {
     list: CommentWithMetadata[];
     metadata: {
-      count: number;
       hasNextPage?: boolean;
       cursor?: { id: string; createdAt: number };
     };
@@ -56,7 +55,6 @@ const usePaginatedComments = (
           {
             ...first,
             list: [comment, ...first.list],
-            metadata: { ...first.metadata, count: first.metadata.count + 1 },
           },
           ...rest,
         ],

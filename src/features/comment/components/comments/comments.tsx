@@ -14,7 +14,6 @@ type CommentsProps = {
   comments: {
     list: CommentWithMetadata[];
     metadata: {
-      count: number;
       hasNextPage?: boolean;
       cursor?: { id: string; createdAt: number };
     };
@@ -36,6 +35,7 @@ const Comments = ({ ticketId, comments, currentUser }: CommentsProps) => {
 
   const { ref, inView } = useInView();
   const [pendingComment, setPendingComment] = useState<CommentWithMetadata | null>(null);
+  const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
@@ -46,6 +46,10 @@ const Comments = ({ ticketId, comments, currentUser }: CommentsProps) => {
   const displayedComments = pendingComment
     ? [pendingComment, ...paginatedComments]
     : paginatedComments;
+
+  const visibleComments = displayedComments.filter(
+    (c) => !deletingIds.has(c.id),
+  );
 
   const handleBeforeSubmit = (content: string) => {
     setPendingComment({
@@ -66,6 +70,27 @@ const Comments = ({ ticketId, comments, currentUser }: CommentsProps) => {
     onHandleCreateComment(comment);
   };
 
+  const handleBeforeDeleteComment = (commentId: string) => {
+    setDeletingIds((prev) => new Set([...prev, commentId]));
+  };
+
+  const handleRollbackDeleteComment = (commentId: string) => {
+    setDeletingIds((prev) => {
+      const next = new Set(prev);
+      next.delete(commentId);
+      return next;
+    });
+  };
+
+  const handleDeleteComment = (commentId: string) => {
+    setDeletingIds((prev) => {
+      const next = new Set(prev);
+      next.delete(commentId);
+      return next;
+    });
+    onHandleDeleteComment(commentId);
+  };
+
   return (
     <>
       <CardCompact
@@ -83,13 +108,15 @@ const Comments = ({ ticketId, comments, currentUser }: CommentsProps) => {
       />
       <CommentEditStateProvider>
         <div className="flex flex-col gap-y-3 mt-2">
-          {displayedComments.map((comment) => (
+          {visibleComments.map((comment) => (
             <CommentItem
               key={comment.id}
               comment={comment}
               onHandleDeleteCommentAttachment={onHandleDeleteCommentAttachment}
-              onHandleDeleteComment={onHandleDeleteComment}
+              onHandleDeleteComment={handleDeleteComment}
               onHandleUpdateComment={onHandleUpdateComment}
+              onBeforeDeleteComment={handleBeforeDeleteComment}
+              onRollbackDeleteComment={handleRollbackDeleteComment}
             />
           ))}
         </div>
