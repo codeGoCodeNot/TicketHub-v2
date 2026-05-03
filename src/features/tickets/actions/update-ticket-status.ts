@@ -6,7 +6,7 @@ import fromErrorToActionState, {
 import getAuthOrRedirect from "@/features/auth/queries/get-auth-or-redirect";
 import isOwnership from "@/features/auth/utils/is-ownership";
 import { TicketStatus } from "@/generated/prisma/enums";
-import { ticketsPagePath } from "@/path";
+import { ticketPagePath, ticketsPagePath } from "@/path";
 import { revalidatePath } from "next/cache";
 import * as ticketData from "../data";
 
@@ -29,6 +29,7 @@ const updateTicketStatus = async (id: string, status: TicketStatus) => {
   }
 
   revalidatePath(ticketsPagePath());
+  revalidatePath(ticketPagePath(id));
   return toActionState("SUCCESS", "Status updated");
 };
 

@@ -1,3 +1,5 @@
+"use client";
+
 import ToolTip from "@/components/tool-tip";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +10,7 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
+import { TicketStatus } from "@/generated/prisma/client";
 import { ticketEditPagePath, ticketPagePath } from "@/path";
 import { toCurrencyFromCents } from "@/utils/currency";
 import clsx from "clsx";
@@ -19,6 +22,9 @@ import {
   LucideSquareArrowOutUpRight,
 } from "lucide-react";
 import Link from "next/link";
+import { startTransition, useOptimistic } from "react";
+import { toast } from "sonner";
+import updateTicketStatus from "../actions/update-ticket-status";
 import { TICKET_ICONS, TICKET_STATUS_LABELS } from "../constants";
 import { TicketWithMetada } from "../type";
 import TicketMoreMenu from "./ticket-more-menu";
@@ -45,6 +51,21 @@ const TicketItem = ({
   referencedTicket,
   comments,
 }: TicketItemProps) => {
+  const [optimisticStatus, setOptimisticStatus] = useOptimistic(ticket.status);
+
+  const handleStatusChange = (value: string) => {
+    const newStatus = value as TicketStatus;
+    startTransition(async () => {
+      setOptimisticStatus(newStatus);
+      const result = await updateTicketStatus(ticket.id, newStatus);
+      if (result.status === "ERROR") {
+        toast.error(result.message);
+      } else {
+        toast.success(result.message);
+      }
+    });
+  };
+
   const editButton =
     (ticket.isOwner || ticket.canUpdateTickets) &&
     (ticket.canUpdateTickets ? (
@@ -84,6 +105,8 @@ const TicketItem = ({
         </Button>
       }
       canDeleteTickets={ticket.canDeleteTickets}
+      currentStatus={optimisticStatus}
+      onStatusChange={handleStatusChange}
     />
   );
 
@@ -117,11 +140,11 @@ const TicketItem = ({
                 variant="secondary"
                 className={clsx(
                   "gap-x-1 rounded-sm border-0 text-xs font-medium",
-                  STATUS_CLASSES[ticket.status],
+                  STATUS_CLASSES[optimisticStatus],
                 )}
               >
-                {TICKET_ICONS[ticket.status]}
-                {TICKET_STATUS_LABELS[ticket.status]}
+                {TICKET_ICONS[optimisticStatus]}
+                {TICKET_STATUS_LABELS[optimisticStatus]}
               </Badge>
               {isDetail ? (
                 <>

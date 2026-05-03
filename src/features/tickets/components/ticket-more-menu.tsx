@@ -13,9 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Ticket, TicketStatus } from "@/generated/prisma/client";
 import { LucideTrash2 } from "lucide-react";
-import { toast } from "sonner";
 import deleteTicket from "../actions/delete-ticket";
-import updateTicketStatus from "../actions/update-ticket-status";
 import { TICKET_STATUS_LABELS } from "../constants";
 import ToolTip from "@/components/tool-tip";
 
@@ -23,27 +21,17 @@ type TicketMoreMenuProps = {
   ticket: Ticket;
   trigger: React.ReactNode;
   canDeleteTickets?: boolean;
+  currentStatus: TicketStatus;
+  onStatusChange: (value: string) => void;
 };
 
 const TicketMoreMenu = ({
   ticket,
   trigger,
   canDeleteTickets = false,
+  currentStatus,
+  onStatusChange,
 }: TicketMoreMenuProps) => {
-  // handle update ticket status
-  const handleUpdateTicketStatus = async (value: string) => {
-    const promiseStatus = updateTicketStatus(ticket.id, value as TicketStatus);
-    toast.promise(promiseStatus, {
-      loading: "Updating status...",
-    });
-    const result = await promiseStatus;
-    if (result.status === "ERROR") {
-      toast.error(result.message);
-    } else if (result.status === "SUCCESS") {
-      toast.success(result.message);
-    }
-  };
-
   // custom state and handlers for delete confirm dialog
   const [deleteDialogTrigger, deleteDialog] = useConfirmDialog({
     action: deleteTicket.bind(null, ticket.id),
@@ -68,8 +56,8 @@ const TicketMoreMenu = ({
 
   const ticketStatusOptionsItems = (
     <DropdownMenuRadioGroup
-      value={ticket.status}
-      onValueChange={handleUpdateTicketStatus}
+      value={currentStatus}
+      onValueChange={onStatusChange}
     >
       {(Object.keys(TICKET_STATUS_LABELS) as TicketStatus[]).map((key) => (
         <DropdownMenuRadioItem key={key} value={key}>
