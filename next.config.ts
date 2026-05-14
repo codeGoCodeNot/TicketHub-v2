@@ -9,8 +9,8 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "4mb",
     },
     staleTimes: {
-      dynamic: 30000, // 30 seconds
-      static: 1000 * 60 * 60, // 1 hour
+      dynamic: 30, 
+      static: 1000 * 60 * 60, 
     },
   },
   images: {
